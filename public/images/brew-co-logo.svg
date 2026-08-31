@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" width="100%" height="100%">
+  <!-- Background Badge Fill -->
+  <rect width="64" height="64" rx="32" fill="#1A1816"/>
+  
+  <!-- Outer Precision Hairline Ring -->
+  <circle cx="32" cy="32" r="28" stroke="#EAE6DF" stroke-width="1" stroke-opacity="0.35" stroke-dasharray="2 2"/>
+  
+  <!-- Inner Solid Frame -->
+  <circle cx="32" cy="32" r="25" stroke="#EAE6DF" stroke-width="1.2" stroke-opacity="0.9"/>
+  
+  <!-- Stylized Roast Flame Dot -->
+  <circle cx="32" cy="13.5" r="2" fill="#C84B31"/>
+  
+  <!-- Coffee Bean & Monogram Silhouette -->
+  <!-- Left Bean Cleft Half -->
+  <path d="M 27 20 C 20 23, 19 33, 23 40 C 27 47, 33 46, 31 42 C 29 38, 25 36, 27 30 C 29 24, 33 24, 32 20 C 31 18.5, 29 19, 27 20 Z" fill="#EAE6DF"/>
+  
+  <!-- Right Bean Cleft & Ampersand Flourish -->
+  <path d="M 37 44 C 44 41, 45 31, 41 24 C 37 17, 31 18, 33 22 C 35 26, 39 28, 37 34 C 35 40, 31 40, 32 44 C 33 45.5, 35 45, 37 44 Z" fill="#EAE6DF"/>
+  
+  <!-- Center S-Curve Steam Slit (Negative Space & Vermilion Spark) -->
+  <path d="M 32 18 Q 28 26, 34 32 T 32 46" stroke="#1A1816" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <circle cx="33" cy="32" r="1.5" fill="#C84B31"/>
+</svg>
