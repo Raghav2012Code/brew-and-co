@@ -1,8 +1,11 @@
 import React, { memo } from 'react';
 import { Heart, Plus, Sliders } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
 
-export const ProductCard = memo(({ item }) => {
+export const ProductCard: React.FC<{ item: any }> = memo(({ item }) => {
   const { setCustomizerItem, addToCart, favorites, toggleFavorite } = useStore();
   const isFavorite = favorites.includes(item.id);
 
@@ -14,14 +17,15 @@ export const ProductCard = memo(({ item }) => {
         size: { id: 'standard', name: 'Standard' },
         temp: item.defaultTemp || 'hot',
       });
+      toast.success(`Added 1× ${item.name} to bag!`);
     }
   };
 
   return (
-    <div className="group rounded-xl border border-[#E8E4DC] dark:border-[#262420] bg-[#FBF9F5] dark:bg-[#161513] hover:border-[#1A1816] dark:hover:border-[#EAE6DF] p-4 flex flex-col justify-between text-left transition-all hover:shadow-md relative">
+    <div className="group border border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-card hover:border-ink dark:hover:border-dark-text-main p-4 flex flex-col justify-between text-left transition-all relative">
       <div>
         {/* Specimen Photo */}
-        <div className="relative aspect-[4/3] w-full rounded-lg overflow-hidden bg-[#E8E4DC] dark:bg-[#1A1816] mb-3.5">
+        <div className="relative aspect-[4/3] w-full overflow-hidden bg-paper-dim dark:bg-dark-subtle mb-3.5 border border-hairline dark:border-dark-hairline">
           <img
             src={item.image}
             alt={item.name}
@@ -29,11 +33,14 @@ export const ProductCard = memo(({ item }) => {
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
           
-          {/* Popular or Specialty Badge */}
+          {/* Popular Badge */}
           {item.isPopular ? (
-            <span className="absolute top-2.5 left-2.5 bg-[#C84B31] text-[#FBF9F5] text-[11px] font-semibold px-2 py-0.5 rounded shadow-sm">
+            <Badge
+              variant="editorial"
+              className="absolute top-2.5 left-2.5 font-bold"
+            >
               Popular
-            </span>
+            </Badge>
           ) : null}
 
           {/* Favorite Button (44x44px touch hitbox) */}
@@ -43,55 +50,58 @@ export const ProductCard = memo(({ item }) => {
               toggleFavorite(item.id);
             }}
             aria-label={isFavorite ? `Remove ${item.name} from favorites` : `Save ${item.name} to favorites`}
-            className="absolute top-2 right-2 min-h-[40px] min-w-[40px] flex items-center justify-center rounded-full bg-[#FBF9F5]/90 dark:bg-[#161513]/90 text-[#666056] dark:text-[#A09A8E] hover:text-[#C84B31] dark:hover:text-[#C84B31] active:scale-90 shadow-sm transition-all cursor-pointer"
+            className="absolute top-2 right-2 min-h-[40px] min-w-[40px] flex items-center justify-center bg-paper/90 dark:bg-dark-subtle/90 text-ink-muted dark:text-dark-text-muted hover:text-vermillion dark:hover:text-dark-vermillion active:scale-90 transition-all cursor-pointer border border-hairline/60 dark:border-dark-hairline/60"
           >
-            <Heart className={`w-4 h-4 ${isFavorite ? 'fill-[#C84B31] text-[#C84B31]' : ''}`} aria-hidden="true" />
+            <Heart className={`w-4 h-4 ${isFavorite ? 'fill-vermillion text-vermillion dark:fill-dark-vermillion dark:text-dark-vermillion' : ''}`} aria-hidden="true" />
           </button>
         </div>
 
         {/* Title & Price */}
         <div className="flex items-baseline justify-between gap-2 mb-1">
-          <h3 className="font-serif font-bold text-base sm:text-lg text-[#1A1816] dark:text-[#EAE6DF] group-hover:text-[#C84B31] transition-colors leading-snug">
+          <h3 className="font-serif font-bold text-base sm:text-lg text-ink dark:text-dark-text-main group-hover:text-vermillion dark:group-hover:text-dark-vermillion transition-colors leading-snug">
             {item.name}
           </h3>
-          <span className="font-semibold text-sm sm:text-base text-[#1A1816] dark:text-[#EAE6DF] shrink-0">
+          <span className="font-mono font-semibold text-sm sm:text-base text-ink dark:text-dark-text-main shrink-0">
             ${item.price.toFixed(2)}
           </span>
         </div>
 
         {/* Origin / Subtitle */}
         {item.roastOrigin ? (
-          <p className="text-[11px] sm:text-xs text-[#888276] dark:text-[#888276] mb-1.5 font-medium truncate">
+          <p className="text-[11px] sm:text-xs text-ink-muted dark:text-dark-text-muted mb-1.5 font-mono truncate">
             {item.roastOrigin}
           </p>
         ) : null}
 
         {/* Short Description */}
-        <p className="text-xs text-[#555047] dark:text-[#A09A8E] line-clamp-2 leading-relaxed mb-3">
+        <p className="text-xs text-ink-muted dark:text-dark-text-muted line-clamp-2 leading-relaxed mb-3">
           {item.description}
         </p>
 
         {/* Flavor Notes */}
         {item.tastingNotes && item.tastingNotes.length > 0 ? (
           <div className="flex flex-wrap gap-1.5 mb-3.5">
-            {item.tastingNotes.map((note) => (
-              <span
+            {item.tastingNotes.map((note: string) => (
+              <Badge
                 key={note}
-                className="text-[10px] sm:text-[11px] px-2 py-0.5 rounded bg-[#F3EFE6] dark:bg-[#1C1B18] text-[#666056] dark:text-[#A09A8E] border border-[#E8E4DC] dark:border-[#262420]"
+                variant="secondary"
+                className="text-[10px]"
               >
                 {note}
-              </span>
+              </Badge>
             ))}
           </div>
         ) : null}
       </div>
 
       {/* Primary Action Button */}
-      <div className="pt-2 border-t border-[#E8E4DC] dark:border-[#262420]">
-        <button
+      <div className="pt-2 border-t border-hairline dark:border-dark-hairline">
+        <Button
           onClick={handleAction}
+          variant="outline"
+          size="default"
+          className="w-full justify-center"
           aria-label={item.customizable ? `Customize options and order ${item.name}` : `Add ${item.name} to order bag`}
-          className="w-full min-h-[42px] py-2.5 px-4 rounded-xl bg-[#F3EFE6] dark:bg-[#1C1B18] hover:bg-[#1A1816] dark:hover:bg-[#EAE6DF] hover:text-[#FBF9F5] dark:hover:text-[#11100F] text-[#1A1816] dark:text-[#EAE6DF] border border-[#E0DACB] dark:border-[#302D27] text-xs font-semibold tracking-wide active:scale-98 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
         >
           {item.customizable ? (
             <>
@@ -104,7 +114,7 @@ export const ProductCard = memo(({ item }) => {
               <span>Add to Bag</span>
             </>
           )}
-        </button>
+        </Button>
       </div>
     </div>
   );

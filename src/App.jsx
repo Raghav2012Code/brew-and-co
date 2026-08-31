@@ -10,11 +10,12 @@ import { Footer } from './components/Footer';
 import { ItemCustomizerModal } from './components/ItemCustomizerModal';
 import { CartDrawer } from './components/CartDrawer';
 import { OrderSuccessModal } from './components/OrderSuccessModal';
+import { Toaster } from '@/components/ui/sonner';
 
 function App() {
   return (
     <StoreProvider>
-      <div className="min-h-screen bg-[#FBF9F5] dark:bg-[#11100F] text-[#1A1816] dark:text-[#EAE6DF] flex flex-col font-sans selection:bg-[#1A1816] dark:selection:bg-[#EAE6DF] selection:text-[#FBF9F5] dark:selection:text-[#11100F] transition-colors">
+      <div className="min-h-screen bg-background text-foreground flex flex-col font-sans selection:bg-ink selection:text-paper dark:selection:bg-dark-text-main dark:selection:text-dark-canvas transition-colors">
         {/* Sticky Header */}
         <Navbar />
 
@@ -34,10 +35,12 @@ function App() {
         <ItemCustomizerModal />
         <CartDrawer />
         <OrderSuccessModal />
+
+        {/* Accessible Toast Notifications */}
+        <Toaster position="bottom-right" />
       </div>
     </StoreProvider>
   );
 }
 
 export default App;
-

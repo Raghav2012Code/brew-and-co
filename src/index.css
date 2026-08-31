@@ -2,6 +2,51 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+:root {
+  --background: #FBF9F5;
+  --foreground: #121110;
+  --card: #F6F4EE;
+  --card-foreground: #121110;
+  --popover: #F6F4EE;
+  --popover-foreground: #121110;
+  --primary: #121110;
+  --primary-foreground: #F6F4EE;
+  --secondary: #EDE9DF;
+  --secondary-foreground: #121110;
+  --muted: #EDE9DF;
+  --muted-foreground: #5C5852;
+  --accent: #E03410;
+  --accent-foreground: #FFFFFF;
+  --destructive: #E03410;
+  --destructive-foreground: #FFFFFF;
+  --border: #D8D3C6;
+  --input: #D8D3C6;
+  --ring: #121110;
+  --radius: 0.125rem;
+}
+
+.dark {
+  --background: #11100F;
+  --foreground: #ECE8DF;
+  --card: #161513;
+  --card-foreground: #ECE8DF;
+  --popover: #161513;
+  --popover-foreground: #ECE8DF;
+  --primary: #ECE8DF;
+  --primary-foreground: #11100F;
+  --secondary: #1E1C1A;
+  --secondary-foreground: #ECE8DF;
+  --muted: #1E1C1A;
+  --muted-foreground: #A8A297;
+  --accent: #FF451A;
+  --accent-foreground: #FFFFFF;
+  --destructive: #FF451A;
+  --destructive-foreground: #FFFFFF;
+  --border: #2B2824;
+  --input: #2B2824;
+  --ring: #ECE8DF;
+}
+
 @theme {
   --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-display: 'Syne', sans-serif;
@@ -27,6 +72,31 @@
   --color-dark-text-muted: #A8A297;
   --color-dark-text-faint: #736D63;
   --color-dark-vermillion: #FF451A;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
 @layer base {
@@ -41,18 +111,13 @@
   }
 
   body {
-    background-color: #FBF9F5;
-    color: #1A1816;
+    background-color: var(--background);
+    color: var(--foreground);
     font-family: 'Plus Jakarta Sans', sans-serif;
     overflow-x: hidden;
     touch-action: manipulation;
     transition: background-color 0.15s ease, color 0.15s ease;
     padding-bottom: env(safe-area-inset-bottom, 0px);
-  }
-
-  .dark body {
-    background-color: #11100F;
-    color: #EAE6DF;
   }
 
   ::selection {
@@ -125,5 +190,3 @@
 .animate-marquee:hover {
   animation-play-state: paused;
 }
-
-
