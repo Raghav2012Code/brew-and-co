@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth bg-[#FBF9F5] dark:bg-[#11100F] text-[#1A1816] dark:text-[#EAE6DF]">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/images/brew-co-logo.svg" />
+    <link rel="apple-touch-icon" href="/images/brew-co-logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Brew & Co. | Single-Origin Coffee & Roastery | San Francisco</title>
+    <meta name="description" content="Single-origin coffees, fresh espresso, and house pastries in San Francisco. Order ahead for quick counter pickup at 442 Industrial Way." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('brew_co_theme');
+          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = saved === 'dark' || ((!saved || saved === 'system') && prefersDark);
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+            document.documentElement.style.colorScheme = 'dark';
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.style.colorScheme = 'light';
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="antialiased selection:bg-[#1A1816] selection:text-[#FBF9F5] dark:selection:bg-[#EAE6DF] dark:selection:text-[#11100F] bg-[#FBF9F5] dark:bg-[#11100F] text-[#1A1816] dark:text-[#EAE6DF] font-sans">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
