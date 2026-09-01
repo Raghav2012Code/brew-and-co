@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 
 export const ProductCard: React.FC<{ item: any }> = memo(({ item }) => {
   const { setCustomizerItem, addToCart, favorites, toggleFavorite } = useStore();
-  const isFavorite = favorites.includes(item.id);
+  const isFavorite = Array.isArray(favorites) ? favorites.includes(item.id) : false;
 
   const handleAction = () => {
     if (item.customizable) {

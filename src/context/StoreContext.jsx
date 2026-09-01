@@ -17,12 +17,12 @@ const triggerConfetti = async (opts) => {
 // Web Audio API pure synth chime for Barista KDS alerts
 export const playBaristaChime = (type = 'new-order') => {
   try {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContext) return;
-    const ctx = new AudioContext();
+    if (typeof window === 'undefined') return;
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    const ctx = new AudioContextClass();
 
     if (type === 'new-order') {
-      // Warm double-ping chime (440Hz -> 880Hz)
       const osc1 = ctx.createOscillator();
       const gain1 = ctx.createGain();
       osc1.type = 'sine';
@@ -35,7 +35,6 @@ export const playBaristaChime = (type = 'new-order') => {
       osc1.start();
       osc1.stop(ctx.currentTime + 0.5);
     } else if (type === 'ready') {
-      // Triple ascending chime (E5 -> G#5 -> B5)
       [659.25, 830.61, 987.77].forEach((freq, idx) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
@@ -54,118 +53,132 @@ export const playBaristaChime = (type = 'new-order') => {
   }
 };
 
+const DEFAULT_SEED_ORDERS = [
+  {
+    orderId: 'BC-1042',
+    timestamp: '10:14 AM',
+    date: 'Today',
+    pickupName: 'Elena Rostova',
+    status: 'brewing',
+    items: [
+      {
+        id: 'item-seed-1',
+        name: 'Smoked Amber Cortado',
+        unitPrice: 5.50,
+        quantity: 1,
+        options: { size: { name: '4oz' }, temp: 'HOT', milk: { name: 'Oat Milk (Oatly)' }, specialNotes: 'Extra hot microfoam' },
+      },
+      {
+        id: 'item-seed-2',
+        name: 'Cardamom Morning Bun',
+        unitPrice: 4.75,
+        quantity: 1,
+        options: { size: { name: '1 Pastry' }, temp: 'WARM' },
+      },
+    ],
+    total: 11.25,
+    elapsedMinutes: 4,
+  },
+  {
+    orderId: 'BC-1043',
+    timestamp: '10:18 AM',
+    date: 'Today',
+    pickupName: 'Marcus Vance',
+    status: 'received',
+    items: [
+      {
+        id: 'item-seed-3',
+        name: 'Ethiopia Guji (Pour Over)',
+        unitPrice: 7.00,
+        quantity: 2,
+        options: { size: { name: '10oz Carafe' }, temp: 'HOT', specialNotes: 'V60 1:16 ratio' },
+      },
+    ],
+    total: 15.15,
+    elapsedMinutes: 1,
+  },
+];
+
 export const StoreProvider = ({ children }) => {
   // Cart State with LocalStorage
   const [cart, setCart] = useState(() => {
     try {
       const saved = localStorage.getItem('brew_co_cart');
-      return saved ? JSON.parse(saved) : [];
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      }
     } catch {
-      return [];
+      // ignore
     }
+    return [];
   });
 
   const [isCartOpen, setIsCartOpen] = useState(false);
-
-  // Customizer Modal State
   const [customizerItem, setCustomizerItem] = useState(null);
 
-  // Loyalty Program State (6 stamps)
   const [loyaltyStamps, setLoyaltyStamps] = useState(() => {
     try {
       const saved = localStorage.getItem('brew_co_loyalty');
-      return saved !== null ? parseInt(saved, 10) : 3;
+      if (saved !== null) {
+        const num = parseInt(saved, 10);
+        if (!isNaN(num)) return num;
+      }
     } catch {
-      return 3;
+      // ignore
     }
+    return 3;
   });
 
   const [freeDrinksAvailable, setFreeDrinksAvailable] = useState(() => {
     try {
       const saved = localStorage.getItem('brew_co_free_drinks');
-      return saved !== null ? parseInt(saved, 10) : 0;
+      if (saved !== null) {
+        const num = parseInt(saved, 10);
+        if (!isNaN(num)) return num;
+      }
     } catch {
-      return 0;
+      // ignore
     }
+    return 0;
   });
 
-  // Active Order / Success Modal State
   const [activeOrder, setActiveOrder] = useState(null);
   const [isLoyaltyModalOpen, setIsLoyaltyModalOpen] = useState(false);
   const [isBaristaModalOpen, setIsBaristaModalOpen] = useState(false);
   const [isMatchmakerOpen, setIsMatchmakerOpen] = useState(false);
   const [isRoasteryStudioOpen, setIsRoasteryStudioOpen] = useState(false);
 
-  // Live Orders Queue for Barista KDS
   const [liveOrders, setLiveOrders] = useState(() => {
     try {
       const saved = localStorage.getItem('brew_co_live_orders');
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
     } catch (e) {
       console.error(e);
     }
-    // Seed with initial realistic incoming tickets
-    return [
-      {
-        orderId: 'BC-1042',
-        timestamp: '10:14 AM',
-        date: 'Today',
-        pickupName: 'Elena Rostova',
-        status: 'brewing', // received | brewing | ready | completed
-        items: [
-          {
-            id: 'item-seed-1',
-            name: 'Smoked Amber Cortado',
-            unitPrice: 5.50,
-            quantity: 1,
-            options: { size: { name: '4oz' }, temp: 'HOT', milk: { name: 'Oat Milk (Oatly)' }, specialNotes: 'Extra hot microfoam' },
-          },
-          {
-            id: 'item-seed-2',
-            name: 'Cardamom Morning Bun',
-            unitPrice: 4.75,
-            quantity: 1,
-            options: { size: { name: '1 Pastry' }, temp: 'WARM' },
-          },
-        ],
-        total: 11.25,
-        elapsedMinutes: 4,
-      },
-      {
-        orderId: 'BC-1043',
-        timestamp: '10:18 AM',
-        date: 'Today',
-        pickupName: 'Marcus Vance',
-        status: 'received',
-        items: [
-          {
-            id: 'item-seed-3',
-            name: 'Ethiopia Guji (Pour Over)',
-            unitPrice: 7.00,
-            quantity: 2,
-            options: { size: { name: '10oz Carafe' }, temp: 'HOT', specialNotes: 'V60 1:16 ratio' },
-          },
-        ],
-        total: 15.15,
-        elapsedMinutes: 1,
-      },
-    ];
+    return DEFAULT_SEED_ORDERS;
   });
 
-  // Favorites
   const [favorites, setFavorites] = useState(() => {
     try {
       const saved = localStorage.getItem('brew_co_favorites');
-      return saved ? JSON.parse(saved) : ['smoked-amber-cortado', 'nitro-cascade-cold-brew'];
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) return parsed;
+      }
     } catch {
-      return ['smoked-amber-cortado', 'nitro-cascade-cold-brew'];
+      // ignore
     }
+    return ['smoked-amber-cortado', 'nitro-cascade-cold-brew'];
   });
 
-  // Sync to LocalStorage
+  // Sync to LocalStorage safely
   useEffect(() => {
     try {
-      localStorage.setItem('brew_co_cart', JSON.stringify(cart));
+      localStorage.setItem('brew_co_cart', JSON.stringify(Array.isArray(cart) ? cart : []));
     } catch (e) {
       console.error(e);
     }
@@ -173,7 +186,7 @@ export const StoreProvider = ({ children }) => {
 
   useEffect(() => {
     try {
-      localStorage.setItem('brew_co_live_orders', JSON.stringify(liveOrders));
+      localStorage.setItem('brew_co_live_orders', JSON.stringify(Array.isArray(liveOrders) ? liveOrders : []));
     } catch (e) {
       console.error(e);
     }
@@ -181,8 +194,8 @@ export const StoreProvider = ({ children }) => {
 
   useEffect(() => {
     try {
-      localStorage.setItem('brew_co_loyalty', loyaltyStamps.toString());
-      localStorage.setItem('brew_co_free_drinks', freeDrinksAvailable.toString());
+      localStorage.setItem('brew_co_loyalty', (loyaltyStamps || 0).toString());
+      localStorage.setItem('brew_co_free_drinks', (freeDrinksAvailable || 0).toString());
     } catch (e) {
       console.error(e);
     }
@@ -190,13 +203,12 @@ export const StoreProvider = ({ children }) => {
 
   useEffect(() => {
     try {
-      localStorage.setItem('brew_co_favorites', JSON.stringify(favorites));
+      localStorage.setItem('brew_co_favorites', JSON.stringify(Array.isArray(favorites) ? favorites : []));
     } catch (e) {
       console.error(e);
     }
   }, [favorites]);
 
-  // Lock background scroll when any modal or drawer is active
   const isAnyModalOpen =
     isCartOpen ||
     !!customizerItem ||
@@ -218,7 +230,6 @@ export const StoreProvider = ({ children }) => {
     };
   }, [isAnyModalOpen]);
 
-  // Global Escape key listener
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
@@ -252,11 +263,10 @@ export const StoreProvider = ({ children }) => {
     isRoasteryStudioOpen,
   ]);
 
-  // Theme State ('system' | 'light' | 'dark')
   const [theme, setTheme] = useState(() => {
     try {
       const saved = localStorage.getItem('brew_co_theme');
-      return saved || 'system';
+      return saved === 'light' || saved === 'dark' || saved === 'system' ? saved : 'system';
     } catch {
       return 'system';
     }
@@ -280,6 +290,7 @@ export const StoreProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    if (typeof document === 'undefined') return;
     const root = document.documentElement;
     if (effectiveTheme === 'dark') {
       root.classList.add('dark');
@@ -386,21 +397,22 @@ export const StoreProvider = ({ children }) => {
   }, []);
 
   const addToCart = useCallback((product, options = {}) => {
+    if (!product) return;
     const sizeDelta = options.size?.priceDelta || 0;
     const milkDelta = options.milk?.priceDelta || 0;
     const shotDelta = options.shot?.priceDelta || 0;
     const syrupDelta = options.syrup?.priceDelta || 0;
-    const unitPrice = Number((product.price + sizeDelta + milkDelta + shotDelta + syrupDelta).toFixed(2));
+    const unitPrice = Number(((product.price || 0) + sizeDelta + milkDelta + shotDelta + syrupDelta).toFixed(2));
 
     const cartItem = {
-      id: `${product.id}-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+      id: `${product.id || 'item'}-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
       productId: product.id,
-      name: product.name,
-      category: product.category,
-      basePrice: product.price,
+      name: product.name || 'Coffee Item',
+      category: product.category || 'all',
+      basePrice: product.price || 0,
       unitPrice,
       quantity: options.quantity || 1,
-      image: product.image,
+      image: product.image || '/images/flat-white.jpg',
       isSubscription: product.isSubscription || false,
       subscriptionMeta: product.subscriptionMeta || null,
       beanMeta: product.beanMeta || null,
@@ -415,60 +427,64 @@ export const StoreProvider = ({ children }) => {
       },
     };
 
-    setCart((prev) => [...prev, cartItem]);
+    setCart((prev) => (Array.isArray(prev) ? [...prev, cartItem] : [cartItem]));
     setIsCartOpen(true);
   }, []);
 
   const removeFromCart = useCallback((cartItemId) => {
-    setCart((prev) => prev.filter((item) => item.id !== cartItemId));
+    setCart((prev) => (Array.isArray(prev) ? prev.filter((item) => item?.id !== cartItemId) : []));
   }, []);
 
   const updateQuantity = useCallback((cartItemId, delta) => {
     setCart((prev) =>
-      prev
-        .map((item) => {
-          if (item.id === cartItemId) {
-            const newQty = item.quantity + delta;
-            return newQty > 0 ? { ...item, quantity: newQty } : null;
-          }
-          return item;
-        })
-        .filter(Boolean)
+      Array.isArray(prev)
+        ? prev
+            .map((item) => {
+              if (item?.id === cartItemId) {
+                const newQty = (item.quantity || 1) + delta;
+                return newQty > 0 ? { ...item, quantity: newQty } : null;
+              }
+              return item;
+            })
+            .filter(Boolean)
+        : []
     );
   }, []);
 
   const clearCart = useCallback(() => setCart([]), []);
 
   const toggleFavorite = useCallback((productId) => {
-    setFavorites((prev) =>
-      prev.includes(productId) ? prev.filter((id) => id !== productId) : [...prev, productId]
-    );
+    setFavorites((prev) => {
+      const arr = Array.isArray(prev) ? prev : [];
+      return arr.includes(productId) ? arr.filter((id) => id !== productId) : [...arr, productId];
+    });
   }, []);
 
-  // Update order status on Barista KDS
   const updateOrderStatus = useCallback((orderId, nextStatus) => {
     setLiveOrders((prev) =>
-      prev.map((order) => {
-        if (order.orderId === orderId) {
-          if (nextStatus === 'ready') {
-            playBaristaChime('ready');
-          }
-          return { ...order, status: nextStatus };
-        }
-        return order;
-      })
+      Array.isArray(prev)
+        ? prev.map((order) => {
+            if (order?.orderId === orderId) {
+              if (nextStatus === 'ready') {
+                playBaristaChime('ready');
+              }
+              return { ...order, status: nextStatus };
+            }
+            return order;
+          })
+        : []
     );
   }, []);
 
   const clearCompletedOrders = useCallback(() => {
-    setLiveOrders((prev) => prev.filter((o) => o.status !== 'completed'));
+    setLiveOrders((prev) => (Array.isArray(prev) ? prev.filter((o) => o?.status !== 'completed') : []));
   }, []);
 
-  // Place simulated order
   const placeOrder = useCallback(
-    ({ pickupName, tipAmount, appliedFreeDrink }) => {
-      const subtotal = cart.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
-      const discount = appliedFreeDrink ? cart[0]?.unitPrice || 5.5 : 0;
+    ({ pickupName, tipAmount = 0, appliedFreeDrink }) => {
+      const safeCart = Array.isArray(cart) ? cart : [];
+      const subtotal = safeCart.reduce((sum, item) => sum + (item?.unitPrice || 0) * (item?.quantity || 1), 0);
+      const discount = appliedFreeDrink ? safeCart[0]?.unitPrice || 5.5 : 0;
       const finalSubtotal = Math.max(0, subtotal - discount);
       const tax = Number((finalSubtotal * 0.0825).toFixed(2));
       const total = Number((finalSubtotal + tax + tipAmount).toFixed(2));
@@ -481,7 +497,7 @@ export const StoreProvider = ({ children }) => {
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
         pickupName: pickupName || 'Counter Guest',
-        items: [...cart],
+        items: [...safeCart],
         subtotal,
         discount,
         tax,
@@ -492,13 +508,11 @@ export const StoreProvider = ({ children }) => {
         status: 'received',
       };
 
-      // Append to live barista queue
-      setLiveOrders((prev) => [orderData, ...prev]);
+      setLiveOrders((prev) => (Array.isArray(prev) ? [orderData, ...prev] : [orderData]));
       playBaristaChime('new-order');
 
-      // Increment stamp card
-      let newStamps = loyaltyStamps + cart.reduce((count, item) => count + item.quantity, 0);
-      let newFreeDrinks = freeDrinksAvailable;
+      let newStamps = (loyaltyStamps || 0) + safeCart.reduce((count, item) => count + (item?.quantity || 1), 0);
+      let newFreeDrinks = freeDrinksAvailable || 0;
 
       if (appliedFreeDrink && newFreeDrinks > 0) {
         newFreeDrinks -= 1;
@@ -531,19 +545,21 @@ export const StoreProvider = ({ children }) => {
     [cart, loyaltyStamps, freeDrinksAvailable, clearCart]
   );
 
-  const cartCount = useMemo(() => cart.reduce((sum, item) => sum + item.quantity, 0), [cart]);
-  const cartSubtotal = useMemo(
-    () => cart.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0),
-    [cart]
-  );
-  const activeOrdersCount = useMemo(
-    () => liveOrders.filter((o) => o.status !== 'completed').length,
-    [liveOrders]
-  );
+  const cartCount = useMemo(() => {
+    return Array.isArray(cart) ? cart.reduce((sum, item) => sum + (item?.quantity || 0), 0) : 0;
+  }, [cart]);
+
+  const cartSubtotal = useMemo(() => {
+    return Array.isArray(cart) ? cart.reduce((sum, item) => sum + (item?.unitPrice || 0) * (item?.quantity || 0), 0) : 0;
+  }, [cart]);
+
+  const activeOrdersCount = useMemo(() => {
+    return Array.isArray(liveOrders) ? liveOrders.filter((o) => o?.status !== 'completed').length : 0;
+  }, [liveOrders]);
 
   const contextValue = useMemo(
     () => ({
-      cart,
+      cart: Array.isArray(cart) ? cart : [],
       cartCount,
       cartSubtotal,
       isCartOpen,
@@ -554,9 +570,9 @@ export const StoreProvider = ({ children }) => {
       removeFromCart,
       updateQuantity,
       clearCart,
-      loyaltyStamps,
+      loyaltyStamps: loyaltyStamps || 0,
       setLoyaltyStamps,
-      freeDrinksAvailable,
+      freeDrinksAvailable: freeDrinksAvailable || 0,
       setFreeDrinksAvailable,
       isLoyaltyModalOpen,
       setIsLoyaltyModalOpen,
@@ -568,12 +584,12 @@ export const StoreProvider = ({ children }) => {
       setIsRoasteryStudioOpen,
       activeOrder,
       setActiveOrder,
-      liveOrders,
+      liveOrders: Array.isArray(liveOrders) ? liveOrders : [],
       activeOrdersCount,
       updateOrderStatus,
       clearCompletedOrders,
       placeOrder,
-      favorites,
+      favorites: Array.isArray(favorites) ? favorites : [],
       toggleFavorite,
       storeStatus,
       theme,

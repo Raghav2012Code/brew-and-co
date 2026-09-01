@@ -47,7 +47,12 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [brandProfile, setBrandProfile] = useState<RoasteryBrandProfile>(() => {
     try {
       const saved = localStorage.getItem(BRAND_STORAGE_KEY);
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object' && parsed.brandName) {
+          return { ...DEFAULT_PROFILE, ...parsed };
+        }
+      }
     } catch (e) {
       console.error(e);
     }
@@ -57,22 +62,25 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [roasteryBeans, setRoasteryBeans] = useState<any[]>(() => {
     try {
       const saved = localStorage.getItem(BEANS_STORAGE_KEY);
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
     } catch (e) {
       console.error(e);
     }
     return ROASTERY_BEANS;
   });
 
-  // Sync CSS variables dynamically to DOM for live white-label styling
   useEffect(() => {
-    const preset = ACCENT_COLOR_PRESETS[brandProfile.accentColorId] || ACCENT_COLOR_PRESETS.vermillion;
+    if (typeof document === 'undefined') return;
+    const preset = ACCENT_COLOR_PRESETS[brandProfile?.accentColorId || 'vermillion'] || ACCENT_COLOR_PRESETS.vermillion;
     const root = document.documentElement;
     root.style.setProperty('--accent', preset.hex);
     root.style.setProperty('--color-vermillion', preset.hex);
 
     try {
-      localStorage.setItem(BRAND_STORAGE_KEY, JSON.stringify(brandProfile));
+      localStorage.setItem(BRAND_STORAGE_KEY, JSON.stringify(brandProfile || DEFAULT_PROFILE));
     } catch (e) {
       console.error(e);
     }
@@ -80,7 +88,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   useEffect(() => {
     try {
-      localStorage.setItem(BEANS_STORAGE_KEY, JSON.stringify(roasteryBeans));
+      localStorage.setItem(BEANS_STORAGE_KEY, JSON.stringify(Array.isArray(roasteryBeans) ? roasteryBeans : ROASTERY_BEANS));
     } catch (e) {
       console.error(e);
     }
@@ -88,7 +96,8 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const updateBrandProfile = useCallback((fields: Partial<RoasteryBrandProfile>) => {
     setBrandProfile((prev) => {
-      const updated = { ...prev, ...fields };
+      const current = prev || DEFAULT_PROFILE;
+      const updated = { ...current, ...fields };
       if (fields.accentColorId && ACCENT_COLOR_PRESETS[fields.accentColorId]) {
         updated.accentHex = ACCENT_COLOR_PRESETS[fields.accentColorId].hex;
       }
@@ -98,25 +107,27 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const updateRoastItem = useCallback((id: string, fields: Partial<any>) => {
     setRoasteryBeans((prev) =>
-      prev.map((bean) => (bean.id === id ? { ...bean, ...fields } : bean))
+      Array.isArray(prev) ? prev.map((bean) => (bean?.id === id ? { ...bean, ...fields } : bean)) : ROASTERY_BEANS
     );
   }, []);
 
   const addRoastItem = useCallback((newBean: any) => {
-    setRoasteryBeans((prev) => [newBean, ...prev]);
+    setRoasteryBeans((prev) => (Array.isArray(prev) ? [newBean, ...prev] : [newBean, ...ROASTERY_BEANS]));
   }, []);
 
   const resetToDefaults = useCallback(() => {
     setBrandProfile(DEFAULT_PROFILE);
     setRoasteryBeans(ROASTERY_BEANS);
-    localStorage.removeItem(BRAND_STORAGE_KEY);
-    localStorage.removeItem(BEANS_STORAGE_KEY);
+    try {
+      localStorage.removeItem(BRAND_STORAGE_KEY);
+      localStorage.removeItem(BEANS_STORAGE_KEY);
+    } catch {}
   }, []);
 
   const value = useMemo(
     () => ({
-      brandProfile,
-      roasteryBeans,
+      brandProfile: brandProfile || DEFAULT_PROFILE,
+      roasteryBeans: Array.isArray(roasteryBeans) ? roasteryBeans : ROASTERY_BEANS,
       updateBrandProfile,
       updateRoastItem,
       addRoastItem,

@@ -29,9 +29,9 @@ export const CartDrawer: React.FC = () => {
   const [customTip, setCustomTip] = useState('');
   const [applyFreeDrink, setApplyFreeDrink] = useState(false);
 
-  const rawSubtotal = cart.reduce((sum: number, item: any) => sum + item.unitPrice * item.quantity, 0);
+  const rawSubtotal = (cart || []).reduce((sum: number, item: any) => sum + (item?.unitPrice || 0) * (item?.quantity || 1), 0);
   
-  const discountAmount = applyFreeDrink && freeDrinksAvailable > 0 && cart.length > 0
+  const discountAmount = applyFreeDrink && (freeDrinksAvailable || 0) > 0 && (cart?.length || 0) > 0
     ? (cart[0]?.unitPrice || 0)
     : 0;
 

@@ -55,39 +55,43 @@ const calculateNextDispatch = (daysAhead: number = 7): string => {
   });
 };
 
+const DEFAULT_SAMPLE_SUBSCRIPTIONS: ActiveSubscription[] = [
+  {
+    id: 'sub-sample-01',
+    beanId: 'ethiopia-yirgacheffe-aricha',
+    beanName: 'Ethiopia Yirgacheffe Aricha',
+    image: '/images/beans-guji.jpg',
+    roastLevel: 'Light',
+    origin: 'Gedeo Zone, Yirgacheffe',
+    grindId: 'chemex-pourover',
+    grindName: 'Chemex & V60 Pour-Over',
+    bagSizeId: '250g',
+    bagSizeName: '250g Bag',
+    frequencyId: 'biweekly',
+    frequencyName: 'Every 2 Weeks',
+    unitPrice: 18.70,
+    quantity: 1,
+    status: 'active',
+    createdAt: 'Feb 15, 2026',
+    nextDispatchDate: calculateNextDispatch(10),
+    totalDeliveredCount: 2,
+  },
+];
+
 export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [subscriptions, setSubscriptions] = useState<ActiveSubscription[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
       }
     } catch (e) {
       console.error('Error loading subscriptions:', e);
     }
-    // Provide 1 realistic default sample active subscription to showcase immediate state
-    return [
-      {
-        id: 'sub-sample-01',
-        beanId: 'ethiopia-yirgacheffe-aricha',
-        beanName: 'Ethiopia Yirgacheffe Aricha',
-        image: '/images/beans-guji.jpg',
-        roastLevel: 'Light',
-        origin: 'Gedeo Zone, Yirgacheffe',
-        grindId: 'chemex-pourover',
-        grindName: 'Chemex & V60 Pour-Over',
-        bagSizeId: '250g',
-        bagSizeName: '250g Bag',
-        frequencyId: 'biweekly',
-        frequencyName: 'Every 2 Weeks',
-        unitPrice: 18.70, // 22.00 * 0.85
-        quantity: 1,
-        status: 'active',
-        createdAt: 'Feb 15, 2026',
-        nextDispatchDate: calculateNextDispatch(10),
-        totalDeliveredCount: 2,
-      },
-    ];
+    return DEFAULT_SAMPLE_SUBSCRIPTIONS;
   });
 
   const [isSubscribeModalOpen, setIsSubscribeModalOpen] = useState(false);
@@ -96,7 +100,7 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(subscriptions));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.isArray(subscriptions) ? subscriptions : []));
     } catch (e) {
       console.error('Error saving subscriptions:', e);
     }
@@ -118,48 +122,52 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
       status: 'active',
     };
 
-    setSubscriptions((prev) => [newSub, ...prev]);
+    setSubscriptions((prev) => (Array.isArray(prev) ? [newSub, ...prev] : [newSub]));
     return newSub;
   }, []);
 
   const pauseSubscription = useCallback((id: string) => {
     setSubscriptions((prev) =>
-      prev.map((sub) => (sub.id === id ? { ...sub, status: 'paused' } : sub))
+      Array.isArray(prev) ? prev.map((sub) => (sub.id === id ? { ...sub, status: 'paused' } : sub)) : []
     );
   }, []);
 
   const resumeSubscription = useCallback((id: string) => {
     setSubscriptions((prev) =>
-      prev.map((sub) =>
-        sub.id === id ? { ...sub, status: 'active', nextDispatchDate: calculateNextDispatch(7) } : sub
-      )
+      Array.isArray(prev)
+        ? prev.map((sub) =>
+            sub.id === id ? { ...sub, status: 'active', nextDispatchDate: calculateNextDispatch(7) } : sub
+          )
+        : []
     );
   }, []);
 
   const cancelSubscription = useCallback((id: string) => {
-    setSubscriptions((prev) => prev.filter((sub) => sub.id !== id));
+    setSubscriptions((prev) => (Array.isArray(prev) ? prev.filter((sub) => sub.id !== id) : []));
   }, []);
 
   const updateFrequency = useCallback((id: string, newFreqId: string) => {
     const freq = SUBSCRIPTION_FREQUENCIES.find((f) => f.id === newFreqId);
     if (!freq) return;
     setSubscriptions((prev) =>
-      prev.map((sub) => {
-        if (sub.id === id) {
-          const bean = ROASTERY_BEANS.find((b) => b.id === sub.beanId);
-          const bagSize = BAG_SIZES.find((s) => s.id === sub.bagSizeId) || BAG_SIZES[0];
-          const baseRaw = (bean?.basePrice || 20) * bagSize.multiplier;
-          const discountedPrice = Number((baseRaw * (1 - freq.discountPct / 100)).toFixed(2));
-          return {
-            ...sub,
-            frequencyId: freq.id,
-            frequencyName: freq.name,
-            unitPrice: discountedPrice,
-            nextDispatchDate: calculateNextDispatch(freq.days || 14),
-          };
-        }
-        return sub;
-      })
+      Array.isArray(prev)
+        ? prev.map((sub) => {
+            if (sub.id === id) {
+              const bean = ROASTERY_BEANS.find((b) => b.id === sub.beanId);
+              const bagSize = BAG_SIZES.find((s) => s.id === sub.bagSizeId) || BAG_SIZES[0];
+              const baseRaw = (bean?.basePrice || 20) * bagSize.multiplier;
+              const discountedPrice = Number((baseRaw * (1 - freq.discountPct / 100)).toFixed(2));
+              return {
+                ...sub,
+                frequencyId: freq.id,
+                frequencyName: freq.name,
+                unitPrice: discountedPrice,
+                nextDispatchDate: calculateNextDispatch(freq.days || 14),
+              };
+            }
+            return sub;
+          })
+        : []
     );
   }, []);
 
@@ -167,17 +175,17 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
     const grind = GRIND_PROFILES.find((g) => g.id === newGrindId);
     if (!grind) return;
     setSubscriptions((prev) =>
-      prev.map((sub) => (sub.id === id ? { ...sub, grindId: grind.id, grindName: grind.name } : sub))
+      Array.isArray(prev) ? prev.map((sub) => (sub.id === id ? { ...sub, grindId: grind.id, grindName: grind.name } : sub)) : []
     );
   }, []);
 
   const activeSubscriptionCount = useMemo(() => {
-    return subscriptions.filter((s) => s.status === 'active').length;
+    return Array.isArray(subscriptions) ? subscriptions.filter((s) => s?.status === 'active').length : 0;
   }, [subscriptions]);
 
   const value = useMemo(
     () => ({
-      subscriptions,
+      subscriptions: Array.isArray(subscriptions) ? subscriptions : [],
       activeSubscriptionCount,
       isSubscribeModalOpen,
       setIsSubscribeModalOpen,

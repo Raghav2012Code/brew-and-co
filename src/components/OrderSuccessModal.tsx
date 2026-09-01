@@ -96,10 +96,10 @@ export const OrderSuccessModal: React.FC = () => {
 
           {/* Item Breakdown */}
           <div className="space-y-2 border-t border-hairline dark:border-dark-hairline pt-3 max-h-32 overflow-y-auto">
-            {activeOrder.items.map((item: any, idx: number) => (
+            {(activeOrder.items || []).map((item: any, idx: number) => (
               <div key={idx} className="flex justify-between text-xs text-ink dark:text-dark-text-main font-mono">
                 <span>{item.quantity}× {item.name}</span>
-                <span className="font-semibold">${(item.unitPrice * item.quantity).toFixed(2)}</span>
+                <span className="font-semibold">${((item.unitPrice || 0) * (item.quantity || 1)).toFixed(2)}</span>
               </div>
             ))}
           </div>
