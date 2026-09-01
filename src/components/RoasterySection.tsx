@@ -7,9 +7,11 @@ import {
   ShieldCheck,
   Package,
   SlidersHorizontal,
+  Compass,
 } from 'lucide-react';
-import { ROASTERY_BEANS } from '../data/roasteryData';
 import { useSubscription } from '../context/SubscriptionContext';
+import { useStore } from '../context/StoreContext';
+import { useTenant } from '../context/TenantContext';
 
 export const RoasterySection: React.FC = () => {
   const {
@@ -19,11 +21,14 @@ export const RoasterySection: React.FC = () => {
     setIsManageDrawerOpen,
   } = useSubscription();
 
+  const { setIsMatchmakerOpen } = useStore();
+  const { roasteryBeans, brandProfile } = useTenant();
+
   const [filterRoast, setFilterRoast] = useState<'all' | 'Light' | 'Medium-Light' | 'Medium' | 'Medium-Dark'>('all');
 
   const filteredBeans = filterRoast === 'all'
-    ? ROASTERY_BEANS
-    : ROASTERY_BEANS.filter((b) => b.roastLevel === filterRoast);
+    ? roasteryBeans
+    : roasteryBeans.filter((b) => b.roastLevel === filterRoast);
 
   return (
     <section
@@ -37,24 +42,33 @@ export const RoasterySection: React.FC = () => {
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-vermillion dark:bg-dark-vermillion" aria-hidden="true" />
             <span className="text-xs font-mono font-bold tracking-widest uppercase text-ink-muted dark:text-dark-text-muted">
-              Micro-Lot Roastery & Doorstep Subscriptions
+              Micro-Lot Roastery & Doorstep Subscriptions • {brandProfile.locationCity}
             </span>
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-ink dark:text-dark-text-main tracking-tight leading-none">
             Freshly Roasted Beans, Calibrated to Your Cup.
           </h2>
           <p className="text-sm sm:text-base text-ink-muted dark:text-dark-text-muted leading-relaxed font-sans">
-            Directly traded from generational high-elevation estates. Roasted on our vintage cast-iron drum roaster in San Francisco and dispatched at peak degassing.
+            Directly traded from generational high-elevation estates. Roasted on our vintage cast-iron drum roaster and dispatched at peak degassing with {brandProfile.roastDiscountPct}% recurring savings.
           </p>
         </div>
 
         {/* Action / Vault Trigger */}
         <div className="flex flex-wrap items-center gap-3">
+          {/* Interactive Palate Quiz Launcher */}
+          <button
+            onClick={() => setIsMatchmakerOpen(true)}
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-vermillion dark:bg-dark-vermillion text-paper dark:text-dark-canvas text-xs font-mono font-bold hover:opacity-90 active:scale-95 transition-all cursor-pointer shadow-xs"
+          >
+            <Compass className="w-3.5 h-3.5 animate-spin-slow" />
+            <span>Find Your Roast (30s Quiz)</span>
+          </button>
+
           {subscriptions.length > 0 && (
             <button
               onClick={() => setIsManageDrawerOpen(true)}
               aria-label="Manage your active subscriptions"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-none border border-ink dark:border-dark-text-main bg-paper-dim dark:bg-dark-card text-xs font-mono font-bold text-ink dark:text-dark-text-main hover:bg-ink hover:text-paper dark:hover:bg-dark-text-main dark:hover:text-dark-canvas active:scale-95 transition-all cursor-pointer shadow-xs"
+              className="inline-flex items-center gap-2 px-4 py-2.5 border border-ink dark:border-dark-text-main bg-paper-dim dark:bg-dark-card text-xs font-mono font-bold text-ink dark:text-dark-text-main hover:bg-ink hover:text-paper dark:hover:bg-dark-text-main dark:hover:text-dark-canvas active:scale-95 transition-all cursor-pointer shadow-xs"
             >
               <Package className="w-3.5 h-3.5 text-vermillion dark:text-dark-vermillion" />
               <span>Subscription Vault ({activeSubscriptionCount} Active)</span>
@@ -65,7 +79,7 @@ export const RoasterySection: React.FC = () => {
             href="#brew-guide"
             className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-vermillion dark:text-dark-vermillion hover:underline py-2"
           >
-            <span>Dial-In Brewing Guide</span>
+            <span>Dial-In Guide</span>
             <ArrowUpRight className="w-3.5 h-3.5" />
           </a>
         </div>
@@ -79,7 +93,7 @@ export const RoasterySection: React.FC = () => {
           </div>
           <div>
             <h3 className="font-bold text-xs uppercase tracking-wider font-mono text-ink dark:text-dark-text-main">
-              15% Recurring Discount
+              {brandProfile.roastDiscountPct}% Recurring Discount
             </h3>
             <p className="text-xs text-ink-muted dark:text-dark-text-muted mt-1 leading-snug">
               Save on every bag compared to retail. Applied automatically.
@@ -162,7 +176,7 @@ export const RoasterySection: React.FC = () => {
       {/* Roastery Bean Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         {filteredBeans.map((bean) => {
-          const subPrice = (bean.basePrice * 0.85).toFixed(2);
+          const subPrice = (bean.basePrice * (1 - brandProfile.roastDiscountPct / 100)).toFixed(2);
 
           return (
             <article
@@ -232,7 +246,7 @@ export const RoasterySection: React.FC = () => {
 
                   {/* Tasting Notes */}
                   <div className="flex flex-wrap gap-1">
-                    {bean.tastingNotes.map((note) => (
+                    {bean.tastingNotes?.map((note: string) => (
                       <span
                         key={note}
                         className="px-2 py-0.5 text-[11px] font-mono bg-paper dark:bg-dark-subtle border border-hairline/80 dark:border-dark-hairline/80 text-ink dark:text-dark-text-main"

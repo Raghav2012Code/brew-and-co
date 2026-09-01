@@ -1,12 +1,26 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Menu as MenuIcon, X, Sun, Moon, Sparkles, MapPin, Package } from 'lucide-react';
+import { ShoppingBag, Menu as MenuIcon, X, Sun, Moon, Sparkles, MapPin, Package, Coffee, Settings } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { useSubscription } from '../context/SubscriptionContext';
+import { useTenant } from '../context/TenantContext';
 import { LogoMark } from './LogoMark';
 
 export const Navbar = () => {
-  const { cartCount, setIsCartOpen, loyaltyStamps, setIsLoyaltyModalOpen, storeStatus, effectiveTheme, toggleTheme } = useStore();
+  const {
+    cartCount,
+    setIsCartOpen,
+    loyaltyStamps,
+    setIsLoyaltyModalOpen,
+    storeStatus,
+    effectiveTheme,
+    toggleTheme,
+    setIsBaristaModalOpen,
+    setIsRoasteryStudioOpen,
+    activeOrdersCount,
+  } = useStore();
+
   const { subscriptions, activeSubscriptionCount, setIsManageDrawerOpen } = useSubscription();
+  const { brandProfile } = useTenant();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -21,16 +35,39 @@ export const Navbar = () => {
             </span>
             <span className="hidden sm:inline-flex items-center gap-1">
               <MapPin className="w-3.5 h-3.5" aria-hidden="true" />
-              442 Industrial Way, San Francisco
+              442 Industrial Way, {brandProfile.locationCity}
             </span>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {/* Barista KDS Quick Access */}
+            <button
+              onClick={() => setIsBaristaModalOpen(true)}
+              aria-label="Open Barista KDS and Roastery Operations Station"
+              className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-none border border-[#D5CFBF] dark:border-[#38342E] bg-[#FBF9F5] dark:bg-[#11100F] text-xs text-[#1A1816] dark:text-[#EAE6DF] hover:border-[#1A1816] dark:hover:border-[#EAE6DF] transition-all cursor-pointer shadow-2xs font-mono"
+            >
+              <Coffee className="w-3.5 h-3.5 text-vermillion dark:text-dark-vermillion" />
+              <span>Barista Rail</span>
+              {activeOrdersCount > 0 && (
+                <span className="w-1.5 h-1.5 rounded-full bg-vermillion dark:bg-dark-vermillion animate-ping" />
+              )}
+            </button>
+
+            {/* Roastery Studio Quick Access */}
+            <button
+              onClick={() => setIsRoasteryStudioOpen(true)}
+              aria-label="Open Roastery SaaS Studio Settings"
+              className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-none border border-[#D5CFBF] dark:border-[#38342E] bg-[#FBF9F5] dark:bg-[#11100F] text-xs text-[#1A1816] dark:text-[#EAE6DF] hover:border-[#1A1816] dark:hover:border-[#EAE6DF] transition-all cursor-pointer shadow-2xs font-mono"
+            >
+              <Settings className="w-3.5 h-3.5" />
+              <span>Studio</span>
+            </button>
+
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
               aria-label={effectiveTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-[#D5CFBF] dark:border-[#38342E] bg-[#FBF9F5] dark:bg-[#11100F] text-xs text-[#1A1816] dark:text-[#EAE6DF] hover:border-[#1A1816] dark:hover:border-[#EAE6DF] transition-all cursor-pointer shadow-xs"
+              className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-none border border-[#D5CFBF] dark:border-[#38342E] bg-[#FBF9F5] dark:bg-[#11100F] text-xs text-[#1A1816] dark:text-[#EAE6DF] hover:border-[#1A1816] dark:hover:border-[#EAE6DF] transition-all cursor-pointer shadow-2xs"
             >
               {effectiveTheme === 'dark' ? (
                 <>
@@ -51,7 +88,7 @@ export const Navbar = () => {
       {/* Main Masthead Navigation */}
       <div className="max-w-7xl mx-auto px-4 sm:px-8 py-3.5 flex items-center justify-between">
         {/* Brand Identity with LogoMark */}
-        <a href="#" className="flex items-center" aria-label="Brew & Co. Home">
+        <a href="#" className="flex items-center" aria-label={`${brandProfile.brandName} Home`}>
           <LogoMark className="w-9 h-9" showText={true} />
         </a>
 
@@ -146,13 +183,24 @@ export const Navbar = () => {
               15% Off
             </span>
           </a>
-          <a
-            href="#brew-guide"
-            onClick={() => setMobileOpen(false)}
-            className="block min-h-[44px] p-3 rounded-xl bg-[#F3EFE6] dark:bg-[#1C1B18] text-sm font-semibold text-[#1A1816] dark:text-[#EAE6DF] active:bg-[#E8E4DC] dark:active:bg-[#262420] transition-colors"
+          <button
+            onClick={() => {
+              setMobileOpen(false);
+              setIsBaristaModalOpen(true);
+            }}
+            className="w-full text-left min-h-[44px] block p-3 rounded-xl bg-[#F3EFE6] dark:bg-[#1C1B18] text-sm font-semibold text-[#1A1816] dark:text-[#EAE6DF] active:bg-[#E8E4DC] dark:active:bg-[#262420] transition-colors"
           >
-            Home Brew Guide
-          </a>
+            ☕ Barista Rail & KDS ({activeOrdersCount} Active)
+          </button>
+          <button
+            onClick={() => {
+              setMobileOpen(false);
+              setIsRoasteryStudioOpen(true);
+            }}
+            className="w-full text-left min-h-[44px] block p-3 rounded-xl bg-[#F3EFE6] dark:bg-[#1C1B18] text-sm font-semibold text-[#1A1816] dark:text-[#EAE6DF] active:bg-[#E8E4DC] dark:active:bg-[#262420] transition-colors"
+          >
+            ⚙ Roastery Studio & Customizer
+          </button>
           <button
             onClick={() => {
               setMobileOpen(false);
@@ -178,27 +226,6 @@ export const Navbar = () => {
           >
             Visit & Hours
           </a>
-          <button
-            onClick={() => {
-              toggleTheme();
-            }}
-            className="w-full flex items-center justify-between min-h-[44px] p-3 rounded-xl bg-[#F3EFE6] dark:bg-[#1C1B18] text-sm font-semibold text-[#1A1816] dark:text-[#EAE6DF] active:bg-[#E8E4DC] dark:active:bg-[#262420] transition-colors"
-          >
-            <span>Appearance Theme</span>
-            <span className="flex items-center gap-1.5 text-xs text-[#666056] dark:text-[#A09A8E]">
-              {effectiveTheme === 'dark' ? (
-                <>
-                  <Sun className="w-4 h-4 text-[#E5A93C]" />
-                  <span>Light Mode</span>
-                </>
-              ) : (
-                <>
-                  <Moon className="w-4 h-4 text-[#666056]" />
-                  <span>Dark Mode</span>
-                </>
-              )}
-            </span>
-          </button>
         </div>
       )}
     </header>
