@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Trash2, Plus, Minus, ShoppingBag, Sparkles } from 'lucide-react';
+import { Trash2, Plus, Minus, ShoppingBag, Sparkles, Zap } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
+import { useSubscription } from '../context/SubscriptionContext';
 import {
   Sheet,
   SheetContent,
@@ -20,6 +21,8 @@ export const CartDrawer: React.FC = () => {
     placeOrder,
     freeDrinksAvailable,
   } = useStore();
+
+  const { addSubscription } = useSubscription();
 
   const [pickupName, setPickupName] = useState('');
   const [tipPercent, setTipPercent] = useState(15);
@@ -41,18 +44,51 @@ export const CartDrawer: React.FC = () => {
     
   const total = Number((subtotal + tax + calculatedTip).toFixed(2));
 
+  const hasSubscriptions = cart.some((item: any) => item.isSubscription || item.subscriptionMeta);
+
   const handleCheckout = (e: React.FormEvent) => {
     e.preventDefault();
     if (cart.length === 0) return;
+
+    // If order contains coffee subscriptions, register them to active subscriptions
+    let registeredCount = 0;
+    cart.forEach((item: any) => {
+      if (item.isSubscription && item.subscriptionMeta) {
+        addSubscription({
+          beanId: item.subscriptionMeta.beanId,
+          beanName: item.name,
+          image: item.image,
+          roastLevel: item.subscriptionMeta.roastLevel || 'Micro-Lot',
+          origin: item.subscriptionMeta.origin || 'Single Origin',
+          grindId: item.subscriptionMeta.grindId,
+          grindName: item.subscriptionMeta.grindName,
+          bagSizeId: item.subscriptionMeta.bagSizeId,
+          bagSizeName: item.subscriptionMeta.bagSizeName,
+          frequencyId: item.subscriptionMeta.frequencyId,
+          frequencyName: item.subscriptionMeta.frequencyName,
+          unitPrice: item.unitPrice,
+          quantity: item.quantity,
+        });
+        registeredCount += 1;
+      }
+    });
+
     placeOrder({
       pickupName: pickupName.trim() || 'Counter Guest',
       tipPercent,
       tipAmount: calculatedTip,
       appliedFreeDrink: applyFreeDrink && freeDrinksAvailable > 0,
     });
-    toast.success('Order placed successfully!', {
-      description: `Preparing your coffee for ${pickupName.trim() || 'Counter Guest'}.`,
-    });
+
+    if (registeredCount > 0) {
+      toast.success(`Order placed & ${registeredCount} Subscription${registeredCount > 1 ? 's' : ''} Activated!`, {
+        description: `Your recurring dispatch is scheduled. Manage your plan anytime in the Subscription Vault.`,
+      });
+    } else {
+      toast.success('Order placed successfully!', {
+        description: `Preparing your coffee for ${pickupName.trim() || 'Counter Guest'}.`,
+      });
+    }
   };
 
   const handleRemove = (id: string, name: string) => {
@@ -74,6 +110,12 @@ export const CartDrawer: React.FC = () => {
               Your Bag
             </SheetTitle>
           </div>
+          {hasSubscriptions && (
+            <span className="inline-flex items-center gap-1 text-[10px] font-mono font-bold uppercase tracking-wider text-vermillion dark:text-dark-vermillion bg-vermillion/10 dark:bg-dark-vermillion/20 px-2 py-0.5 border border-vermillion/30 dark:border-dark-vermillion/30">
+              <Zap className="w-3 h-3 fill-current" />
+              Includes Sub
+            </span>
+          )}
         </SheetHeader>
 
         {/* Drawer Body */}
@@ -83,102 +125,155 @@ export const CartDrawer: React.FC = () => {
               <ShoppingBag className="w-10 h-10 mx-auto text-ink-muted dark:text-dark-text-muted stroke-[1.5]" aria-hidden="true" />
               <h3 className="font-serif text-xl font-bold text-ink dark:text-dark-text-main">Your bag is empty</h3>
               <p className="text-xs text-ink-muted dark:text-dark-text-muted max-w-xs mx-auto">
-                Add coffee, tea, or pastries from our menu to start your order.
+                Add fresh coffee, pastries, or roastery bean subscriptions to start your order.
               </p>
-              <Button
-                variant="default"
-                size="sm"
-                onClick={() => setIsCartOpen(false)}
-                className="mt-2"
-              >
-                Browse Menu
-              </Button>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-2 pt-2">
+                <Button
+                  variant="default"
+                  size="sm"
+                  onClick={() => setIsCartOpen(false)}
+                >
+                  Browse Cafe Menu
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setIsCartOpen(false);
+                    const el = document.getElementById('roastery');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                >
+                  Explore Roastery Beans
+                </Button>
+              </div>
             </div>
           ) : (
             <>
               {/* Item List */}
               <div className="space-y-3">
-                {cart.map((item: any) => (
-                  <div
-                    key={item.id}
-                    className="p-3.5 sm:p-4 bg-paper-dim dark:bg-dark-card border border-hairline dark:border-dark-hairline space-y-2.5"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="w-12 h-12 object-cover border border-hairline dark:border-dark-hairline shrink-0"
-                        />
-                        <div>
-                          <h4 className="font-serif font-bold text-base text-ink dark:text-dark-text-main leading-snug">
-                            {item.name}
-                          </h4>
-                          <p className="text-xs font-mono font-semibold text-vermillion dark:text-dark-vermillion">
-                            ${(item.unitPrice * item.quantity).toFixed(2)}
-                          </p>
-                        </div>
-                      </div>
+                {cart.map((item: any) => {
+                  const isItemSub = item.isSubscription || !!item.subscriptionMeta;
 
-                      <button
-                        onClick={() => handleRemove(item.id, item.name)}
-                        aria-label={`Remove ${item.name} from bag`}
-                        className="min-h-[36px] min-w-[36px] flex items-center justify-center text-ink-faint hover:text-vermillion dark:hover:text-dark-vermillion active:scale-90 transition-all cursor-pointer"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
+                  return (
+                    <div
+                      key={item.id}
+                      className={`p-3.5 sm:p-4 border space-y-2.5 ${
+                        isItemSub
+                          ? 'bg-paper-dim dark:bg-dark-card border-vermillion/40 dark:border-dark-vermillion/40 shadow-xs'
+                          : 'bg-paper-dim dark:bg-dark-card border-hairline dark:border-dark-hairline'
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-center gap-3">
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            className="w-12 h-12 object-cover border border-hairline dark:border-dark-hairline shrink-0"
+                          />
+                          <div>
+                            {isItemSub && (
+                              <span className="inline-flex items-center gap-1 text-[9px] font-mono font-bold uppercase tracking-wider text-vermillion dark:text-dark-vermillion mb-0.5">
+                                <Zap className="w-2.5 h-2.5 fill-current" />
+                                Subscription • 15% Off
+                              </span>
+                            )}
+                            <h4 className="font-serif font-bold text-base text-ink dark:text-dark-text-main leading-snug">
+                              {item.name}
+                            </h4>
+                            <p className="text-xs font-mono font-semibold text-vermillion dark:text-dark-vermillion">
+                              ${(item.unitPrice * item.quantity).toFixed(2)}
+                            </p>
+                          </div>
+                        </div>
 
-                    {/* Customization Details */}
-                    <div className="text-xs text-ink-muted dark:text-dark-text-muted space-y-0.5 bg-paper dark:bg-dark-canvas p-2.5 border border-hairline dark:border-dark-hairline">
-                      <div>
-                        <span>Size & Temp: </span>
-                        <strong className="text-ink dark:text-dark-text-main font-mono text-[11px]">{item.options.size?.name || 'Standard'} • {item.options.temp.toUpperCase()}</strong>
-                      </div>
-                      {item.options.milk && (
-                        <div>
-                          <span>Milk: </span>
-                          <strong className="text-ink dark:text-dark-text-main font-mono text-[11px]">{item.options.milk.name}</strong>
-                        </div>
-                      )}
-                      {item.options.shot && item.options.shot.id !== 'standard' && (
-                        <div>
-                          <span>Shots: </span>
-                          <strong className="text-ink dark:text-dark-text-main font-mono text-[11px]">{item.options.shot.name}</strong>
-                        </div>
-                      )}
-                      {item.options.specialNotes && (
-                        <div className="italic text-ink dark:text-dark-text-main pt-0.5 truncate">
-                          Note: "{item.options.specialNotes}"
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Stepper with accessible touch targets */}
-                    <div className="flex items-center justify-between pt-1">
-                      <span className="text-xs font-mono text-ink-muted dark:text-dark-text-muted">Qty:</span>
-                      <div className="flex items-center border border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas">
                         <button
-                          onClick={() => updateQuantity(item.id, -1)}
-                          aria-label="Decrease quantity"
-                          className="min-h-[36px] min-w-[36px] flex items-center justify-center text-ink-muted hover:text-ink dark:hover:text-dark-text-main active:scale-90 transition-transform cursor-pointer"
+                          onClick={() => handleRemove(item.id, item.name)}
+                          aria-label={`Remove ${item.name} from bag`}
+                          className="min-h-[36px] min-w-[36px] flex items-center justify-center text-ink-faint hover:text-vermillion dark:hover:text-dark-vermillion active:scale-90 transition-all cursor-pointer"
                         >
-                          <Minus className="w-3.5 h-3.5" />
-                        </button>
-                        <span className="px-3 font-mono font-bold text-xs text-ink dark:text-dark-text-main">
-                          {item.quantity}
-                        </span>
-                        <button
-                          onClick={() => updateQuantity(item.id, 1)}
-                          aria-label="Increase quantity"
-                          className="min-h-[36px] min-w-[36px] flex items-center justify-center text-ink-muted hover:text-ink dark:hover:text-dark-text-main active:scale-90 transition-transform cursor-pointer"
-                        >
-                          <Plus className="w-3.5 h-3.5" />
+                          <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
+
+                      {/* Customization Details */}
+                      <div className="text-xs text-ink-muted dark:text-dark-text-muted space-y-0.5 bg-paper dark:bg-dark-canvas p-2.5 border border-hairline dark:border-dark-hairline">
+                        {isItemSub ? (
+                          <>
+                            <div>
+                              <span>Frequency: </span>
+                              <strong className="text-vermillion dark:text-dark-vermillion font-mono text-[11px]">
+                                {item.subscriptionMeta?.frequencyName || 'Recurring'}
+                              </strong>
+                            </div>
+                            <div>
+                              <span>Grind: </span>
+                              <strong className="text-ink dark:text-dark-text-main font-mono text-[11px]">
+                                {item.subscriptionMeta?.grindName || item.beanMeta?.grindName || 'Whole Bean'}
+                              </strong>
+                            </div>
+                            <div>
+                              <span>Size: </span>
+                              <strong className="text-ink dark:text-dark-text-main font-mono text-[11px]">
+                                {item.subscriptionMeta?.bagSizeName || item.options?.size?.name || 'Standard'}
+                              </strong>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div>
+                              <span>Size & Temp: </span>
+                              <strong className="text-ink dark:text-dark-text-main font-mono text-[11px]">
+                                {item.options?.size?.name || 'Standard'} • {item.options?.temp?.toUpperCase()}
+                              </strong>
+                            </div>
+                            {item.options?.milk && (
+                              <div>
+                                <span>Milk: </span>
+                                <strong className="text-ink dark:text-dark-text-main font-mono text-[11px]">{item.options.milk.name}</strong>
+                              </div>
+                            )}
+                            {item.options?.shot && item.options.shot.id !== 'standard' && (
+                              <div>
+                                <span>Shots: </span>
+                                <strong className="text-ink dark:text-dark-text-main font-mono text-[11px]">{item.options.shot.name}</strong>
+                              </div>
+                            )}
+                            {item.options?.specialNotes && (
+                              <div className="italic text-ink dark:text-dark-text-main pt-0.5 truncate">
+                                Note: "{item.options.specialNotes}"
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </div>
+
+                      {/* Stepper with accessible touch targets */}
+                      <div className="flex items-center justify-between pt-1">
+                        <span className="text-xs font-mono text-ink-muted dark:text-dark-text-muted">Qty:</span>
+                        <div className="flex items-center border border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas">
+                          <button
+                            onClick={() => updateQuantity(item.id, -1)}
+                            aria-label="Decrease quantity"
+                            className="min-h-[36px] min-w-[36px] flex items-center justify-center text-ink-muted hover:text-ink dark:hover:text-dark-text-main active:scale-90 transition-transform cursor-pointer"
+                          >
+                            <Minus className="w-3.5 h-3.5" />
+                          </button>
+                          <span className="px-3 font-mono font-bold text-xs text-ink dark:text-dark-text-main">
+                            {item.quantity}
+                          </span>
+                          <button
+                            onClick={() => updateQuantity(item.id, 1)}
+                            aria-label="Increase quantity"
+                            className="min-h-[36px] min-w-[36px] flex items-center justify-center text-ink-muted hover:text-ink dark:hover:text-dark-text-main active:scale-90 transition-transform cursor-pointer"
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {/* Free Drink Reward Toggle */}
@@ -236,7 +331,7 @@ export const CartDrawer: React.FC = () => {
               {/* Pickup Name Input */}
               <div className="space-y-1.5 pt-2">
                 <label htmlFor="pickup-guest-name" className="text-xs font-mono font-medium text-ink-muted dark:text-dark-text-muted block">
-                  Name for Order
+                  Name for Order / Delivery
                 </label>
                 <input
                   id="pickup-guest-name"
@@ -244,7 +339,7 @@ export const CartDrawer: React.FC = () => {
                   required
                   value={pickupName}
                   onChange={(e) => setPickupName(e.target.value)}
-                  placeholder="Your name"
+                  placeholder="Your full name"
                   className="w-full min-h-[42px] p-3 bg-paper-dim dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main placeholder:text-ink-faint font-sans text-xs focus:outline-none focus:border-ink dark:focus:border-dark-text-main"
                 />
               </div>
@@ -287,7 +382,7 @@ export const CartDrawer: React.FC = () => {
               size="lg"
               className="w-full justify-between"
             >
-              <span>Place Pickup Order</span>
+              <span>{hasSubscriptions ? 'Place Order & Start Subscription' : 'Place Pickup Order'}</span>
               <span className="font-bold">${total.toFixed(2)}</span>
             </Button>
           </div>

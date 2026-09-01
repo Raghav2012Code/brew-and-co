@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Menu as MenuIcon, X, Sun, Moon, Sparkles, MapPin } from 'lucide-react';
+import { ShoppingBag, Menu as MenuIcon, X, Sun, Moon, Sparkles, MapPin, Package } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
+import { useSubscription } from '../context/SubscriptionContext';
 import { LogoMark } from './LogoMark';
 
 export const Navbar = () => {
   const { cartCount, setIsCartOpen, loyaltyStamps, setIsLoyaltyModalOpen, storeStatus, effectiveTheme, toggleTheme } = useStore();
+  const { subscriptions, activeSubscriptionCount, setIsManageDrawerOpen } = useSubscription();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -58,8 +60,11 @@ export const Navbar = () => {
           <a href="#menu" className="hover:text-[#1A1816] dark:hover:text-[#EAE6DF] transition-colors py-1">
             Menu & Order
           </a>
-          <a href="#location" className="hover:text-[#1A1816] dark:hover:text-[#EAE6DF] transition-colors py-1">
-            Visit & Hours
+          <a href="#roastery" className="hover:text-[#1A1816] dark:hover:text-[#EAE6DF] transition-colors py-1 flex items-center gap-1.5">
+            <span>Roastery & Subscriptions</span>
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.2 bg-vermillion/10 text-vermillion dark:text-dark-vermillion border border-vermillion/30">
+              15% Off
+            </span>
           </a>
           <a href="#brew-guide" className="hover:text-[#1A1816] dark:hover:text-[#EAE6DF] transition-colors py-1">
             Brew Guide
@@ -67,10 +72,25 @@ export const Navbar = () => {
           <a href="#rewards" className="hover:text-[#1A1816] dark:hover:text-[#EAE6DF] transition-colors py-1">
             Tasting Pass
           </a>
+          <a href="#location" className="hover:text-[#1A1816] dark:hover:text-[#EAE6DF] transition-colors py-1">
+            Visit & Hours
+          </a>
         </nav>
 
         {/* Right Actions */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Active Subscription Status Pill */}
+          {subscriptions.length > 0 && (
+            <button
+              onClick={() => setIsManageDrawerOpen(true)}
+              aria-label={`View Subscriptions: ${activeSubscriptionCount} active plans`}
+              className="hidden lg:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-full bg-[#F3EFE6] dark:bg-[#1C1B18] border border-[#E0DACB] dark:border-[#302D27] text-[#1A1816] dark:text-[#EAE6DF] hover:border-[#1A1816] dark:hover:border-[#EAE6DF] active:scale-95 transition-all"
+            >
+              <Package className="w-3.5 h-3.5 text-[#C84B31]" aria-hidden="true" />
+              <span>Vault: {activeSubscriptionCount}</span>
+            </button>
+          )}
+
           {/* Tasting Pass Status */}
           <button
             onClick={() => setIsLoyaltyModalOpen(true)}
@@ -85,7 +105,7 @@ export const Navbar = () => {
           <button
             onClick={() => setIsCartOpen(true)}
             aria-label={`View Bag: ${cartCount} items`}
-            className="min-h-[42px] min-w-[42px] flex items-center justify-center gap-2 px-3.5 sm:px-4 py-2 rounded-lg bg-[#1A1816] dark:bg-[#EAE6DF] text-[#FBF9F5] dark:text-[#11100F] hover:bg-[#C84B31] dark:hover:bg-[#C84B31] dark:hover:text-[#FBF9F5] text-xs sm:text-sm font-semibold shadow-sm active:scale-95 transition-all"
+            className="min-h-[42px] min-w-[42px] flex items-center justify-center gap-2 px-3.5 sm:px-4 py-2 rounded-lg bg-[#1A1816] dark:bg-[#EAE6DF] text-[#FBF9F5] dark:text-[#11100F] hover:bg-[#C84B31] dark:hover:bg-[#C84B31] dark:hover:text-[#FBF9F5] text-xs sm:text-sm font-semibold shadow-sm active:scale-95 transition-all cursor-pointer"
           >
             <ShoppingBag className="w-4 h-4" aria-hidden="true" />
             <span className="hidden xs:inline">Bag</span>
@@ -97,7 +117,7 @@ export const Navbar = () => {
           {/* Mobile Menu Hamburger (Min 44x44px hitbox) */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden min-h-[42px] min-w-[42px] flex items-center justify-center p-2.5 rounded-lg border border-[#E0DACB] dark:border-[#302D27] bg-[#F3EFE6] dark:bg-[#1C1B18] text-[#1A1816] dark:text-[#EAE6DF] active:scale-95 transition-all"
+            className="md:hidden min-h-[42px] min-w-[42px] flex items-center justify-center p-2.5 rounded-lg border border-[#E0DACB] dark:border-[#302D27] bg-[#F3EFE6] dark:bg-[#1C1B18] text-[#1A1816] dark:text-[#EAE6DF] active:scale-95 transition-all cursor-pointer"
             aria-label="Toggle Navigation Menu"
             aria-expanded={mobileOpen}
           >
@@ -117,11 +137,14 @@ export const Navbar = () => {
             Menu & Order Ahead
           </a>
           <a
-            href="#location"
+            href="#roastery"
             onClick={() => setMobileOpen(false)}
-            className="block min-h-[44px] p-3 rounded-xl bg-[#F3EFE6] dark:bg-[#1C1B18] text-sm font-semibold text-[#1A1816] dark:text-[#EAE6DF] active:bg-[#E8E4DC] dark:active:bg-[#262420] transition-colors"
+            className="flex items-center justify-between min-h-[44px] p-3 rounded-xl bg-[#F3EFE6] dark:bg-[#1C1B18] text-sm font-semibold text-[#1A1816] dark:text-[#EAE6DF] active:bg-[#E8E4DC] dark:active:bg-[#262420] transition-colors"
           >
-            Visit & Hours
+            <span>Roastery & Subscriptions</span>
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 bg-vermillion/10 text-vermillion dark:text-dark-vermillion">
+              15% Off
+            </span>
           </a>
           <a
             href="#brew-guide"
@@ -133,12 +156,28 @@ export const Navbar = () => {
           <button
             onClick={() => {
               setMobileOpen(false);
+              setIsManageDrawerOpen(true);
+            }}
+            className="w-full text-left min-h-[44px] block p-3 rounded-xl bg-[#F3EFE6] dark:bg-[#1C1B18] text-sm font-semibold text-[#1A1816] dark:text-[#EAE6DF] active:bg-[#E8E4DC] dark:active:bg-[#262420] transition-colors"
+          >
+            Subscription Vault ({activeSubscriptionCount} Active)
+          </button>
+          <button
+            onClick={() => {
+              setMobileOpen(false);
               setIsLoyaltyModalOpen(true);
             }}
             className="w-full text-left min-h-[44px] block p-3 rounded-xl bg-[#F3EFE6] dark:bg-[#1C1B18] text-sm font-semibold text-[#1A1816] dark:text-[#EAE6DF] active:bg-[#E8E4DC] dark:active:bg-[#262420] transition-colors"
           >
             Tasting Pass ({loyaltyStamps}/6 Stamps)
           </button>
+          <a
+            href="#location"
+            onClick={() => setMobileOpen(false)}
+            className="block min-h-[44px] p-3 rounded-xl bg-[#F3EFE6] dark:bg-[#1C1B18] text-sm font-semibold text-[#1A1816] dark:text-[#EAE6DF] active:bg-[#E8E4DC] dark:active:bg-[#262420] transition-colors"
+          >
+            Visit & Hours
+          </a>
           <button
             onClick={() => {
               toggleTheme();
