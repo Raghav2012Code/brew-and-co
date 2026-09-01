@@ -175,8 +175,10 @@ export const RoasterySection: React.FC = () => {
 
       {/* Roastery Bean Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-        {filteredBeans.map((bean) => {
-          const subPrice = (bean.basePrice * (1 - brandProfile.roastDiscountPct / 100)).toFixed(2);
+        {(filteredBeans || []).map((bean) => {
+          const basePrice = bean.basePrice || 20;
+          const discountPct = brandProfile?.roastDiscountPct ?? 15;
+          const subPrice = (basePrice * (1 - discountPct / 100)).toFixed(2);
 
           return (
             <article
