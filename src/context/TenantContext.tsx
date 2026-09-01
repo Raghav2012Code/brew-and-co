@@ -64,7 +64,13 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       const saved = localStorage.getItem(BEANS_STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          // Merge with latest image paths and data from ROASTERY_BEANS
+          return parsed.map((item) => {
+            const canonical = ROASTERY_BEANS.find((b) => b.id === item.id);
+            return canonical ? { ...item, image: canonical.image } : item;
+          });
+        }
       }
     } catch (e) {
       console.error(e);
