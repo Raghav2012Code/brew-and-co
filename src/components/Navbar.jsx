@@ -31,7 +31,7 @@ export const Navbar = () => {
           <div className="flex items-center gap-4 sm:gap-6 truncate">
             <span className="flex items-center gap-1.5 font-medium text-[#1A1816] dark:text-[#EAE6DF]">
               <span className={`w-2 h-2 rounded-full ${storeStatus.isOpen ? 'bg-[#2E7D32]' : 'bg-[#C62828]'}`} aria-hidden="true" />
-              {storeStatus.isOpen ? 'Open Today: 7:00 AM – 6:00 PM' : 'Opens Tomorrow at 7:00 AM'}
+              {storeStatus.statusText}
             </span>
             <span className="hidden sm:inline-flex items-center gap-1">
               <MapPin className="w-3.5 h-3.5" aria-hidden="true" />

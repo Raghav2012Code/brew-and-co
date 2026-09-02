@@ -81,7 +81,8 @@ const DEFAULT_SAMPLE_SUBSCRIPTIONS: ActiveSubscription[] = [
 export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [subscriptions, setSubscriptions] = useState<ActiveSubscription[]>(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
+      if (typeof window === 'undefined' || !window.localStorage) return DEFAULT_SAMPLE_SUBSCRIPTIONS;
+      const saved = window.localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {

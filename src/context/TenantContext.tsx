@@ -46,7 +46,8 @@ const BEANS_STORAGE_KEY = 'brew_co_tenant_beans';
 export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [brandProfile, setBrandProfile] = useState<RoasteryBrandProfile>(() => {
     try {
-      const saved = localStorage.getItem(BRAND_STORAGE_KEY);
+      if (typeof window === 'undefined' || !window.localStorage) return DEFAULT_PROFILE;
+      const saved = window.localStorage.getItem(BRAND_STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed && typeof parsed === 'object' && parsed.brandName) {
@@ -61,7 +62,8 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const [roasteryBeans, setRoasteryBeans] = useState<any[]>(() => {
     try {
-      const saved = localStorage.getItem(BEANS_STORAGE_KEY);
+      if (typeof window === 'undefined' || !window.localStorage) return ROASTERY_BEANS;
+      const saved = window.localStorage.getItem(BEANS_STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
@@ -78,19 +80,42 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return ROASTERY_BEANS;
   });
 
-  useEffect(() => {
+  const syncAccentToDOM = useCallback((profile: RoasteryBrandProfile) => {
     if (typeof document === 'undefined') return;
-    const preset = ACCENT_COLOR_PRESETS[brandProfile?.accentColorId || 'vermillion'] || ACCENT_COLOR_PRESETS.vermillion;
+    const preset = ACCENT_COLOR_PRESETS[profile?.accentColorId || 'vermillion'] || ACCENT_COLOR_PRESETS.vermillion;
     const root = document.documentElement;
-    root.style.setProperty('--accent', preset.hex);
-    root.style.setProperty('--color-vermillion', preset.hex);
+    const isDark = root.classList.contains('dark');
+    const accentHex = isDark ? preset.darkHex : preset.hex;
+    root.style.setProperty('--accent', accentHex);
+    root.style.setProperty('--color-vermillion', accentHex);
+    root.style.setProperty('--color-dark-vermillion', preset.darkHex);
+    root.style.setProperty('--color-vermillion-dark', preset.darkHex);
+  }, []);
 
+  useEffect(() => {
+    syncAccentToDOM(brandProfile || DEFAULT_PROFILE);
     try {
       localStorage.setItem(BRAND_STORAGE_KEY, JSON.stringify(brandProfile || DEFAULT_PROFILE));
     } catch (e) {
       console.error(e);
     }
-  }, [brandProfile]);
+  }, [brandProfile, syncAccentToDOM]);
+
+  // Re-sync accent when theme class toggles (dark/light switch)
+  useEffect(() => {
+    if (typeof document === 'undefined' || typeof MutationObserver === 'undefined') return;
+    const root = document.documentElement;
+    const obs = new MutationObserver(() => syncAccentToDOM(brandProfile || DEFAULT_PROFILE));
+    obs.observe(root, { attributes: true, attributeFilter: ['class'] });
+    // Also listen to system preference changes when in system mode
+    const mql = typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+    const handleMql = () => syncAccentToDOM(brandProfile || DEFAULT_PROFILE);
+    mql?.addEventListener('change', handleMql);
+    return () => {
+      obs.disconnect();
+      mql?.removeEventListener('change', handleMql);
+    };
+  }, [brandProfile, syncAccentToDOM]);
 
   useEffect(() => {
     try {

@@ -26,21 +26,22 @@ export const CartDrawer: React.FC = () => {
 
   const [pickupName, setPickupName] = useState('');
   const [tipPercent, setTipPercent] = useState(15);
-  const [customTip, setCustomTip] = useState('');
   const [applyFreeDrink, setApplyFreeDrink] = useState(false);
 
   const rawSubtotal = (cart || []).reduce((sum: number, item: any) => sum + (item?.unitPrice || 0) * (item?.quantity || 1), 0);
   
-  const discountAmount = applyFreeDrink && (freeDrinksAvailable || 0) > 0 && (cart?.length || 0) > 0
-    ? (cart[0]?.unitPrice || 0)
-    : 0;
+  // Free drink should apply to cheapest eligible drink, not just first item
+  const discountAmount = (() => {
+    if (!applyFreeDrink || (freeDrinksAvailable || 0) <= 0 || (cart?.length || 0) === 0) return 0;
+    const eligible = (cart as any[]).filter((i) => !i.isSubscription && !i.subscriptionMeta);
+    const pool = eligible.length > 0 ? eligible : (cart as any[]);
+    return Math.min(...pool.map((i) => i?.unitPrice || 0));
+  })();
 
   const subtotal = Math.max(0, rawSubtotal - discountAmount);
   const tax = Number((subtotal * 0.0825).toFixed(2));
   
-  const calculatedTip = customTip !== '' 
-    ? parseFloat(customTip) || 0 
-    : Number(((subtotal * tipPercent) / 100).toFixed(2));
+  const calculatedTip = Number(((subtotal * tipPercent) / 100).toFixed(2));
     
   const total = Number((subtotal + tax + calculatedTip).toFixed(2));
 
@@ -306,14 +307,13 @@ export const CartDrawer: React.FC = () => {
                 </div>
                 <div className="grid grid-cols-4 gap-1.5">
                   {[10, 15, 20, 0].map((pct) => {
-                    const isSelected = tipPercent === pct && customTip === '';
+                    const isSelected = tipPercent === pct;
                     return (
                       <button
                         key={pct}
                         type="button"
                         onClick={() => {
                           setTipPercent(pct);
-                          setCustomTip('');
                         }}
                         className={`min-h-[38px] py-2 border text-xs font-mono font-semibold active:scale-95 transition-all cursor-pointer ${
                           isSelected

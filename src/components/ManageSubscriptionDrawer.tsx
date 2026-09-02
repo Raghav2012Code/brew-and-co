@@ -39,8 +39,14 @@ export const ManageSubscriptionDrawer: React.FC = () => {
       toast.info(`Paused subscription for ${sub.beanName}`);
     } else {
       resumeSubscription(sub.id);
+      // Compute fresh dispatch date since state update is async and sub.nextDispatchDate is stale
+      const freq = SUBSCRIPTION_FREQUENCIES.find((f) => f.id === sub.frequencyId);
+      const days = freq?.days || 7;
+      const next = new Date();
+      next.setDate(next.getDate() + days);
+      const nextStr = next.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
       toast.success(`Resumed subscription for ${sub.beanName}!`, {
-        description: `Next roast scheduled for ${sub.nextDispatchDate}.`,
+        description: `Next roast scheduled for ${nextStr}.`,
       });
     }
   };

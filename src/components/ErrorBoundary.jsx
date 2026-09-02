@@ -16,7 +16,10 @@ export class ErrorBoundary extends Component {
 
   handleReset = () => {
     try {
-      localStorage.clear();
+      // Only clear Brew & Co keys, not unrelated site storage
+      Object.keys(localStorage).forEach((k) => {
+        if (k.startsWith('brew_co_')) localStorage.removeItem(k);
+      });
       sessionStorage.clear();
     } catch {}
     window.location.reload();

@@ -206,7 +206,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // Cart State with LocalStorage
   const [cart, setCart] = useState<CartItem[]>(() => {
     try {
-      const saved = localStorage.getItem('brew_co_cart');
+      if (typeof window === 'undefined' || !window.localStorage) return [];
+      const saved = window.localStorage.getItem('brew_co_cart');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) return parsed as CartItem[];
@@ -222,7 +223,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const [loyaltyStamps, setLoyaltyStamps] = useState<number>(() => {
     try {
-      const saved = localStorage.getItem('brew_co_loyalty');
+      if (typeof window === 'undefined' || !window.localStorage) return 3;
+      const saved = window.localStorage.getItem('brew_co_loyalty');
       if (saved !== null) {
         const num = parseInt(saved, 10);
         if (!isNaN(num)) return num;
@@ -235,7 +237,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const [freeDrinksAvailable, setFreeDrinksAvailable] = useState<number>(() => {
     try {
-      const saved = localStorage.getItem('brew_co_free_drinks');
+      if (typeof window === 'undefined' || !window.localStorage) return 0;
+      const saved = window.localStorage.getItem('brew_co_free_drinks');
       if (saved !== null) {
         const num = parseInt(saved, 10);
         if (!isNaN(num)) return num;
@@ -254,7 +257,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const [liveOrders, setLiveOrders] = useState<LiveOrder[]>(() => {
     try {
-      const saved = localStorage.getItem('brew_co_live_orders');
+      if (typeof window === 'undefined' || !window.localStorage) return DEFAULT_SEED_ORDERS;
+      const saved = window.localStorage.getItem('brew_co_live_orders');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed as LiveOrder[];
@@ -267,7 +271,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const [favorites, setFavorites] = useState<string[]>(() => {
     try {
-      const saved = localStorage.getItem('brew_co_favorites');
+      if (typeof window === 'undefined' || !window.localStorage) return ['smoked-amber-cortado', 'nitro-cascade-cold-brew'];
+      const saved = window.localStorage.getItem('brew_co_favorites');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) return parsed as string[];
@@ -368,7 +373,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const [theme, setTheme] = useState<string>(() => {
     try {
-      const saved = localStorage.getItem('brew_co_theme');
+      if (typeof window === 'undefined' || !window.localStorage) return 'system';
+      const saved = window.localStorage.getItem('brew_co_theme');
       return saved === 'light' || saved === 'dark' || saved === 'system' ? saved : 'system';
     } catch {
       return 'system';
@@ -587,7 +593,14 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     ({ pickupName, tipAmount = 0, appliedFreeDrink }: PlaceOrderParams) => {
       const safeCart = Array.isArray(cart) ? cart : [];
       const subtotal = safeCart.reduce((sum, item) => sum + (item?.unitPrice || 0) * (item?.quantity || 1), 0);
-      const discount = appliedFreeDrink ? safeCart[0]?.unitPrice || 5.5 : 0;
+      const discount = (() => {
+        if (!appliedFreeDrink) return 0;
+        if (safeCart.length === 0) return 0;
+        const eligible = safeCart.filter((i) => !i?.isSubscription && !i?.subscriptionMeta);
+        const pool = eligible.length > 0 ? eligible : safeCart;
+        const cheapest = Math.min(...pool.map((i) => i?.unitPrice || 0));
+        return isFinite(cheapest) ? cheapest : 5.5;
+      })();
       const finalSubtotal = Math.max(0, subtotal - discount);
       const tax = Number((finalSubtotal * 0.0825).toFixed(2));
       const total = Number((finalSubtotal + tax + tipAmount).toFixed(2));

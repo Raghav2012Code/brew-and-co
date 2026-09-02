@@ -1,8 +1,10 @@
 import React from 'react';
 import { ArrowUpRight, Wifi, Music, Bike } from 'lucide-react';
 import { STORE_INFO } from '../data/menuData';
+import { useStore } from '../context/StoreContext';
 
 export const LocationSection = () => {
+  const { storeStatus } = useStore();
   return (
     <section id="location" className="border-b border-[#E8E4DC] dark:border-[#262420] bg-[#FBF9F5] dark:bg-[#11100F] py-12 sm:py-20 scroll-mt-16 text-left transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-10">
@@ -32,8 +34,8 @@ export const LocationSection = () => {
                 <h3 className="font-serif font-bold text-xl text-[#1A1816] dark:text-[#EAE6DF]">
                   Cafe Hours
                 </h3>
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#2E7D32] text-white">
-                  Open Today
+                <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${storeStatus.isOpen ? 'bg-[#2E7D32] text-white' : 'bg-[#C62828] text-white'}`}>
+                  {storeStatus.isOpen ? (storeStatus.isClosingSoon ? storeStatus.statusText : 'Open Today') : 'Closed'}
                 </span>
               </div>
 
