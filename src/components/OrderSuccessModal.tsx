@@ -11,8 +11,7 @@ import { Button } from '@/components/ui/button';
 
 export const OrderSuccessModal: React.FC = () => {
   const { activeOrder, setActiveOrder } = useStore();
-  const initialSeconds = activeOrder?.prepMinutes ? activeOrder.prepMinutes * 60 : 480;
-  const [secondsRemaining, setSecondsRemaining] = useState(initialSeconds);
+  const [secondsRemaining, setSecondsRemaining] = useState(0);
   const [prepStage, setPrepStage] = useState(1);
 
   useEffect(() => {

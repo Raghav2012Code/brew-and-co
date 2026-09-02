@@ -1,15 +1,16 @@
-import React, { memo } from 'react';
+import React, { memo, useCallback } from 'react';
 import { Heart, Plus, Sliders } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import type { MenuItem } from '@/types';
 
-export const ProductCard: React.FC<{ item: any }> = memo(({ item }) => {
+export const ProductCard: React.FC<{ item: MenuItem }> = memo(({ item }) => {
   const { setCustomizerItem, addToCart, favorites, toggleFavorite } = useStore();
   const isFavorite = Array.isArray(favorites) ? favorites.includes(item.id) : false;
 
-  const handleAction = () => {
+  const handleAction = useCallback(() => {
     if (item.customizable) {
       setCustomizerItem(item);
     } else {
@@ -19,7 +20,12 @@ export const ProductCard: React.FC<{ item: any }> = memo(({ item }) => {
       });
       toast.success(`Added 1× ${item.name} to bag!`);
     }
-  };
+  }, [item, setCustomizerItem, addToCart]);
+
+  const handleToggleFavorite = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggleFavorite(item.id);
+  }, [item.id, toggleFavorite]);
 
   return (
     <div className="group border border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-card hover:border-ink dark:hover:border-dark-text-main p-4 flex flex-col justify-between text-left transition-all relative">
@@ -45,10 +51,8 @@ export const ProductCard: React.FC<{ item: any }> = memo(({ item }) => {
 
           {/* Favorite Button (44x44px touch hitbox) */}
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleFavorite(item.id);
-            }}
+            type="button"
+            onClick={handleToggleFavorite}
             aria-label={isFavorite ? `Remove ${item.name} from favorites` : `Save ${item.name} to favorites`}
             className="absolute top-2 right-2 min-h-[40px] min-w-[40px] flex items-center justify-center bg-paper/90 dark:bg-dark-subtle/90 text-ink-muted dark:text-dark-text-muted hover:text-vermillion dark:hover:text-dark-vermillion active:scale-90 transition-all cursor-pointer border border-hairline/60 dark:border-dark-hairline/60"
           >
@@ -97,6 +101,7 @@ export const ProductCard: React.FC<{ item: any }> = memo(({ item }) => {
       {/* Primary Action Button */}
       <div className="pt-2 border-t border-hairline dark:border-dark-hairline">
         <Button
+          type="button"
           onClick={handleAction}
           variant="outline"
           size="default"

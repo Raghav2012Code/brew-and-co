@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, memo } from 'react';
 import { ShoppingBag, Menu as MenuIcon, X, Sun, Moon, Sparkles, MapPin, Package, Coffee, Settings } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { useSubscription } from '../context/SubscriptionContext';
 import { useTenant } from '../context/TenantContext';
 import { LogoMark } from './LogoMark';
 
-export const Navbar = () => {
+export const Navbar = memo(() => {
   const {
     cartCount,
     setIsCartOpen,
@@ -22,6 +22,9 @@ export const Navbar = () => {
   const { subscriptions, activeSubscriptionCount, setIsManageDrawerOpen } = useSubscription();
   const { brandProfile } = useTenant();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const toggleMobile = useCallback(() => setMobileOpen((v) => !v), []);
+  const closeMobile = useCallback(() => setMobileOpen(false), []);
 
   return (
     <header className="sticky top-0 z-40 w-full bg-[#FBF9F5]/95 dark:bg-[#11100F]/95 backdrop-blur-md border-b border-[#E8E4DC] dark:border-[#262420] transition-colors">
@@ -153,7 +156,8 @@ export const Navbar = () => {
 
           {/* Mobile Menu Hamburger (Min 44x44px hitbox) */}
           <button
-            onClick={() => setMobileOpen(!mobileOpen)}
+            type="button"
+            onClick={toggleMobile}
             className="md:hidden min-h-[42px] min-w-[42px] flex items-center justify-center p-2.5 rounded-lg border border-[#E0DACB] dark:border-[#302D27] bg-[#F3EFE6] dark:bg-[#1C1B18] text-[#1A1816] dark:text-[#EAE6DF] active:scale-95 transition-all cursor-pointer"
             aria-label="Toggle Navigation Menu"
             aria-expanded={mobileOpen}
@@ -168,14 +172,14 @@ export const Navbar = () => {
         <div className="md:hidden border-t border-[#E8E4DC] dark:border-[#262420] bg-[#FBF9F5]/98 dark:bg-[#11100F]/98 backdrop-blur-lg p-4 sm:p-5 space-y-2.5 shadow-xl animate-in slide-in-from-top-2 duration-200">
           <a
             href="#menu"
-            onClick={() => setMobileOpen(false)}
+            onClick={closeMobile}
             className="block min-h-[44px] p-3 rounded-xl bg-[#F3EFE6] dark:bg-[#1C1B18] text-sm font-semibold text-[#1A1816] dark:text-[#EAE6DF] active:bg-[#E8E4DC] dark:active:bg-[#262420] transition-colors"
           >
             Menu & Order Ahead
           </a>
           <a
             href="#roastery"
-            onClick={() => setMobileOpen(false)}
+            onClick={closeMobile}
             className="flex items-center justify-between min-h-[44px] p-3 rounded-xl bg-[#F3EFE6] dark:bg-[#1C1B18] text-sm font-semibold text-[#1A1816] dark:text-[#EAE6DF] active:bg-[#E8E4DC] dark:active:bg-[#262420] transition-colors"
           >
             <span>Roastery & Subscriptions</span>
@@ -184,8 +188,9 @@ export const Navbar = () => {
             </span>
           </a>
           <button
+            type="button"
             onClick={() => {
-              setMobileOpen(false);
+              closeMobile();
               setIsBaristaModalOpen(true);
             }}
             className="w-full text-left min-h-[44px] block p-3 rounded-xl bg-[#F3EFE6] dark:bg-[#1C1B18] text-sm font-semibold text-[#1A1816] dark:text-[#EAE6DF] active:bg-[#E8E4DC] dark:active:bg-[#262420] transition-colors"
@@ -193,8 +198,9 @@ export const Navbar = () => {
             ☕ Barista Rail & KDS ({activeOrdersCount} Active)
           </button>
           <button
+            type="button"
             onClick={() => {
-              setMobileOpen(false);
+              closeMobile();
               setIsRoasteryStudioOpen(true);
             }}
             className="w-full text-left min-h-[44px] block p-3 rounded-xl bg-[#F3EFE6] dark:bg-[#1C1B18] text-sm font-semibold text-[#1A1816] dark:text-[#EAE6DF] active:bg-[#E8E4DC] dark:active:bg-[#262420] transition-colors"
@@ -202,8 +208,9 @@ export const Navbar = () => {
             ⚙ Roastery Studio & Customizer
           </button>
           <button
+            type="button"
             onClick={() => {
-              setMobileOpen(false);
+              closeMobile();
               setIsManageDrawerOpen(true);
             }}
             className="w-full text-left min-h-[44px] block p-3 rounded-xl bg-[#F3EFE6] dark:bg-[#1C1B18] text-sm font-semibold text-[#1A1816] dark:text-[#EAE6DF] active:bg-[#E8E4DC] dark:active:bg-[#262420] transition-colors"
@@ -211,8 +218,9 @@ export const Navbar = () => {
             Subscription Vault ({activeSubscriptionCount} Active)
           </button>
           <button
+            type="button"
             onClick={() => {
-              setMobileOpen(false);
+              closeMobile();
               setIsLoyaltyModalOpen(true);
             }}
             className="w-full text-left min-h-[44px] block p-3 rounded-xl bg-[#F3EFE6] dark:bg-[#1C1B18] text-sm font-semibold text-[#1A1816] dark:text-[#EAE6DF] active:bg-[#E8E4DC] dark:active:bg-[#262420] transition-colors"
@@ -221,7 +229,7 @@ export const Navbar = () => {
           </button>
           <a
             href="#location"
-            onClick={() => setMobileOpen(false)}
+            onClick={closeMobile}
             className="block min-h-[44px] p-3 rounded-xl bg-[#F3EFE6] dark:bg-[#1C1B18] text-sm font-semibold text-[#1A1816] dark:text-[#EAE6DF] active:bg-[#E8E4DC] dark:active:bg-[#262420] transition-colors"
           >
             Visit & Hours
@@ -230,4 +238,5 @@ export const Navbar = () => {
       )}
     </header>
   );
-};
+});
+Navbar.displayName = 'Navbar';

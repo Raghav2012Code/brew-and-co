@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Trash2, Plus, Minus, ShoppingBag, Sparkles, Zap } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { useSubscription } from '../context/SubscriptionContext';
+import { formatPrice } from '@/lib/format';
 import {
   Sheet,
   SheetContent,
@@ -28,26 +29,23 @@ export const CartDrawer: React.FC = () => {
   const [tipPercent, setTipPercent] = useState(15);
   const [applyFreeDrink, setApplyFreeDrink] = useState(false);
 
-  const rawSubtotal = (cart || []).reduce((sum: number, item: any) => sum + (item?.unitPrice || 0) * (item?.quantity || 1), 0);
-  
-  // Free drink should apply to cheapest eligible drink, not just first item
-  const discountAmount = (() => {
+  const rawSubtotal = useMemo(() => (cart || []).reduce((sum: number, item: any) => sum + (item?.unitPrice || 0) * (item?.quantity || 1), 0), [cart]);
+
+  const discountAmount = useMemo(() => {
     if (!applyFreeDrink || (freeDrinksAvailable || 0) <= 0 || (cart?.length || 0) === 0) return 0;
     const eligible = (cart as any[]).filter((i) => !i.isSubscription && !i.subscriptionMeta);
     const pool = eligible.length > 0 ? eligible : (cart as any[]);
     return Math.min(...pool.map((i) => i?.unitPrice || 0));
-  })();
+  }, [applyFreeDrink, freeDrinksAvailable, cart]);
 
-  const subtotal = Math.max(0, rawSubtotal - discountAmount);
-  const tax = Number((subtotal * 0.0825).toFixed(2));
-  
-  const calculatedTip = Number(((subtotal * tipPercent) / 100).toFixed(2));
-    
-  const total = Number((subtotal + tax + calculatedTip).toFixed(2));
+  const subtotal = useMemo(() => Math.max(0, rawSubtotal - discountAmount), [rawSubtotal, discountAmount]);
+  const tax = useMemo(() => Number((subtotal * 0.0825).toFixed(2)), [subtotal]);
+  const calculatedTip = useMemo(() => Number(((subtotal * tipPercent) / 100).toFixed(2)), [subtotal, tipPercent]);
+  const total = useMemo(() => Number((subtotal + tax + calculatedTip).toFixed(2)), [subtotal, tax, calculatedTip]);
 
-  const hasSubscriptions = cart.some((item: any) => item.isSubscription || item.subscriptionMeta);
+  const hasSubscriptions = useMemo(() => cart.some((item: any) => item.isSubscription || item.subscriptionMeta), [cart]);
 
-  const handleCheckout = (e: React.FormEvent) => {
+  const handleCheckout = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (cart.length === 0) return;
 
@@ -90,12 +88,12 @@ export const CartDrawer: React.FC = () => {
         description: `Preparing your coffee for ${pickupName.trim() || 'Counter Guest'}.`,
       });
     }
-  };
+  }, [cart, addSubscription, placeOrder, pickupName, tipPercent, calculatedTip, applyFreeDrink, freeDrinksAvailable]);
 
-  const handleRemove = (id: string, name: string) => {
+  const handleRemove = useCallback((id: string, name: string) => {
     removeFromCart(id);
     toast.info(`Removed ${name} from bag.`);
-  };
+  }, [removeFromCart]);
 
   return (
     <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
@@ -150,7 +148,7 @@ export const CartDrawer: React.FC = () => {
               </div>
             </div>
           ) : (
-            <>
+            <form onSubmit={handleCheckout} className="space-y-4 flex flex-col flex-1">
               {/* Item List */}
               <div className="space-y-3">
                 {cart.map((item: any) => {
@@ -189,6 +187,7 @@ export const CartDrawer: React.FC = () => {
                         </div>
 
                         <button
+                          type="button"
                           onClick={() => handleRemove(item.id, item.name)}
                           aria-label={`Remove ${item.name} from bag`}
                           className="min-h-[36px] min-w-[36px] flex items-center justify-center text-ink-faint hover:text-vermillion dark:hover:text-dark-vermillion active:scale-90 transition-all cursor-pointer"
@@ -254,6 +253,7 @@ export const CartDrawer: React.FC = () => {
                         <span className="text-xs font-mono text-ink-muted dark:text-dark-text-muted">Qty:</span>
                         <div className="flex items-center border border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas">
                           <button
+                            type="button"
                             onClick={() => updateQuantity(item.id, -1)}
                             aria-label="Decrease quantity"
                             className="min-h-[36px] min-w-[36px] flex items-center justify-center text-ink-muted hover:text-ink dark:hover:text-dark-text-main active:scale-90 transition-transform cursor-pointer"
@@ -264,6 +264,7 @@ export const CartDrawer: React.FC = () => {
                             {item.quantity}
                           </span>
                           <button
+                            type="button"
                             onClick={() => updateQuantity(item.id, 1)}
                             aria-label="Increase quantity"
                             className="min-h-[36px] min-w-[36px] flex items-center justify-center text-ink-muted hover:text-ink dark:hover:text-dark-text-main active:scale-90 transition-transform cursor-pointer"
@@ -290,6 +291,7 @@ export const CartDrawer: React.FC = () => {
                     </p>
                   </div>
                   <Button
+                    type="button"
                     size="sm"
                     variant={applyFreeDrink ? 'destructive' : 'default'}
                     onClick={() => setApplyFreeDrink(!applyFreeDrink)}
@@ -343,50 +345,48 @@ export const CartDrawer: React.FC = () => {
                   className="w-full min-h-[42px] p-3 bg-paper-dim dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main placeholder:text-ink-faint font-sans text-xs focus:outline-none focus:border-ink dark:focus:border-dark-text-main"
                 />
               </div>
-            </>
+
+              {/* Drawer Footer & Checkout (With Safe Area Inset) */}
+              <div className="p-4 sm:p-6 bg-paper-dim dark:bg-dark-card border-t border-hairline dark:border-dark-hairline space-y-3.5 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
+                <div className="space-y-1.5 text-xs text-ink-muted dark:text-dark-text-muted font-mono">
+                  <div className="flex justify-between">
+                    <span>Subtotal:</span>
+                    <span className="font-medium text-ink dark:text-dark-text-main">{formatPrice(rawSubtotal)}</span>
+                  </div>
+                  {discountAmount > 0 && (
+                    <div className="flex justify-between text-vermillion dark:text-dark-vermillion font-semibold">
+                      <span>Free Drink Reward:</span>
+                      <span>-{formatPrice(discountAmount)}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between">
+                    <span>Tax (8.25%):</span>
+                    <span>{formatPrice(tax)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Tip:</span>
+                    <span>{formatPrice(calculatedTip)}</span>
+                  </div>
+                  <div className="flex justify-between text-base font-bold text-ink dark:text-dark-text-main pt-2 border-t border-hairline dark:border-dark-hairline font-sans">
+                    <span>Total:</span>
+                    <span className="text-vermillion dark:text-dark-vermillion font-mono">{formatPrice(total)}</span>
+                  </div>
+                </div>
+
+                <Button
+                  type="submit"
+                  variant="editorial"
+                  size="lg"
+                  className="w-full justify-between"
+                >
+                  <span>{hasSubscriptions ? 'Place Order & Start Subscription' : 'Place Pickup Order'}</span>
+                  <span className="font-bold">{formatPrice(total)}</span>
+                </Button>
+              </div>
+            </form>
           )}
         </div>
 
-        {/* Drawer Footer & Checkout (With Safe Area Inset) */}
-        {cart.length > 0 && (
-          <div className="p-4 sm:p-6 bg-paper-dim dark:bg-dark-card border-t border-hairline dark:border-dark-hairline space-y-3.5 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
-            <div className="space-y-1.5 text-xs text-ink-muted dark:text-dark-text-muted font-mono">
-              <div className="flex justify-between">
-                <span>Subtotal:</span>
-                <span className="font-medium text-ink dark:text-dark-text-main">${rawSubtotal.toFixed(2)}</span>
-              </div>
-              {discountAmount > 0 && (
-                <div className="flex justify-between text-vermillion dark:text-dark-vermillion font-semibold">
-                  <span>Free Drink Reward:</span>
-                  <span>-${discountAmount.toFixed(2)}</span>
-                </div>
-              )}
-              <div className="flex justify-between">
-                <span>Tax (8.25%):</span>
-                <span>${tax.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Tip:</span>
-                <span>${calculatedTip.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-base font-bold text-ink dark:text-dark-text-main pt-2 border-t border-hairline dark:border-dark-hairline font-sans">
-                <span>Total:</span>
-                <span className="text-vermillion dark:text-dark-vermillion font-mono">${total.toFixed(2)}</span>
-              </div>
-            </div>
-
-            {/* Checkout CTA */}
-            <Button
-              onClick={handleCheckout}
-              variant="editorial"
-              size="lg"
-              className="w-full justify-between"
-            >
-              <span>{hasSubscriptions ? 'Place Order & Start Subscription' : 'Place Pickup Order'}</span>
-              <span className="font-bold">${total.toFixed(2)}</span>
-            </Button>
-          </div>
-        )}
       </SheetContent>
     </Sheet>
   );

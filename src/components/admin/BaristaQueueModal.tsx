@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { X, Coffee, Flame, CheckCircle2, Printer, ChevronRight, Check, Volume2 } from 'lucide-react';
 import { useStore, playBaristaChime } from '../../context/StoreContext';
 import { useSubscription } from '../../context/SubscriptionContext';
@@ -53,14 +53,12 @@ export const BaristaQueueModal: React.FC = () => {
     };
   }, [subscriptions]);
 
-  if (!isBaristaModalOpen) return null;
-
   const filteredOrders = liveOrders.filter((order: any) => {
     if (filterStatus === 'all') return order.status !== 'completed';
     return order.status === filterStatus;
   });
 
-  const handleStatusAdvance = (orderId: string, currentStatus: string) => {
+  const handleStatusAdvance = useCallback((orderId: string, currentStatus: string) => {
     if (currentStatus === 'received') {
       updateOrderStatus(orderId, 'brewing');
       toast.info(`Order #${orderId} is now Brewing`);
@@ -71,7 +69,9 @@ export const BaristaQueueModal: React.FC = () => {
       updateOrderStatus(orderId, 'completed');
       toast.info(`Order #${orderId} marked completed`);
     }
-  };
+  }, [updateOrderStatus]);
+
+  if (!isBaristaModalOpen) return null;
 
   return (
     <div

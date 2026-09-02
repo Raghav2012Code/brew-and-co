@@ -8,7 +8,9 @@ export const Footer = () => {
 
   const handleSubscribe = (e) => {
     e.preventDefault();
-    if (!email) return;
+    const trimmed = email.trim();
+    // Industry-level: basic RFC5322-lite validation before marking subscribed
+    if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) return;
     setSubscribed(true);
   };
 
