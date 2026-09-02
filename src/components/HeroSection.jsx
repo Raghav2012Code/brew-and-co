@@ -1,6 +1,5 @@
 import React from 'react';
-import { ArrowRight, Clock, Coffee, ShieldCheck, Sparkles, MapPin, Star, Flame } from 'lucide-react';
-import { useStore } from '../context/StoreContext';
+import { ArrowRight, Clock, Coffee, Sparkles, MapPin, Star, Flame } from 'lucide-react';
 
 const TODAY_TASTING_SPECIMENS = [
   { name: 'Ethiopia Guji Anaerobic', notes: 'Candied Lime • Jasmine', badge: 'Special Roast' },
@@ -9,7 +8,6 @@ const TODAY_TASTING_SPECIMENS = [
 ];
 
 export const HeroSection = () => {
-  const { storeStatus } = useStore();
 
   return (
     <section className="relative overflow-hidden border-b border-[#E8E4DC] dark:border-[#262420] bg-[#FBF9F5] dark:bg-[#11100F] transition-colors">

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRight, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { LogoMark } from './LogoMark';
 
 export const Footer = () => {

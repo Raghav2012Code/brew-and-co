@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, MapPin, Clock, Wifi, Music, Bike } from 'lucide-react';
+import { ArrowUpRight, Wifi, Music, Bike } from 'lucide-react';
 import { STORE_INFO } from '../data/menuData';
 
 export const LocationSection = () => {

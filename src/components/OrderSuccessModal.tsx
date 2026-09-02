@@ -18,6 +18,9 @@ export const OrderSuccessModal: React.FC = () => {
   useEffect(() => {
     if (!activeOrder) return;
 
+    setSecondsRemaining(activeOrder.prepMinutes ? activeOrder.prepMinutes * 60 : 480);
+    setPrepStage(1);
+
     const timer = setInterval(() => {
       setSecondsRemaining((prev) => (prev <= 1 ? 0 : prev - 1));
     }, 1000);
@@ -107,7 +110,7 @@ export const OrderSuccessModal: React.FC = () => {
           {/* Total Paid */}
           <div className="border-t border-hairline dark:border-dark-hairline pt-3 flex justify-between text-sm font-bold text-ink dark:text-dark-text-main">
             <span>Total Paid:</span>
-            <span className="text-vermillion dark:text-dark-vermillion font-mono">${activeOrder.total.toFixed(2)}</span>
+            <span className="text-vermillion dark:text-dark-vermillion font-mono">${(activeOrder.total ?? 0).toFixed(2)}</span>
           </div>
 
           {/* Actions */}

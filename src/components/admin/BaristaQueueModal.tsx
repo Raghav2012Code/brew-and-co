@@ -1,18 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import {
-  X,
-  Coffee,
-  Flame,
-  CheckCircle2,
-  Clock,
-  Sparkles,
-  Printer,
-  ChevronRight,
-  Filter,
-  Check,
-  RotateCcw,
-  Volume2,
-} from 'lucide-react';
+import { X, Coffee, Flame, CheckCircle2, Printer, ChevronRight, Check, Volume2 } from 'lucide-react';
 import { useStore, playBaristaChime } from '../../context/StoreContext';
 import { useSubscription } from '../../context/SubscriptionContext';
 import { toast } from 'sonner';

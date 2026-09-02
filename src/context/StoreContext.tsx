@@ -1,24 +1,124 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { STORE_HOURS } from '../data/menuData';
 
-const StoreContext = createContext(null);
+// ----- Types -----
+
+export interface CartItemOptions {
+  size?: { id?: string; name: string; priceDelta?: number } | null;
+  temp?: string | null;
+  milk?: { name: string; priceDelta?: number } | null;
+  shot?: { id?: string; name: string; priceDelta?: number } | null;
+  syrup?: { name: string; priceDelta?: number } | null;
+  sweetness?: string | null;
+  specialNotes?: string;
+}
+
+export interface CartItem {
+  id: string;
+  productId?: string;
+  name: string;
+  category?: string;
+  basePrice?: number;
+  unitPrice: number;
+  quantity: number;
+  image: string;
+  isSubscription?: boolean;
+  subscriptionMeta?: Record<string, unknown> | null;
+  beanMeta?: Record<string, unknown> | null;
+  options?: CartItemOptions;
+}
+
+export interface LiveOrder {
+  orderId: string;
+  timestamp: string;
+  date?: string;
+  pickupName: string;
+  status: string;
+  items: CartItem[];
+  total: number;
+  elapsedMinutes?: number;
+  subtotal?: number;
+  discount?: number;
+  tax?: number;
+  tipAmount?: number;
+  prepMinutes?: number;
+  qrToken?: string;
+}
+
+export interface StoreStatus {
+  isOpen: boolean;
+  statusText: string;
+  closesAt: string;
+  isClosingSoon: boolean;
+}
+
+export interface PlaceOrderParams {
+  pickupName: string;
+  tipPercent?: number;
+  tipAmount?: number;
+  appliedFreeDrink?: boolean;
+  tip?: number;
+}
+
+export interface StoreContextType {
+  cart: CartItem[];
+  cartCount: number;
+  cartSubtotal: number;
+  isCartOpen: boolean;
+  setIsCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  customizerItem: any | null;
+  setCustomizerItem: React.Dispatch<React.SetStateAction<any | null>>;
+  addToCart: (product: any, options?: any) => void;
+  removeFromCart: (cartItemId: string) => void;
+  updateQuantity: (cartItemId: string, delta: number) => void;
+  clearCart: () => void;
+  loyaltyStamps: number;
+  setLoyaltyStamps: React.Dispatch<React.SetStateAction<number>>;
+  freeDrinksAvailable: number;
+  setFreeDrinksAvailable: React.Dispatch<React.SetStateAction<number>>;
+  isLoyaltyModalOpen: boolean;
+  setIsLoyaltyModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isBaristaModalOpen: boolean;
+  setIsBaristaModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isMatchmakerOpen: boolean;
+  setIsMatchmakerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isRoasteryStudioOpen: boolean;
+  setIsRoasteryStudioOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  activeOrder: LiveOrder | null;
+  setActiveOrder: React.Dispatch<React.SetStateAction<LiveOrder | null>>;
+  liveOrders: LiveOrder[];
+  activeOrdersCount: number;
+  updateOrderStatus: (orderId: string, nextStatus: string) => void;
+  clearCompletedOrders: () => void;
+  placeOrder: (params: PlaceOrderParams) => void;
+  favorites: string[];
+  toggleFavorite: (productId: string) => void;
+  storeStatus: StoreStatus;
+  theme: string;
+  effectiveTheme: string;
+  setTheme: React.Dispatch<React.SetStateAction<string>>;
+  toggleTheme: () => void;
+}
+
+const StoreContext = createContext<StoreContextType | null>(null);
 
 // Lazy confetti loader for bundle size optimization
-const triggerConfetti = async (opts) => {
+const triggerConfetti = async (opts: unknown) => {
   try {
+    // @ts-ignore - canvas-confetti has no types bundled
     const confettiModule = await import('canvas-confetti');
-    const confetti = confettiModule.default || confettiModule;
-    confetti(opts);
+    const confetti = (confettiModule as unknown as { default: (o: unknown) => void }).default || (confettiModule as unknown as (o: unknown) => void);
+    (confetti as (o: unknown) => void)(opts);
   } catch (e) {
     console.error('Failed to load confetti:', e);
   }
 };
 
 // Web Audio API pure synth chime for Barista KDS alerts
-export const playBaristaChime = (type = 'new-order') => {
+export const playBaristaChime = (type: string = 'new-order') => {
   try {
     if (typeof window === 'undefined') return;
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    const AudioContextClass: typeof AudioContext | undefined = (window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext }).AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
     if (!AudioContextClass) return;
     const ctx = new AudioContextClass();
 
@@ -53,7 +153,7 @@ export const playBaristaChime = (type = 'new-order') => {
   }
 };
 
-const DEFAULT_SEED_ORDERS = [
+const DEFAULT_SEED_ORDERS: LiveOrder[] = [
   {
     orderId: 'BC-1042',
     timestamp: '10:14 AM',
@@ -66,6 +166,7 @@ const DEFAULT_SEED_ORDERS = [
         name: 'Smoked Amber Cortado',
         unitPrice: 5.50,
         quantity: 1,
+        image: '/images/flat-white.jpg',
         options: { size: { name: '4oz' }, temp: 'HOT', milk: { name: 'Oat Milk (Oatly)' }, specialNotes: 'Extra hot microfoam' },
       },
       {
@@ -73,6 +174,7 @@ const DEFAULT_SEED_ORDERS = [
         name: 'Cardamom Morning Bun',
         unitPrice: 4.75,
         quantity: 1,
+        image: '/images/flat-white.jpg',
         options: { size: { name: '1 Pastry' }, temp: 'WARM' },
       },
     ],
@@ -91,6 +193,7 @@ const DEFAULT_SEED_ORDERS = [
         name: 'Ethiopia Guji (Pour Over)',
         unitPrice: 7.00,
         quantity: 2,
+        image: '/images/flat-white.jpg',
         options: { size: { name: '10oz Carafe' }, temp: 'HOT', specialNotes: 'V60 1:16 ratio' },
       },
     ],
@@ -99,14 +202,14 @@ const DEFAULT_SEED_ORDERS = [
   },
 ];
 
-export const StoreProvider = ({ children }) => {
+export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Cart State with LocalStorage
-  const [cart, setCart] = useState(() => {
+  const [cart, setCart] = useState<CartItem[]>(() => {
     try {
       const saved = localStorage.getItem('brew_co_cart');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) return parsed;
+        if (Array.isArray(parsed)) return parsed as CartItem[];
       }
     } catch {
       // ignore
@@ -114,10 +217,10 @@ export const StoreProvider = ({ children }) => {
     return [];
   });
 
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [customizerItem, setCustomizerItem] = useState(null);
+  const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
+  const [customizerItem, setCustomizerItem] = useState<any | null>(null);
 
-  const [loyaltyStamps, setLoyaltyStamps] = useState(() => {
+  const [loyaltyStamps, setLoyaltyStamps] = useState<number>(() => {
     try {
       const saved = localStorage.getItem('brew_co_loyalty');
       if (saved !== null) {
@@ -130,7 +233,7 @@ export const StoreProvider = ({ children }) => {
     return 3;
   });
 
-  const [freeDrinksAvailable, setFreeDrinksAvailable] = useState(() => {
+  const [freeDrinksAvailable, setFreeDrinksAvailable] = useState<number>(() => {
     try {
       const saved = localStorage.getItem('brew_co_free_drinks');
       if (saved !== null) {
@@ -143,18 +246,18 @@ export const StoreProvider = ({ children }) => {
     return 0;
   });
 
-  const [activeOrder, setActiveOrder] = useState(null);
-  const [isLoyaltyModalOpen, setIsLoyaltyModalOpen] = useState(false);
-  const [isBaristaModalOpen, setIsBaristaModalOpen] = useState(false);
-  const [isMatchmakerOpen, setIsMatchmakerOpen] = useState(false);
-  const [isRoasteryStudioOpen, setIsRoasteryStudioOpen] = useState(false);
+  const [activeOrder, setActiveOrder] = useState<LiveOrder | null>(null);
+  const [isLoyaltyModalOpen, setIsLoyaltyModalOpen] = useState<boolean>(false);
+  const [isBaristaModalOpen, setIsBaristaModalOpen] = useState<boolean>(false);
+  const [isMatchmakerOpen, setIsMatchmakerOpen] = useState<boolean>(false);
+  const [isRoasteryStudioOpen, setIsRoasteryStudioOpen] = useState<boolean>(false);
 
-  const [liveOrders, setLiveOrders] = useState(() => {
+  const [liveOrders, setLiveOrders] = useState<LiveOrder[]>(() => {
     try {
       const saved = localStorage.getItem('brew_co_live_orders');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed as LiveOrder[];
       }
     } catch (e) {
       console.error(e);
@@ -162,12 +265,12 @@ export const StoreProvider = ({ children }) => {
     return DEFAULT_SEED_ORDERS;
   });
 
-  const [favorites, setFavorites] = useState(() => {
+  const [favorites, setFavorites] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem('brew_co_favorites');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed)) return parsed;
+        if (Array.isArray(parsed)) return parsed as string[];
       }
     } catch {
       // ignore
@@ -231,7 +334,7 @@ export const StoreProvider = ({ children }) => {
   }, [isAnyModalOpen]);
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         if (customizerItem) {
           setCustomizerItem(null);
@@ -263,7 +366,7 @@ export const StoreProvider = ({ children }) => {
     isRoasteryStudioOpen,
   ]);
 
-  const [theme, setTheme] = useState(() => {
+  const [theme, setTheme] = useState<string>(() => {
     try {
       const saved = localStorage.getItem('brew_co_theme');
       return saved === 'light' || saved === 'dark' || saved === 'system' ? saved : 'system';
@@ -272,7 +375,7 @@ export const StoreProvider = ({ children }) => {
     }
   });
 
-  const [systemIsDark, setSystemIsDark] = useState(() => {
+  const [systemIsDark, setSystemIsDark] = useState<boolean>(() => {
     if (typeof window !== 'undefined' && window.matchMedia) {
       return window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
@@ -284,7 +387,7 @@ export const StoreProvider = ({ children }) => {
   useEffect(() => {
     if (typeof window === 'undefined' || !window.matchMedia) return;
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = (e) => setSystemIsDark(e.matches);
+    const handleChange = (e: MediaQueryListEvent) => setSystemIsDark(e.matches);
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
@@ -325,7 +428,7 @@ export const StoreProvider = ({ children }) => {
     }
   }, [effectiveTheme]);
 
-  const [storeStatus, setStoreStatus] = useState({
+  const [storeStatus, setStoreStatus] = useState<StoreStatus>({
     isOpen: true,
     statusText: 'Open Today • 7:00 AM – 6:00 PM',
     closesAt: '6:00 PM',
@@ -338,7 +441,7 @@ export const StoreProvider = ({ children }) => {
         const now = new Date();
         const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
         const dayName = days[now.getDay()];
-        const todayHours = STORE_HOURS[dayName] || STORE_HOURS.monday;
+        const todayHours = (STORE_HOURS as Record<string, { open?: string; close?: string; label?: string }>)[dayName] || (STORE_HOURS as Record<string, unknown>).monday as { open?: string; close?: string; label?: string };
 
         if (!todayHours || !todayHours.open || !todayHours.close) {
           setStoreStatus({
@@ -396,34 +499,34 @@ export const StoreProvider = ({ children }) => {
     return () => clearInterval(interval);
   }, []);
 
-  const addToCart = useCallback((product, options = {}) => {
+  const addToCart = useCallback<StoreContextType['addToCart']>((product, options = {}) => {
     if (!product) return;
-    const sizeDelta = options.size?.priceDelta || 0;
-    const milkDelta = options.milk?.priceDelta || 0;
-    const shotDelta = options.shot?.priceDelta || 0;
-    const syrupDelta = options.syrup?.priceDelta || 0;
-    const unitPrice = Number(((product.price || 0) + sizeDelta + milkDelta + shotDelta + syrupDelta).toFixed(2));
+    const sizeDelta = (options.size as { priceDelta?: number } | undefined)?.priceDelta || 0;
+    const milkDelta = (options.milk as { priceDelta?: number } | undefined)?.priceDelta || 0;
+    const shotDelta = (options.shot as { priceDelta?: number } | undefined)?.priceDelta || 0;
+    const syrupDelta = (options.syrup as { priceDelta?: number } | undefined)?.priceDelta || 0;
+    const unitPrice = Number((((product.price as number) || 0) + sizeDelta + milkDelta + shotDelta + syrupDelta).toFixed(2));
 
-    const cartItem = {
-      id: `${product.id || 'item'}-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
-      productId: product.id,
-      name: product.name || 'Coffee Item',
-      category: product.category || 'all',
-      basePrice: product.price || 0,
+    const cartItem: CartItem = {
+      id: `${(product.id as string) || 'item'}-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      productId: product.id as string | undefined,
+      name: (product.name as string) || 'Coffee Item',
+      category: (product.category as string) || 'all',
+      basePrice: (product.price as number) || 0,
       unitPrice,
-      quantity: options.quantity || 1,
-      image: product.image || '/images/flat-white.jpg',
-      isSubscription: product.isSubscription || false,
-      subscriptionMeta: product.subscriptionMeta || null,
-      beanMeta: product.beanMeta || null,
+      quantity: (options.quantity as number) || 1,
+      image: (product.image as string) || '/images/flat-white.jpg',
+      isSubscription: (product.isSubscription as boolean) || false,
+      subscriptionMeta: (product.subscriptionMeta as Record<string, unknown>) || null,
+      beanMeta: (product.beanMeta as Record<string, unknown>) || null,
       options: {
-        size: options.size || { id: 'standard', name: 'Standard' },
-        temp: options.temp || product.defaultTemp || 'hot',
-        milk: options.milk || null,
-        shot: options.shot || null,
-        syrup: options.syrup || null,
-        sweetness: options.sweetness || null,
-        specialNotes: options.specialNotes || '',
+        size: (options.size as CartItemOptions['size']) || { id: 'standard', name: 'Standard' },
+        temp: (options.temp as string) || (product.defaultTemp as string) || 'hot',
+        milk: (options.milk as CartItemOptions['milk']) || null,
+        shot: (options.shot as CartItemOptions['shot']) || null,
+        syrup: (options.syrup as CartItemOptions['syrup']) || null,
+        sweetness: (options.sweetness as string) || null,
+        specialNotes: (options.specialNotes as string) || '',
       },
     };
 
@@ -431,11 +534,11 @@ export const StoreProvider = ({ children }) => {
     setIsCartOpen(true);
   }, []);
 
-  const removeFromCart = useCallback((cartItemId) => {
+  const removeFromCart = useCallback((cartItemId: string) => {
     setCart((prev) => (Array.isArray(prev) ? prev.filter((item) => item?.id !== cartItemId) : []));
   }, []);
 
-  const updateQuantity = useCallback((cartItemId, delta) => {
+  const updateQuantity = useCallback((cartItemId: string, delta: number) => {
     setCart((prev) =>
       Array.isArray(prev)
         ? prev
@@ -446,21 +549,21 @@ export const StoreProvider = ({ children }) => {
               }
               return item;
             })
-            .filter(Boolean)
+            .filter(Boolean) as CartItem[]
         : []
     );
   }, []);
 
   const clearCart = useCallback(() => setCart([]), []);
 
-  const toggleFavorite = useCallback((productId) => {
+  const toggleFavorite = useCallback((productId: string) => {
     setFavorites((prev) => {
       const arr = Array.isArray(prev) ? prev : [];
       return arr.includes(productId) ? arr.filter((id) => id !== productId) : [...arr, productId];
     });
   }, []);
 
-  const updateOrderStatus = useCallback((orderId, nextStatus) => {
+  const updateOrderStatus = useCallback((orderId: string, nextStatus: string) => {
     setLiveOrders((prev) =>
       Array.isArray(prev)
         ? prev.map((order) => {
@@ -481,7 +584,7 @@ export const StoreProvider = ({ children }) => {
   }, []);
 
   const placeOrder = useCallback(
-    ({ pickupName, tipAmount = 0, appliedFreeDrink }) => {
+    ({ pickupName, tipAmount = 0, appliedFreeDrink }: PlaceOrderParams) => {
       const safeCart = Array.isArray(cart) ? cart : [];
       const subtotal = safeCart.reduce((sum, item) => sum + (item?.unitPrice || 0) * (item?.quantity || 1), 0);
       const discount = appliedFreeDrink ? safeCart[0]?.unitPrice || 5.5 : 0;
@@ -492,7 +595,7 @@ export const StoreProvider = ({ children }) => {
       const orderNumber = `BC-${Math.floor(1000 + Math.random() * 9000)}`;
       const prepMinutes = Math.floor(7 + Math.random() * 6);
 
-      const orderData = {
+      const orderData: LiveOrder = {
         orderId: orderNumber,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
@@ -521,7 +624,7 @@ export const StoreProvider = ({ children }) => {
       while (newStamps >= 6) {
         newStamps -= 6;
         newFreeDrinks += 1;
-        triggerConfetti({
+        void triggerConfetti({
           particleCount: 80,
           spread: 70,
           origin: { y: 0.6 },
@@ -535,7 +638,7 @@ export const StoreProvider = ({ children }) => {
       clearCart();
       setIsCartOpen(false);
 
-      triggerConfetti({
+      void triggerConfetti({
         particleCount: 120,
         spread: 90,
         origin: { y: 0.5 },
@@ -557,7 +660,7 @@ export const StoreProvider = ({ children }) => {
     return Array.isArray(liveOrders) ? liveOrders.filter((o) => o?.status !== 'completed').length : 0;
   }, [liveOrders]);
 
-  const contextValue = useMemo(
+  const contextValue = useMemo<StoreContextType>(
     () => ({
       cart: Array.isArray(cart) ? cart : [],
       cartCount,
@@ -631,7 +734,7 @@ export const StoreProvider = ({ children }) => {
   return <StoreContext.Provider value={contextValue}>{children}</StoreContext.Provider>;
 };
 
-export const useStore = () => {
+export const useStore = (): StoreContextType => {
   const context = useContext(StoreContext);
   if (!context) {
     throw new Error('useStore must be used within a StoreProvider');

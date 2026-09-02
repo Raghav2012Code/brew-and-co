@@ -1,15 +1,5 @@
 import React, { useState } from 'react';
-import {
-  X,
-  Palette,
-  Coffee,
-  Sparkles,
-  Sliders,
-  Check,
-  RotateCcw,
-  Store,
-  DollarSign,
-} from 'lucide-react';
+import { X, Palette, Coffee, Check, RotateCcw, Store } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { useTenant, ACCENT_COLOR_PRESETS } from '../../context/TenantContext';
 import { toast } from 'sonner';

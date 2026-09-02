@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Coffee, Droplets, Thermometer, Sparkles, Clock, CheckCircle, Flame } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 const CUP_PRESETS = [
   {

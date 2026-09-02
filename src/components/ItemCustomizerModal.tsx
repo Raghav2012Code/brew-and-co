@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { CUSTOMIZATION_OPTIONS } from '../data/menuData';
@@ -14,20 +14,35 @@ import { toast } from 'sonner';
 export const ItemCustomizerModal: React.FC = () => {
   const { customizerItem, setCustomizerItem, addToCart } = useStore();
 
-  const [selectedSize, setSelectedSize] = useState(CUSTOMIZATION_OPTIONS.sizes[1]);
+  const [selectedSize, setSelectedSize] = useState(CUSTOMIZATION_OPTIONS.sizes[0]);
   const [selectedTemp, setSelectedTemp] = useState('hot');
-  const [selectedMilk, setSelectedMilk] = useState(CUSTOMIZATION_OPTIONS.milks[0]);
+  const [selectedMilk, setSelectedMilk] = useState<any>(CUSTOMIZATION_OPTIONS.milks[0]);
   const [selectedShot, setSelectedShot] = useState(CUSTOMIZATION_OPTIONS.shots[0]);
   const [selectedSyrup, setSelectedSyrup] = useState(CUSTOMIZATION_OPTIONS.syrups[0]);
-  const [selectedSweetness, setSelectedSweetness] = useState(CUSTOMIZATION_OPTIONS.sweetness[2]);
+  const [selectedSweetness, setSelectedSweetness] = useState(CUSTOMIZATION_OPTIONS.sweetness[0]);
   const [specialNotes, setSpecialNotes] = useState('');
   const [quantity, setQuantity] = useState(1);
 
+  // Reset options cleanly when customizer item changes
+  useEffect(() => {
+    if (customizerItem) {
+      setSelectedSize(CUSTOMIZATION_OPTIONS.sizes[0]);
+      setSelectedTemp(customizerItem.defaultTemp || 'hot');
+      setSelectedMilk(customizerItem.category === 'espresso' ? CUSTOMIZATION_OPTIONS.milks[0] : null);
+      setSelectedShot(CUSTOMIZATION_OPTIONS.shots[0]);
+      setSelectedSyrup(CUSTOMIZATION_OPTIONS.syrups[0]);
+      setSelectedSweetness(CUSTOMIZATION_OPTIONS.sweetness[0]);
+      setSpecialNotes('');
+      setQuantity(1);
+    }
+  }, [customizerItem]);
+
   if (!customizerItem) return null;
 
+  const isEspresso = customizerItem.category === 'espresso';
   const basePrice = customizerItem.price;
   const sizeDelta = selectedSize?.priceDelta || 0;
-  const milkDelta = selectedMilk?.priceDelta || 0;
+  const milkDelta = isEspresso && selectedMilk ? selectedMilk.priceDelta || 0 : 0;
   const shotDelta = selectedShot?.priceDelta || 0;
   const syrupDelta = selectedSyrup?.priceDelta || 0;
 
@@ -38,7 +53,7 @@ export const ItemCustomizerModal: React.FC = () => {
     addToCart(customizerItem, {
       size: selectedSize,
       temp: selectedTemp,
-      milk: selectedMilk,
+      milk: isEspresso ? selectedMilk : null,
       shot: selectedShot,
       syrup: selectedSyrup,
       sweetness: selectedSweetness,

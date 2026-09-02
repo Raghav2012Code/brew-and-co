@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { Search, X, Heart, Sparkles, Filter } from 'lucide-react';
+import { Search, X, Heart, Filter } from 'lucide-react';
 import { MENU_ITEMS, CATEGORIES, DIETARY_FILTERS } from '../data/menuData';
 import { ProductCard } from './ProductCard';
 import { useStore } from '../context/StoreContext';

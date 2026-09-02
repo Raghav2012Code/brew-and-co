@@ -1,15 +1,5 @@
 import React, { useState } from 'react';
-import {
-  X,
-  Sparkles,
-  ArrowRight,
-  Coffee,
-  Heart,
-  Zap,
-  RotateCcw,
-  Compass,
-  CheckCircle2,
-} from 'lucide-react';
+import { X, ArrowRight, Zap, RotateCcw, Compass } from 'lucide-react';
 import { ROASTERY_BEANS } from '../data/roasteryData';
 import { useStore } from '../context/StoreContext';
 import { useSubscription } from '../context/SubscriptionContext';
