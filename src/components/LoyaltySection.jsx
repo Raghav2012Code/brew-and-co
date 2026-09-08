@@ -13,12 +13,19 @@ export const LoyaltySection = () => {
   } = useStore();
 
   const handleTestStamp = async () => {
-    let nextStamps = loyaltyStamps + 1;
-    let nextFree = freeDrinksAvailable;
+    let earnedReward = false;
 
-    if (nextStamps >= 6) {
-      nextStamps = 0;
-      nextFree += 1;
+    setLoyaltyStamps((prev) => {
+      const next = prev + 1;
+      if (next >= 6) {
+        earnedReward = true;
+        return 0;
+      }
+      return next;
+    });
+
+    if (earnedReward) {
+      setFreeDrinksAvailable((prev) => prev + 1);
       try {
         const confettiModule = await import('canvas-confetti');
         const confetti = confettiModule.default || confettiModule;
@@ -32,9 +39,6 @@ export const LoyaltySection = () => {
         console.error(e);
       }
     }
-
-    setLoyaltyStamps(nextStamps);
-    setFreeDrinksAvailable(nextFree);
   };
 
   const content = (

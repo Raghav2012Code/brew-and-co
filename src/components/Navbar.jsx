@@ -91,7 +91,7 @@ export const Navbar = memo(() => {
       {/* Main Masthead Navigation */}
       <div className="max-w-7xl mx-auto px-4 sm:px-8 py-3.5 flex items-center justify-between">
         {/* Brand Identity with LogoMark */}
-        <a href="#" className="flex items-center" aria-label={`${brandProfile.brandName} Home`}>
+        <a href="#hero" className="flex items-center" aria-label={`${brandProfile.brandName} Home`}>
           <LogoMark className="w-9 h-9" showText={true} />
         </a>
 
@@ -186,6 +186,13 @@ export const Navbar = memo(() => {
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 bg-vermillion/10 text-vermillion dark:text-dark-vermillion">
               15% Off
             </span>
+          </a>
+          <a
+            href="#brew-guide"
+            onClick={closeMobile}
+            className="block min-h-[44px] p-3 rounded-xl bg-[#F3EFE6] dark:bg-[#1C1B18] text-sm font-semibold text-[#1A1816] dark:text-[#EAE6DF] active:bg-[#E8E4DC] dark:active:bg-[#262420] transition-colors"
+          >
+            Brew Guide
           </a>
           <button
             type="button"

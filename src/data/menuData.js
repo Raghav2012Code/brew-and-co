@@ -1,5 +1,5 @@
 export const CATEGORIES = [
-  { id: 'all', name: 'All Items', count: 16 },
+  { id: 'all', name: 'All Items', count: 19 },
   { id: 'espresso', name: 'Espresso', count: 5 },
   { id: 'cold', name: 'Iced & Cold Brew', count: 4 },
   { id: 'filter', name: 'Drip & Pour Over', count: 3 },

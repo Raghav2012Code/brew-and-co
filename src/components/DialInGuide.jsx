@@ -7,7 +7,7 @@ const CUP_PRESETS = [
     label: '1 Cup',
     subtitle: '8 oz / 250ml',
     dose: 16,
-    water: 250,
+    water: 256,
     time: '2.5 mins',
     bloom: 50,
     spoons: 'about 2 level tbsp',
@@ -16,8 +16,8 @@ const CUP_PRESETS = [
     id: '2cups',
     label: '2 Mugs',
     subtitle: '16 oz / 500ml',
-    dose: 30,
-    water: 500,
+    dose: 32,
+    water: 512,
     time: '3.5 mins',
     bloom: 80,
     spoons: 'about 4 level tbsp',
@@ -27,7 +27,7 @@ const CUP_PRESETS = [
     label: 'Travel Mug',
     subtitle: '12 oz / 380ml',
     dose: 24,
-    water: 380,
+    water: 384,
     time: '3.0 mins',
     bloom: 60,
     spoons: 'about 3 level tbsp',
@@ -111,7 +111,9 @@ export const DialInGuide = () => {
               return (
                 <button
                   key={preset.id}
+                  type="button"
                   onClick={() => setSelectedPresetId(preset.id)}
+                  aria-pressed={isSelected}
                   className={`p-4 rounded-xl border text-left transition-all ${
                     isSelected
                       ? 'border-[#1A1816] dark:border-[#EAE6DF] bg-[#1A1816] dark:bg-[#EAE6DF] text-[#FBF9F5] dark:text-[#11100F] shadow-sm'

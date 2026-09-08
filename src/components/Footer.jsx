@@ -29,7 +29,8 @@ export const Footer = () => {
 
             <div className="pt-2 text-xs text-[#888276] space-y-1">
               <p>442 Industrial Way, San Francisco, CA 94107</p>
-              <p>Open Daily: 7:00 AM – 6:00 PM</p>
+              <p>Mon–Thu 7:00 AM – 6:00 PM</p>
+              <p>Fri–Sun 7:00 AM – 8:00 PM</p>
             </div>
           </div>
 
@@ -40,6 +41,7 @@ export const Footer = () => {
             </h4>
             <ul className="space-y-2 text-sm text-[#666056] dark:text-[#A09A8E]">
               <li><a href="#menu" className="hover:text-[#1A1816] dark:hover:text-[#EAE6DF] transition-colors">Menu & Online Order</a></li>
+              <li><a href="#roastery" className="hover:text-[#1A1816] dark:hover:text-[#EAE6DF] transition-colors">Roastery & Subscriptions</a></li>
               <li><a href="#location" className="hover:text-[#1A1816] dark:hover:text-[#EAE6DF] transition-colors">Hours & Location</a></li>
               <li><a href="#brew-guide" className="hover:text-[#1A1816] dark:hover:text-[#EAE6DF] transition-colors">Home Brew Guide</a></li>
               <li><a href="#rewards" className="hover:text-[#1A1816] dark:hover:text-[#EAE6DF] transition-colors">Tasting Pass</a></li>
