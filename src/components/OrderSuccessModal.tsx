@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Check, Clock, Printer } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import {
@@ -10,35 +10,68 @@ import {
 import { Button } from '@/components/ui/button';
 
 export const OrderSuccessModal: React.FC = () => {
-  const { activeOrder, setActiveOrder } = useStore();
+  const { activeOrder, setActiveOrder, liveOrders } = useStore();
+
+  const currentOrder = useMemo(() => {
+    if (!activeOrder) return null;
+    return liveOrders.find((o) => o.orderId === activeOrder.orderId) || activeOrder;
+  }, [activeOrder, liveOrders]);
+
   const [secondsRemaining, setSecondsRemaining] = useState(0);
-  const [prepStage, setPrepStage] = useState(1);
+
+  const orderId = currentOrder?.orderId;
+  const orderStatus = currentOrder?.status;
+  const prepMinutes = currentOrder?.prepMinutes;
 
   useEffect(() => {
-    if (!activeOrder) return;
+    if (!orderId) return;
 
-    setSecondsRemaining(activeOrder.prepMinutes ? activeOrder.prepMinutes * 60 : 480);
-    setPrepStage(1);
+    if (orderStatus === 'ready' || orderStatus === 'completed') {
+      setSecondsRemaining(0);
+      return;
+    }
+
+    const initialSeconds = prepMinutes ? prepMinutes * 60 : 480;
+    setSecondsRemaining(initialSeconds);
 
     const timer = setInterval(() => {
-      setSecondsRemaining((prev) => (prev <= 1 ? 0 : prev - 1));
+      setSecondsRemaining((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
     }, 1000);
-
-    const stageTimer1 = setTimeout(() => setPrepStage(2), 6000);
-    const stageTimer2 = setTimeout(() => setPrepStage(3), 18000);
 
     return () => {
       clearInterval(timer);
-      clearTimeout(stageTimer1);
-      clearTimeout(stageTimer2);
     };
-  }, [activeOrder]);
+  }, [orderId, orderStatus, prepMinutes]);
 
-  if (!activeOrder) return null;
+  const prepStage = useMemo(() => {
+    const status = currentOrder?.status;
+    if (status === 'ready' || status === 'completed' || secondsRemaining <= 0) {
+      return 3;
+    }
+    const totalSeconds = currentOrder?.prepMinutes ? currentOrder.prepMinutes * 60 : 480;
+    if (status === 'brewing' || secondsRemaining <= totalSeconds * 0.5) {
+      return 2;
+    }
+    return 1;
+  }, [currentOrder?.status, currentOrder?.prepMinutes, secondsRemaining]);
+
+  if (!currentOrder) return null;
 
   const minutes = Math.floor(secondsRemaining / 60);
   const seconds = secondsRemaining % 60;
   const formattedTime = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+  const subtotal = currentOrder.subtotal ?? (currentOrder.items || []).reduce((sum: number, item: any) => sum + (item.unitPrice || 0) * (item.quantity || 1), 0);
+  const discount = currentOrder.discount ?? 0;
+  const tax = currentOrder.tax ?? Number((Math.max(0, subtotal - discount) * 0.0825).toFixed(2));
+  const tip = currentOrder.tipAmount ?? 0;
+  const total = currentOrder.total ?? Number((Math.max(0, subtotal - discount) + tax + tip).toFixed(2));
 
   return (
     <Dialog open={Boolean(activeOrder)} onOpenChange={(open) => !open && setActiveOrder(null)}>
@@ -50,10 +83,12 @@ export const OrderSuccessModal: React.FC = () => {
           </div>
 
           <DialogTitle className="font-serif font-bold text-xl sm:text-2xl text-ink dark:text-dark-text-main">
-            Order #{activeOrder.orderId} Confirmed
+            Order #{currentOrder.orderId} Confirmed
           </DialogTitle>
           <p className="text-xs font-mono text-ink-muted dark:text-dark-text-muted mt-1">
-            We're preparing your order for pickup at the counter.
+            {prepStage === 3
+              ? 'Your order is ready for pickup at the counter!'
+              : "We're preparing your order for pickup at the counter."}
           </p>
         </DialogHeader>
 
@@ -67,7 +102,7 @@ export const OrderSuccessModal: React.FC = () => {
               <span>Estimated Time:</span>
             </div>
             <span className="font-mono font-bold text-xl text-vermillion dark:text-dark-vermillion">
-              {formattedTime}
+              {prepStage === 3 ? 'Ready!' : formattedTime}
             </span>
           </div>
 
@@ -88,7 +123,7 @@ export const OrderSuccessModal: React.FC = () => {
           <div className="p-3.5 bg-paper-dim dark:bg-dark-card border border-hairline dark:border-dark-hairline text-xs font-mono space-y-1 text-ink-muted dark:text-dark-text-muted">
             <div className="flex justify-between">
               <span>Name on Order:</span>
-              <strong className="text-ink dark:text-dark-text-main">{activeOrder.pickupName}</strong>
+              <strong className="text-ink dark:text-dark-text-main">{currentOrder.pickupName}</strong>
             </div>
             <div className="flex justify-between">
               <span>Pickup Spot:</span>
@@ -98,7 +133,7 @@ export const OrderSuccessModal: React.FC = () => {
 
           {/* Item Breakdown */}
           <div className="space-y-2 border-t border-hairline dark:border-dark-hairline pt-3 max-h-32 overflow-y-auto">
-            {(activeOrder.items || []).map((item: any, idx: number) => (
+            {(currentOrder.items || []).map((item: any, idx: number) => (
               <div key={idx} className="flex justify-between text-xs text-ink dark:text-dark-text-main font-mono">
                 <span>{item.quantity}× {item.name}</span>
                 <span className="font-semibold">${((item.unitPrice || 0) * (item.quantity || 1)).toFixed(2)}</span>
@@ -106,10 +141,28 @@ export const OrderSuccessModal: React.FC = () => {
             ))}
           </div>
 
-          {/* Total Paid */}
-          <div className="border-t border-hairline dark:border-dark-hairline pt-3 flex justify-between text-sm font-bold text-ink dark:text-dark-text-main">
-            <span>Total Paid:</span>
-            <span className="text-vermillion dark:text-dark-vermillion font-mono">${(activeOrder.total ?? 0).toFixed(2)}</span>
+          {/* Receipt Breakdown */}
+          <div className="border-t border-hairline dark:border-dark-hairline pt-3 space-y-1.5 text-xs font-mono text-ink-muted dark:text-dark-text-muted">
+            <div className="flex justify-between">
+              <span>Subtotal:</span>
+              <span className="text-ink dark:text-dark-text-main">${subtotal.toFixed(2)}</span>
+            </div>
+            <div className={`flex justify-between ${discount > 0 ? 'text-vermillion dark:text-dark-vermillion font-semibold' : ''}`}>
+              <span>Loyalty Discount:</span>
+              <span>{discount > 0 ? `-$${discount.toFixed(2)}` : '$0.00'}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Sales Tax:</span>
+              <span className="text-ink dark:text-dark-text-main">${tax.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Tip:</span>
+              <span className="text-ink dark:text-dark-text-main">${tip.toFixed(2)}</span>
+            </div>
+            <div className="border-t border-hairline dark:border-dark-hairline pt-2 flex justify-between text-sm font-bold text-ink dark:text-dark-text-main font-sans">
+              <span>Total Paid:</span>
+              <span className="text-vermillion dark:text-dark-vermillion font-mono">${total.toFixed(2)}</span>
+            </div>
           </div>
 
           {/* Actions */}

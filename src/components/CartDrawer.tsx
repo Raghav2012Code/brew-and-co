@@ -33,14 +33,17 @@ export const CartDrawer: React.FC = () => {
 
   const discountAmount = useMemo(() => {
     if (!applyFreeDrink || (freeDrinksAvailable || 0) <= 0 || (cart?.length || 0) === 0) return 0;
-    const eligible = (cart as any[]).filter((i) => !i.isSubscription && !i.subscriptionMeta);
-    const pool = eligible.length > 0 ? eligible : (cart as any[]);
-    return Math.min(...pool.map((i) => i?.unitPrice || 0));
+    const eligibleDrinks = (cart as any[]).filter(
+      (i) => !i?.isSubscription && !i?.subscriptionMeta && ['espresso', 'cold', 'filter'].includes(i?.category)
+    );
+    if (eligibleDrinks.length === 0) return 0;
+    const cheapest = Math.min(...eligibleDrinks.map((i) => i?.unitPrice || 0));
+    return isFinite(cheapest) ? cheapest : 0;
   }, [applyFreeDrink, freeDrinksAvailable, cart]);
 
   const subtotal = useMemo(() => Math.max(0, rawSubtotal - discountAmount), [rawSubtotal, discountAmount]);
   const tax = useMemo(() => Number((subtotal * 0.0825).toFixed(2)), [subtotal]);
-  const calculatedTip = useMemo(() => Number(((subtotal * tipPercent) / 100).toFixed(2)), [subtotal, tipPercent]);
+  const calculatedTip = useMemo(() => Number(((rawSubtotal * tipPercent) / 100).toFixed(2)), [rawSubtotal, tipPercent]);
   const total = useMemo(() => Number((subtotal + tax + calculatedTip).toFixed(2)), [subtotal, tax, calculatedTip]);
 
   const hasSubscriptions = useMemo(() => cart.some((item: any) => item.isSubscription || item.subscriptionMeta), [cart]);
@@ -49,10 +52,20 @@ export const CartDrawer: React.FC = () => {
     e.preventDefault();
     if (cart.length === 0) return;
 
-    // If order contains coffee subscriptions, register them to active subscriptions
-    let registeredCount = 0;
-    cart.forEach((item: any) => {
-      if (item.isSubscription && item.subscriptionMeta) {
+    const guestName = pickupName.trim() || 'Counter Guest';
+    const subItems = cart.filter((item: any) => item.isSubscription && item.subscriptionMeta);
+
+    try {
+      placeOrder({
+        pickupName: guestName,
+        tipPercent,
+        tipAmount: calculatedTip,
+        appliedFreeDrink: applyFreeDrink && freeDrinksAvailable > 0 && discountAmount > 0,
+      });
+
+      // Atomic subscription commit: only commit subscriptions after placeOrder succeeds
+      let registeredCount = 0;
+      subItems.forEach((item: any) => {
         addSubscription({
           beanId: item.subscriptionMeta.beanId,
           beanName: item.name,
@@ -69,26 +82,21 @@ export const CartDrawer: React.FC = () => {
           quantity: item.quantity,
         });
         registeredCount += 1;
+      });
+
+      if (registeredCount > 0) {
+        toast.success(`Order placed & ${registeredCount} Subscription${registeredCount > 1 ? 's' : ''} Activated!`, {
+          description: `Your recurring dispatch is scheduled. Manage your plan anytime in the Subscription Vault.`,
+        });
+      } else {
+        toast.success('Order placed successfully!', {
+          description: `Preparing your coffee for ${guestName}.`,
+        });
       }
-    });
-
-    placeOrder({
-      pickupName: pickupName.trim() || 'Counter Guest',
-      tipPercent,
-      tipAmount: calculatedTip,
-      appliedFreeDrink: applyFreeDrink && freeDrinksAvailable > 0,
-    });
-
-    if (registeredCount > 0) {
-      toast.success(`Order placed & ${registeredCount} Subscription${registeredCount > 1 ? 's' : ''} Activated!`, {
-        description: `Your recurring dispatch is scheduled. Manage your plan anytime in the Subscription Vault.`,
-      });
-    } else {
-      toast.success('Order placed successfully!', {
-        description: `Preparing your coffee for ${pickupName.trim() || 'Counter Guest'}.`,
-      });
+    } catch {
+      toast.error('Failed to place order. Please try again.');
     }
-  }, [cart, addSubscription, placeOrder, pickupName, tipPercent, calculatedTip, applyFreeDrink, freeDrinksAvailable]);
+  }, [cart, addSubscription, placeOrder, pickupName, tipPercent, calculatedTip, applyFreeDrink, freeDrinksAvailable, discountAmount]);
 
   const handleRemove = useCallback((id: string, name: string) => {
     removeFromCart(id);
@@ -255,7 +263,7 @@ export const CartDrawer: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => updateQuantity(item.id, -1)}
-                            aria-label="Decrease quantity"
+                            aria-label={`Decrease quantity for ${item.name}`}
                             className="min-h-[36px] min-w-[36px] flex items-center justify-center text-ink-muted hover:text-ink dark:hover:text-dark-text-main active:scale-90 transition-transform cursor-pointer"
                           >
                             <Minus className="w-3.5 h-3.5" />
@@ -266,7 +274,7 @@ export const CartDrawer: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => updateQuantity(item.id, 1)}
-                            aria-label="Increase quantity"
+                            aria-label={`Increase quantity for ${item.name}`}
                             className="min-h-[36px] min-w-[36px] flex items-center justify-center text-ink-muted hover:text-ink dark:hover:text-dark-text-main active:scale-90 transition-transform cursor-pointer"
                           >
                             <Plus className="w-3.5 h-3.5" />
@@ -338,7 +346,6 @@ export const CartDrawer: React.FC = () => {
                 <input
                   id="pickup-guest-name"
                   type="text"
-                  required
                   value={pickupName}
                   onChange={(e) => setPickupName(e.target.value)}
                   placeholder="Your full name"

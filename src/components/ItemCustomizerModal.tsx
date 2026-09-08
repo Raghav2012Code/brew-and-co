@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { CUSTOMIZATION_OPTIONS } from '../data/menuData';
@@ -11,10 +11,62 @@ import {
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
+interface CustomizerSize {
+  id: string;
+  name: string;
+  priceDelta: number;
+}
+
+const getAvailableSizes = (item: any): CustomizerSize[] => {
+  if (Array.isArray(item?.availableSizes) && item.availableSizes.length > 0) {
+    return item.availableSizes.map((size: any, index: number) => {
+      if (typeof size === 'object' && size !== null) {
+        return {
+          id: size.id || `size-${index}`,
+          name: size.name || size.id,
+          priceDelta: typeof size.priceDelta === 'number' ? size.priceDelta : 0,
+        };
+      }
+      const sizeStr = String(size);
+      let priceDelta = 0;
+      if (index > 0) {
+        if (sizeStr.includes('16oz') || sizeStr.toLowerCase().includes('large') || sizeStr.includes('Carafe')) {
+          priceDelta = 0.75;
+        } else if (sizeStr.includes('12oz')) {
+          priceDelta = 0.50;
+        } else if (sizeStr.includes('8oz') || sizeStr.includes('6oz')) {
+          priceDelta = 0.50;
+        } else {
+          priceDelta = index * 0.50;
+        }
+      }
+      return {
+        id: `size-${sizeStr.toLowerCase().replace(/[^a-z0-9]/g, '-')}`,
+        name: sizeStr,
+        priceDelta,
+      };
+    });
+  }
+  return CUSTOMIZATION_OPTIONS.sizes;
+};
+
+const supportsMilk = (item: any): boolean => {
+  if (!item) return false;
+  if (item.category === 'espresso') return true;
+  if (item.category === 'cold') {
+    const text = `${item.name} ${item.description || ''}`.toLowerCase();
+    return text.includes('milk') || text.includes('latte') || text.includes('shakerato') || text.includes('cream');
+  }
+  return false;
+};
+
 export const ItemCustomizerModal: React.FC = () => {
   const { customizerItem, setCustomizerItem, addToCart } = useStore();
 
-  const [selectedSize, setSelectedSize] = useState(CUSTOMIZATION_OPTIONS.sizes[0]);
+  const availableSizes = useMemo(() => getAvailableSizes(customizerItem), [customizerItem]);
+  const hasMilkOption = useMemo(() => supportsMilk(customizerItem), [customizerItem]);
+
+  const [selectedSize, setSelectedSize] = useState<CustomizerSize>(CUSTOMIZATION_OPTIONS.sizes[0]);
   const [selectedTemp, setSelectedTemp] = useState('hot');
   const [selectedMilk, setSelectedMilk] = useState<any>(CUSTOMIZATION_OPTIONS.milks[0]);
   const [selectedShot, setSelectedShot] = useState(CUSTOMIZATION_OPTIONS.shots[0]);
@@ -26,9 +78,10 @@ export const ItemCustomizerModal: React.FC = () => {
   // Reset options cleanly when customizer item changes
   useEffect(() => {
     if (customizerItem) {
-      setSelectedSize(CUSTOMIZATION_OPTIONS.sizes[0]);
+      const sizes = getAvailableSizes(customizerItem);
+      setSelectedSize(sizes[0]);
       setSelectedTemp(customizerItem.defaultTemp || 'hot');
-      setSelectedMilk(customizerItem.category === 'espresso' ? CUSTOMIZATION_OPTIONS.milks[0] : null);
+      setSelectedMilk(supportsMilk(customizerItem) ? CUSTOMIZATION_OPTIONS.milks[0] : null);
       setSelectedShot(CUSTOMIZATION_OPTIONS.shots[0]);
       setSelectedSyrup(CUSTOMIZATION_OPTIONS.syrups[0]);
       setSelectedSweetness(CUSTOMIZATION_OPTIONS.sweetness[0]);
@@ -39,10 +92,9 @@ export const ItemCustomizerModal: React.FC = () => {
 
   if (!customizerItem) return null;
 
-  const isEspresso = customizerItem.category === 'espresso';
   const basePrice = customizerItem.price;
   const sizeDelta = selectedSize?.priceDelta || 0;
-  const milkDelta = isEspresso && selectedMilk ? selectedMilk.priceDelta || 0 : 0;
+  const milkDelta = hasMilkOption && selectedMilk ? selectedMilk.priceDelta || 0 : 0;
   const shotDelta = selectedShot?.priceDelta || 0;
   const syrupDelta = selectedSyrup?.priceDelta || 0;
 
@@ -53,11 +105,11 @@ export const ItemCustomizerModal: React.FC = () => {
     addToCart(customizerItem, {
       size: selectedSize,
       temp: selectedTemp,
-      milk: isEspresso ? selectedMilk : null,
+      milk: hasMilkOption ? selectedMilk : null,
       shot: selectedShot,
       syrup: selectedSyrup,
       sweetness: selectedSweetness,
-      specialNotes,
+      specialNotes: specialNotes.slice(0, 150),
       quantity,
     });
     toast.success(`Added ${quantity}× ${customizerItem.name} to bag!`);
@@ -97,8 +149,8 @@ export const ItemCustomizerModal: React.FC = () => {
             <label className="font-mono font-semibold text-xs text-ink-muted dark:text-dark-text-muted uppercase tracking-wide block">
               Size
             </label>
-            <div className="grid grid-cols-3 gap-2">
-              {CUSTOMIZATION_OPTIONS.sizes.map((s) => {
+            <div className={`grid gap-2 ${availableSizes.length === 1 ? 'grid-cols-1' : availableSizes.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
+              {availableSizes.map((s) => {
                 const isSelected = selectedSize?.id === s.id;
                 return (
                   <button
@@ -113,7 +165,7 @@ export const ItemCustomizerModal: React.FC = () => {
                   >
                     <p className="text-xs sm:text-sm font-medium">{s.name}</p>
                     <p className={`text-[11px] font-mono ${isSelected ? 'text-hairline dark:text-dark-hairline' : 'text-ink-muted dark:text-dark-text-muted'}`}>
-                      {s.priceDelta === 0 ? 'Standard' : `+$${s.priceDelta.toFixed(2)}`}
+                      {s.priceDelta === 0 ? 'Standard' : s.priceDelta > 0 ? `+$${s.priceDelta.toFixed(2)}` : `-$${Math.abs(s.priceDelta).toFixed(2)}`}
                     </p>
                   </button>
                 );
@@ -148,7 +200,7 @@ export const ItemCustomizerModal: React.FC = () => {
           </div>
 
           {/* Milk Choice */}
-          {customizerItem.category === 'espresso' && (
+          {hasMilkOption && (
             <div className="space-y-2">
               <label className="font-mono font-semibold text-xs text-ink-muted dark:text-dark-text-muted uppercase tracking-wide block">
                 Milk
@@ -264,14 +316,20 @@ export const ItemCustomizerModal: React.FC = () => {
 
           {/* Special Notes */}
           <div className="space-y-2">
-            <label htmlFor="item-notes" className="font-mono font-semibold text-xs text-ink-muted dark:text-dark-text-muted uppercase tracking-wide block">
-              Special Instructions (Optional)
-            </label>
+            <div className="flex justify-between items-center">
+              <label htmlFor="item-notes" className="font-mono font-semibold text-xs text-ink-muted dark:text-dark-text-muted uppercase tracking-wide block">
+                Special Instructions (Optional)
+              </label>
+              <span className="text-[10px] font-mono text-ink-muted dark:text-dark-text-muted">
+                {specialNotes.length}/150
+              </span>
+            </div>
             <input
               id="item-notes"
               type="text"
+              maxLength={150}
               value={specialNotes}
-              onChange={(e) => setSpecialNotes(e.target.value)}
+              onChange={(e) => setSpecialNotes(e.target.value.slice(0, 150))}
               placeholder="e.g. extra hot, light ice, oat milk foam..."
               className="w-full min-h-[42px] p-3 bg-paper-dim dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main placeholder:text-ink-faint text-xs focus:outline-none focus:border-ink dark:focus:border-dark-text-main"
             />
@@ -284,9 +342,11 @@ export const ItemCustomizerModal: React.FC = () => {
           {/* Quantity Stepper */}
           <div className="flex items-center border border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas">
             <button
-              onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              aria-label="Decrease quantity"
-              className="min-h-[40px] min-w-[38px] flex items-center justify-center text-ink-muted dark:text-dark-text-muted hover:text-ink dark:hover:text-dark-text-main active:scale-90 transition-transform cursor-pointer"
+              type="button"
+              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+              disabled={quantity <= 1}
+              aria-label={`Decrease quantity for ${customizerItem.name}`}
+              className="min-h-[40px] min-w-[38px] flex items-center justify-center text-ink-muted dark:text-dark-text-muted hover:text-ink dark:hover:text-dark-text-main active:scale-90 transition-transform cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <Minus className="w-3.5 h-3.5" />
             </button>
@@ -294,9 +354,11 @@ export const ItemCustomizerModal: React.FC = () => {
               {quantity}
             </span>
             <button
-              onClick={() => setQuantity(quantity + 1)}
-              aria-label="Increase quantity"
-              className="min-h-[40px] min-w-[38px] flex items-center justify-center text-ink-muted dark:text-dark-text-muted hover:text-ink dark:hover:text-dark-text-main active:scale-90 transition-transform cursor-pointer"
+              type="button"
+              onClick={() => setQuantity((q) => Math.min(99, q + 1))}
+              disabled={quantity >= 99}
+              aria-label={`Increase quantity for ${customizerItem.name}`}
+              className="min-h-[40px] min-w-[38px] flex items-center justify-center text-ink-muted dark:text-dark-text-muted hover:text-ink dark:hover:text-dark-text-main active:scale-90 transition-transform cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <Plus className="w-3.5 h-3.5" />
             </button>
