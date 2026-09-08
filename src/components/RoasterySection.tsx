@@ -279,7 +279,7 @@ export const RoasterySection: React.FC = () => {
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
-                    onClick={() => openSubscriptionModalFor(bean)}
+                    onClick={() => openSubscriptionModalFor(bean, 'biweekly')}
                     className="min-h-[42px] px-3 py-2 bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion dark:hover:bg-dark-vermillion dark:hover:text-paper text-xs font-bold font-sans flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer shadow-xs"
                   >
                     <Zap className="w-3.5 h-3.5 fill-current text-vermillion dark:text-dark-canvas" />
@@ -288,7 +288,7 @@ export const RoasterySection: React.FC = () => {
 
                   <button
                     type="button"
-                    onClick={() => openSubscriptionModalFor(bean)}
+                    onClick={() => openSubscriptionModalFor(bean, 'onetime')}
                     className="min-h-[42px] px-3 py-2 bg-paper dark:bg-dark-subtle border border-hairline dark:border-dark-hairline hover:border-ink dark:hover:border-dark-text-main text-ink dark:text-dark-text-main text-xs font-bold font-sans active:scale-95 transition-all cursor-pointer"
                   >
                     <span>One-Time Bag</span>

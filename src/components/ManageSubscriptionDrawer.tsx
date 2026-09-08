@@ -144,16 +144,24 @@ export const ManageSubscriptionDrawer: React.FC = () => {
 
                       <div className="text-right">
                         <span className="font-mono font-bold text-sm text-vermillion dark:text-dark-vermillion">
-                          ${sub.unitPrice.toFixed(2)}
+                          ${(sub.unitPrice * (sub.quantity || 1)).toFixed(2)}
                         </span>
                         <span className="text-[10px] font-mono text-ink-muted dark:text-dark-text-muted block">
-                          / dispatch
+                          {(sub.quantity || 1) > 1
+                            ? `${sub.quantity || 1} bags (${sub.quantity || 1} × $${sub.unitPrice.toFixed(2)}) / dispatch`
+                            : '/ dispatch'}
                         </span>
                       </div>
                     </div>
 
                     {/* Meta tags */}
                     <div className="mt-3 p-2.5 bg-paper dark:bg-dark-canvas border border-hairline dark:border-dark-hairline space-y-1 text-xs">
+                      <div className="flex justify-between">
+                        <span className="text-ink-muted dark:text-dark-text-muted">Quantity:</span>
+                        <strong className="text-ink dark:text-dark-text-main font-mono text-[11px]">
+                          {sub.quantity || 1} {(sub.quantity || 1) > 1 ? 'bags' : 'bag'}
+                        </strong>
+                      </div>
                       <div className="flex justify-between">
                         <span className="text-ink-muted dark:text-dark-text-muted">Grind:</span>
                         <strong className="text-ink dark:text-dark-text-main font-mono text-[11px]">

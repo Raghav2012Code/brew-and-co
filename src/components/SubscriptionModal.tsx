@@ -19,14 +19,21 @@ import {
 } from '../data/roasteryData';
 import { toast } from 'sonner';
 
-export const SubscriptionModal: React.FC = () => {
+interface SubscriptionModalProps {
+  initialFrequency?: string;
+}
+
+export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFrequency: propInitialFrequency }) => {
   const {
     isSubscribeModalOpen,
     setIsSubscribeModalOpen,
     selectedBean,
+    initialFrequency: contextInitialFrequency,
   } = useSubscription();
 
   const { addToCart } = useStore();
+
+  const effectiveInitialFrequency = propInitialFrequency || contextInitialFrequency || 'biweekly';
 
   const grindGroupId = useId();
   const bagGroupId = useId();
@@ -34,18 +41,28 @@ export const SubscriptionModal: React.FC = () => {
 
   const [selectedGrind, setSelectedGrind] = useState(GRIND_PROFILES[0].id);
   const [selectedBagSize, setSelectedBagSize] = useState(BAG_SIZES[0].id);
-  const [selectedFrequency, setSelectedFrequency] = useState(SUBSCRIPTION_FREQUENCIES[1].id); // biweekly default
+  const [selectedFrequency, setSelectedFrequency] = useState(effectiveInitialFrequency);
   const [quantity, setQuantity] = useState(1);
 
-  // Reset defaults on bean change
+  // Reset defaults on bean change or open
   useEffect(() => {
-    if (selectedBean) {
+    if (selectedBean && isSubscribeModalOpen) {
       setSelectedGrind(GRIND_PROFILES[0].id);
       setSelectedBagSize(BAG_SIZES[0].id);
-      setSelectedFrequency(SUBSCRIPTION_FREQUENCIES[1].id);
+      setSelectedFrequency(effectiveInitialFrequency);
       setQuantity(1);
     }
-  }, [selectedBean]);
+  }, [selectedBean, effectiveInitialFrequency, isSubscribeModalOpen]);
+
+  // Lock body scroll on open with cleanup
+  useEffect(() => {
+    if (!isSubscribeModalOpen) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isSubscribeModalOpen]);
 
   useEffect(() => {
     if (!isSubscribeModalOpen) return;
@@ -114,7 +131,7 @@ export const SubscriptionModal: React.FC = () => {
 
     if (isSubscription) {
       toast.success(`Subscribed to ${selectedBean.name}!`, {
-        description: `Delivered ${currentFreq.name.toLowerCase()} (${currentGrind.name}) with 15% recurring savings.`,
+        description: `Delivered ${currentFreq.name.toLowerCase()} (${currentGrind.name}) with ${currentFreq.discountPct}% recurring savings.`,
       });
     } else {
       toast.success(`Added ${selectedBean.name} to Bag`, {
@@ -188,9 +205,9 @@ export const SubscriptionModal: React.FC = () => {
                 <Calendar className="w-3.5 h-3.5 text-vermillion dark:text-dark-vermillion" />
                 1. Delivery Frequency & Savings
               </label>
-              {isSubscription && (
+              {isSubscription && currentFreq.discountPct > 0 && (
                 <span className="text-[11px] font-mono font-bold text-vermillion dark:text-dark-vermillion bg-vermillion/10 dark:bg-dark-vermillion/15 px-2 py-0.5">
-                  15% Recurring Discount Active
+                  {currentFreq.discountPct}% Recurring Discount Active
                 </span>
               )}
             </div>
@@ -411,7 +428,9 @@ export const SubscriptionModal: React.FC = () => {
             {isSubscription ? (
               <>
                 <Zap className="w-4 h-4 text-vermillion dark:text-dark-canvas fill-current" />
-                <span>Start Subscription • Save 15%</span>
+                <span>
+                  Start Subscription{currentFreq.discountPct > 0 ? ` • Save ${currentFreq.discountPct}%` : ''}
+                </span>
               </>
             ) : (
               <>

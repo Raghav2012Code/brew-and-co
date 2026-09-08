@@ -16,39 +16,67 @@ export const BaristaQueueModal: React.FC = () => {
   const { subscriptions } = useSubscription();
 
   const [activeTab, setActiveTab] = useState<'barista' | 'roaster'>('barista');
-  const [filterStatus, setFilterStatus] = useState<'all' | 'received' | 'brewing' | 'ready'>('all');
+  const [filterStatus, setFilterStatus] = useState<'all' | 'received' | 'brewing' | 'ready' | 'completed'>('all');
 
-  // Compute Weekly Roastery Manifest from active subscriptions
+  // Compute Weekly Roastery Manifest from active subscriptions with cadence normalization & green coffee shrinkage
   const roasteryManifest = useMemo(() => {
-    const manifestByBean: Record<string, { beanName: string; totalGrams: number; bagsCount: number; grinds: Record<string, number> }> = {};
-    let grandTotalGrams = 0;
+    const manifestByBean: Record<
+      string,
+      {
+        beanName: string;
+        totalRoastedGrams: number;
+        requiredGreenGrams: number;
+        bagsCount: number;
+        grinds: Record<string, number>;
+      }
+    > = {};
+    let grandRoastedGrams = 0;
+    let grandGreenGrams = 0;
 
     subscriptions
       .filter((s) => s.status === 'active')
       .forEach((sub) => {
+        // Cadence normalization: weekly = 1x, biweekly = 0.5x, monthly = 0.25x
+        const cadenceMultiplier =
+          sub.frequencyId === 'weekly'
+            ? 1.0
+            : sub.frequencyId === 'biweekly'
+            ? 0.5
+            : sub.frequencyId === 'monthly'
+            ? 0.25
+            : 1.0;
+
         // Grams per bag size
         const grams = sub.bagSizeId === '1kg' ? 1000 : sub.bagSizeId === '500g' ? 500 : 250;
-        const totalSubGrams = grams * (sub.quantity || 1);
-        grandTotalGrams += totalSubGrams;
+        const subQuantity = sub.quantity || 1;
+        const totalRoastedGrams = grams * subQuantity * cadenceMultiplier;
+        // 15.2% shrinkage compensation: Green = Roasted / (1 - 0.152)
+        const requiredGreenGrams = totalRoastedGrams / (1 - 0.152);
+
+        grandRoastedGrams += totalRoastedGrams;
+        grandGreenGrams += requiredGreenGrams;
 
         if (!manifestByBean[sub.beanId]) {
           manifestByBean[sub.beanId] = {
             beanName: sub.beanName,
-            totalGrams: 0,
+            totalRoastedGrams: 0,
+            requiredGreenGrams: 0,
             bagsCount: 0,
             grinds: {},
           };
         }
 
-        manifestByBean[sub.beanId].totalGrams += totalSubGrams;
-        manifestByBean[sub.beanId].bagsCount += sub.quantity || 1;
+        manifestByBean[sub.beanId].totalRoastedGrams += totalRoastedGrams;
+        manifestByBean[sub.beanId].requiredGreenGrams += requiredGreenGrams;
+        manifestByBean[sub.beanId].bagsCount += subQuantity;
         manifestByBean[sub.beanId].grinds[sub.grindName] =
-          (manifestByBean[sub.beanId].grinds[sub.grindName] || 0) + (sub.quantity || 1);
+          (manifestByBean[sub.beanId].grinds[sub.grindName] || 0) + subQuantity;
       });
 
     return {
       items: Object.values(manifestByBean),
-      totalKg: (grandTotalGrams / 1000).toFixed(2),
+      totalRoastedKg: (grandRoastedGrams / 1000).toFixed(2),
+      totalGreenKg: (grandGreenGrams / 1000).toFixed(2),
       activeSubsCount: subscriptions.filter((s) => s.status === 'active').length,
     };
   }, [subscriptions]);
@@ -79,6 +107,7 @@ export const BaristaQueueModal: React.FC = () => {
       aria-modal="true"
       aria-labelledby="barista-kds-title"
       className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
+      onClick={() => setIsBaristaModalOpen(false)}
     >
       <div
         className="relative w-full max-w-5xl h-[94vh] flex flex-col bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
@@ -151,13 +180,13 @@ export const BaristaQueueModal: React.FC = () => {
               }`}
             >
               <Flame className="w-4 h-4" />
-              <span>Roast & Grind Manifest ({roasteryManifest.totalKg} kg)</span>
+              <span>Roast & Grind Manifest ({roasteryManifest.totalRoastedKg} kg)</span>
             </button>
           </div>
 
           {activeTab === 'barista' && (
             <div className="hidden sm:flex items-center gap-1.5 py-1.5">
-              {(['all', 'received', 'brewing', 'ready'] as const).map((st) => (
+              {(['all', 'received', 'brewing', 'ready', 'completed'] as const).map((st) => (
                 <button
                   key={st}
                   onClick={() => setFilterStatus(st)}
@@ -195,12 +224,15 @@ export const BaristaQueueModal: React.FC = () => {
                     const isReceived = order.status === 'received';
                     const isBrewing = order.status === 'brewing';
                     const isReady = order.status === 'ready';
+                    const isCompleted = order.status === 'completed';
 
                     return (
                       <div
                         key={order.orderId}
                         className={`relative flex flex-col justify-between border transition-all duration-200 shadow-sm ${
-                          isReady
+                          isCompleted
+                            ? 'border-hairline dark:border-dark-hairline bg-paper/60 dark:bg-dark-card/60 opacity-80'
+                            : isReady
                             ? 'border-emerald-500 bg-emerald-50/20 dark:bg-emerald-950/20'
                             : isBrewing
                             ? 'border-vermillion bg-paper dark:bg-dark-card ring-1 ring-vermillion/40'
@@ -219,7 +251,9 @@ export const BaristaQueueModal: React.FC = () => {
                               </span>
                               <span
                                 className={`px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-wider ${
-                                  isReady
+                                  isCompleted
+                                    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+                                    : isReady
                                     ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 animate-pulse'
                                     : isBrewing
                                     ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30'
@@ -275,36 +309,43 @@ export const BaristaQueueModal: React.FC = () => {
 
                         {/* Status Transition Action Bar */}
                         <div className="p-3 bg-paper-dim dark:bg-dark-subtle border-t border-hairline dark:border-dark-hairline">
-                          <button
-                            type="button"
-                            onClick={() => handleStatusAdvance(order.orderId, order.status)}
-                            className={`w-full min-h-[38px] px-3 py-1.5 text-xs font-mono font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer shadow-xs ${
-                              isReceived
-                                ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion'
-                                : isBrewing
-                                ? 'bg-amber-600 text-white hover:bg-amber-700'
-                                : 'bg-emerald-600 text-white hover:bg-emerald-700'
-                            }`}
-                          >
-                            {isReceived && (
-                              <>
-                                <span>Start Brewing</span>
-                                <ChevronRight className="w-3.5 h-3.5" />
-                              </>
-                            )}
-                            {isBrewing && (
-                              <>
-                                <span>Mark as Ready (Ring Chime)</span>
-                                <Check className="w-3.5 h-3.5" />
-                              </>
-                            )}
-                            {isReady && (
-                              <>
-                                <span>Complete & Hand Off</span>
-                                <CheckCircle2 className="w-3.5 h-3.5" />
-                              </>
-                            )}
-                          </button>
+                          {isCompleted ? (
+                            <div className="w-full min-h-[38px] px-3 py-1.5 text-xs font-mono font-bold flex items-center justify-center gap-1.5 bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline text-emerald-600 dark:text-emerald-400 shadow-xs">
+                              <CheckCircle2 className="w-3.5 h-3.5" />
+                              <span>Order Completed & Dispatched</span>
+                            </div>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => handleStatusAdvance(order.orderId, order.status)}
+                              className={`w-full min-h-[38px] px-3 py-1.5 text-xs font-mono font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer shadow-xs ${
+                                isReceived
+                                  ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion'
+                                  : isBrewing
+                                  ? 'bg-amber-600 text-white hover:bg-amber-700'
+                                  : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                              }`}
+                            >
+                              {isReceived && (
+                                <>
+                                  <span>Start Brewing</span>
+                                  <ChevronRight className="w-3.5 h-3.5" />
+                                </>
+                              )}
+                              {isBrewing && (
+                                <>
+                                  <span>Mark as Ready (Ring Chime)</span>
+                                  <Check className="w-3.5 h-3.5" />
+                                </>
+                              )}
+                              {isReady && (
+                                <>
+                                  <span>Complete & Hand Off</span>
+                                  <CheckCircle2 className="w-3.5 h-3.5" />
+                                </>
+                              )}
+                            </button>
+                          )}
                         </div>
                       </div>
                     );
@@ -319,37 +360,37 @@ export const BaristaQueueModal: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="p-4 bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline">
                   <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-ink-muted dark:text-dark-text-muted block">
-                    Total Roast Batch Requirement
+                    Total Roasted Batch (Demand)
                   </span>
                   <span className="font-serif text-3xl font-bold text-vermillion dark:text-dark-vermillion mt-1 block">
-                    {roasteryManifest.totalKg} kg
+                    {roasteryManifest.totalRoastedKg} kg
                   </span>
                   <span className="text-[11px] font-mono text-ink-faint">
-                    Net roasted beans for this week
+                    Cadence-normalized weekly roasted weight
                   </span>
                 </div>
 
                 <div className="p-4 bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline">
                   <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-ink-muted dark:text-dark-text-muted block">
-                    Active Subscriber Bags
+                    Required Green Coffee Weight
+                  </span>
+                  <span className="font-serif text-3xl font-bold text-ink dark:text-dark-text-main mt-1 block">
+                    {roasteryManifest.totalGreenKg} kg
+                  </span>
+                  <span className="text-[11px] font-mono text-ink-faint">
+                    With 15.2% shrinkage compensation
+                  </span>
+                </div>
+
+                <div className="p-4 bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline">
+                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-ink-muted dark:text-dark-text-muted block">
+                    Active Subscriber Plans
                   </span>
                   <span className="font-serif text-3xl font-bold text-ink dark:text-dark-text-main mt-1 block">
                     {roasteryManifest.activeSubsCount} Plans
                   </span>
                   <span className="text-[11px] font-mono text-ink-faint">
-                    Recurring weekly/bi-weekly deliveries
-                  </span>
-                </div>
-
-                <div className="p-4 bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline">
-                  <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-ink-muted dark:text-dark-text-muted block">
-                    Green Bean Shrinkage Factor
-                  </span>
-                  <span className="font-serif text-3xl font-bold text-ink dark:text-dark-text-main mt-1 block">
-                    15.2%
-                  </span>
-                  <span className="text-[11px] font-mono text-ink-faint">
-                    Calculated roast loss compensation
+                    Weekly (1x), Bi-Weekly (0.5x), Monthly (0.25x)
                   </span>
                 </div>
               </div>
@@ -393,12 +434,15 @@ export const BaristaQueueModal: React.FC = () => {
                             </span>
                           </div>
 
-                          <div className="font-mono text-right">
-                            <span className="text-lg font-bold text-vermillion dark:text-dark-vermillion">
-                              {(item.totalGrams / 1000).toFixed(2)} kg
-                            </span>
-                            <span className="text-[11px] text-ink-muted block">
-                              Required Roast Weight
+                          <div className="font-mono text-right space-y-0.5">
+                            <div className="text-lg font-bold text-vermillion dark:text-dark-vermillion">
+                              {(item.totalRoastedGrams / 1000).toFixed(2)} kg <span className="text-xs font-normal text-ink-muted">roasted</span>
+                            </div>
+                            <div className="text-xs font-bold text-ink dark:text-dark-text-main">
+                              {(item.requiredGreenGrams / 1000).toFixed(2)} kg green required
+                            </div>
+                            <span className="text-[10px] text-ink-faint block">
+                              15.2% shrinkage compensated
                             </span>
                           </div>
                         </div>

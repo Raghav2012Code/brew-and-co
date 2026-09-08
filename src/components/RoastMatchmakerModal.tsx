@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, ArrowRight, Zap, RotateCcw, Compass } from 'lucide-react';
 import { ROASTERY_BEANS } from '../data/roasteryData';
 import { useStore } from '../context/StoreContext';
 import { useSubscription } from '../context/SubscriptionContext';
+import { useTenant } from '../context/TenantContext';
 
 interface QuizState {
   brewMethod: string;
@@ -13,6 +14,7 @@ interface QuizState {
 export const RoastMatchmakerModal: React.FC = () => {
   const { isMatchmakerOpen, setIsMatchmakerOpen } = useStore();
   const { openSubscriptionModalFor } = useSubscription();
+  const { roasteryBeans } = useTenant();
 
   const [step, setStep] = useState<number>(1);
   const [answers, setAnswers] = useState<QuizState>({
@@ -20,6 +22,18 @@ export const RoastMatchmakerModal: React.FC = () => {
     flavorPreference: '',
     milkPreference: '',
   });
+
+  const resetQuiz = () => {
+    setStep(1);
+    setAnswers({ brewMethod: '', flavorPreference: '', milkPreference: '' });
+  };
+
+  // Reset quiz state when modal is closed
+  useEffect(() => {
+    if (!isMatchmakerOpen) {
+      resetQuiz();
+    }
+  }, [isMatchmakerOpen]);
 
   if (!isMatchmakerOpen) return null;
 
@@ -33,30 +47,101 @@ export const RoastMatchmakerModal: React.FC = () => {
     }
   };
 
-  // Palate Matching Algorithm
+  // Weighted Palate Matching Algorithm (Flavor choice 3x weight)
   const getMatchedBean = () => {
+    const candidateBeans = roasteryBeans && roasteryBeans.length > 0 ? roasteryBeans : ROASTERY_BEANS;
     const { brewMethod, flavorPreference, milkPreference } = answers;
 
-    if (flavorPreference === 'floral' || (brewMethod === 'pourover' && milkPreference === 'black')) {
-      return ROASTERY_BEANS.find((b) => b.id === 'ethiopia-yirgacheffe-aricha') || ROASTERY_BEANS[0];
+    if (!candidateBeans || candidateBeans.length === 0) {
+      return ROASTERY_BEANS[0];
     }
-    if (flavorPreference === 'fruity' || brewMethod === 'coldbrew') {
-      return ROASTERY_BEANS.find((b) => b.id === 'colombia-huila-pink-bourbon') || ROASTERY_BEANS[1];
-    }
-    if (flavorPreference === 'citrus' || (flavorPreference === 'bright' && brewMethod === 'pourover')) {
-      return ROASTERY_BEANS.find((b) => b.id === 'kenya-nyeri-hill-aa') || ROASTERY_BEANS[3];
-    }
-    if (flavorPreference === 'deep' || brewMethod === 'espresso' || milkPreference === 'milk') {
-      return ROASTERY_BEANS.find((b) => b.id === 'kissa-dark-velvet-blend') || ROASTERY_BEANS[4];
-    }
-    return ROASTERY_BEANS.find((b) => b.id === 'guatemala-huehuetenango-antigua') || ROASTERY_BEANS[2];
+
+    const flavorKeywords: Record<string, string[]> = {
+      floral: ['floral', 'jasmine', 'bergamot', 'blossom', 'peach', 'tea', 'honey', 'aricha', 'light'],
+      fruity: ['fruit', 'fruity', 'berry', 'strawberry', 'grapefruit', 'guava', 'jam', 'bourbon', 'honey'],
+      citrus: ['citrus', 'lemon', 'cassis', 'blackcurrant', 'sparkling', 'acid', 'acidity', 'bright', 'kenya'],
+      chocolate: ['chocolate', 'toffee', 'praline', 'apple', 'walnut', 'caramel', 'guatemala', 'balanced'],
+      deep: ['dark', 'velvet', 'cocoa', 'cacao', 'truffle', 'hazelnut', 'smoke', 'crema', 'espresso', 'moka', 'kissa'],
+    };
+
+    const targetKeywords = flavorKeywords[flavorPreference] || [];
+
+    const scored = candidateBeans.map((bean) => {
+      let score = 0;
+      const beanText = [
+        bean.name || '',
+        bean.roastLevel || '',
+        bean.description || '',
+        bean.tagline || '',
+        bean.process || '',
+        ...(bean.tastingNotes || []),
+        bean.flavorProfile?.acidity || '',
+        bean.flavorProfile?.body || '',
+        bean.flavorProfile?.sweetness || '',
+      ].join(' ').toLowerCase();
+
+      // 1. FLAVOR PREFERENCE (3x weight -> 30 pts max)
+      const canonicalIds: Record<string, string> = {
+        floral: 'ethiopia-yirgacheffe-aricha',
+        fruity: 'colombia-huila-pink-bourbon',
+        citrus: 'kenya-nyeri-hill-aa',
+        chocolate: 'guatemala-huehuetenango-antigua',
+        deep: 'kissa-dark-velvet-blend',
+      };
+
+      if (canonicalIds[flavorPreference] === bean.id) {
+        score += 30;
+      } else {
+        let keywordHits = 0;
+        targetKeywords.forEach((kw) => {
+          if (beanText.includes(kw.toLowerCase())) {
+            keywordHits += 1;
+          }
+        });
+        score += Math.min(30, keywordHits * 10);
+      }
+
+      // 2. BREW METHOD (1x weight -> 10 pts max)
+      if (brewMethod === 'pourover') {
+        if (bean.roastLevel === 'Light' || bean.roastLevel === 'Medium-Light') score += 10;
+        else if (bean.roastLevel === 'Medium') score += 6;
+      } else if (brewMethod === 'espresso') {
+        if (bean.roastLevel === 'Medium-Dark' || beanText.includes('espresso')) score += 10;
+        else if (bean.roastLevel === 'Medium') score += 6;
+      } else if (brewMethod === 'frenchpress') {
+        if (bean.roastLevel === 'Medium-Dark' || bean.roastLevel === 'Medium') score += 10;
+        else score += 5;
+      } else if (brewMethod === 'drip') {
+        if (bean.roastLevel === 'Medium' || bean.roastLevel === 'Medium-Light') score += 10;
+        else score += 6;
+      } else if (brewMethod === 'coldbrew') {
+        if (beanText.includes('fruity') || bean.roastLevel === 'Medium-Dark' || bean.roastLevel === 'Medium-Light') score += 10;
+        else score += 5;
+      }
+
+      // 3. MILK PREFERENCE (1x weight -> 10 pts max)
+      if (milkPreference === 'milk') {
+        if (bean.roastLevel === 'Medium-Dark') score += 10;
+        else if (bean.roastLevel === 'Medium') score += 8;
+        else score += 3;
+      } else if (milkPreference === 'black') {
+        if (bean.roastLevel === 'Light' || bean.roastLevel === 'Medium-Light') score += 10;
+        else if (bean.roastLevel === 'Medium') score += 7;
+        else score += 4;
+      }
+
+      return { bean, score };
+    });
+
+    scored.sort((a, b) => b.score - a.score);
+    return scored[0]?.bean || candidateBeans[0];
   };
 
   const matchedBean = getMatchedBean();
 
-  const resetQuiz = () => {
-    setStep(1);
-    setAnswers({ brewMethod: '', flavorPreference: '', milkPreference: '' });
+  const handleDismiss = () => {
+    setIsMatchmakerOpen(false);
+    resetQuiz();
   };
 
   return (
@@ -65,6 +150,7 @@ export const RoastMatchmakerModal: React.FC = () => {
       aria-modal="true"
       aria-labelledby="matchmaker-modal-title"
       className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200"
+      onClick={handleDismiss}
     >
       <div
         className="relative w-full max-w-xl flex flex-col bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
@@ -240,7 +326,7 @@ export const RoastMatchmakerModal: React.FC = () => {
 
                 {/* Tasting notes */}
                 <div className="flex flex-wrap gap-1">
-                  {matchedBean.tastingNotes.map((note) => (
+                  {matchedBean.tastingNotes?.map((note: string) => (
                     <span
                       key={note}
                       className="px-2 py-0.5 text-[11px] font-mono bg-paper dark:bg-dark-canvas border border-hairline dark:border-dark-hairline"
@@ -256,8 +342,8 @@ export const RoastMatchmakerModal: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => {
-                    setIsMatchmakerOpen(false);
-                    openSubscriptionModalFor(matchedBean);
+                    handleDismiss();
+                    openSubscriptionModalFor(matchedBean, 'biweekly');
                   }}
                   className="min-h-[44px] px-4 py-2.5 bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion text-xs sm:text-sm font-bold flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer shadow-md"
                 >
@@ -268,8 +354,8 @@ export const RoastMatchmakerModal: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => {
-                    setIsMatchmakerOpen(false);
-                    openSubscriptionModalFor(matchedBean);
+                    handleDismiss();
+                    openSubscriptionModalFor(matchedBean, 'onetime');
                   }}
                   className="min-h-[44px] px-4 py-2.5 bg-paper dark:bg-dark-subtle border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main text-xs sm:text-sm font-bold flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer"
                 >
