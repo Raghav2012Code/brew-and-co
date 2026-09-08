@@ -20,6 +20,7 @@ export interface ActiveSubscription {
   createdAt: string;
   nextDispatchDate: string;
   totalDeliveredCount: number;
+  basePrice?: number;
 }
 
 interface SubscriptionContextType {
@@ -29,9 +30,10 @@ interface SubscriptionContextType {
   setIsSubscribeModalOpen: (open: boolean) => void;
   selectedBean: any | null;
   setSelectedBean: (bean: any | null) => void;
+  initialFrequency: string;
   isManageDrawerOpen: boolean;
   setIsManageDrawerOpen: (open: boolean) => void;
-  openSubscriptionModalFor: (bean: any) => void;
+  openSubscriptionModalFor: (bean: any, initialFrequency?: string) => void;
   addSubscription: (sub: Omit<ActiveSubscription, 'id' | 'createdAt' | 'nextDispatchDate' | 'totalDeliveredCount' | 'status'>) => ActiveSubscription;
   pauseSubscription: (id: string) => void;
   resumeSubscription: (id: string) => void;
@@ -75,17 +77,19 @@ const DEFAULT_SAMPLE_SUBSCRIPTIONS: ActiveSubscription[] = [
     createdAt: 'Feb 15, 2026',
     nextDispatchDate: calculateNextDispatch(10),
     totalDeliveredCount: 2,
+    basePrice: 22,
   },
 ];
 
 export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Allow empty array [] in localStorage hydration so cancelled subscriptions stay cancelled on reload
   const [subscriptions, setSubscriptions] = useState<ActiveSubscription[]>(() => {
     try {
       if (typeof window === 'undefined' || !window.localStorage) return DEFAULT_SAMPLE_SUBSCRIPTIONS;
       const saved = window.localStorage.getItem(STORAGE_KEY);
-      if (saved) {
+      if (saved !== null) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
+        if (Array.isArray(parsed)) {
           return parsed;
         }
       }
@@ -97,6 +101,7 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   const [isSubscribeModalOpen, setIsSubscribeModalOpen] = useState(false);
   const [selectedBean, setSelectedBean] = useState<any | null>(null);
+  const [initialFrequency, setInitialFrequency] = useState<string>('biweekly');
   const [isManageDrawerOpen, setIsManageDrawerOpen] = useState(false);
 
   useEffect(() => {
@@ -107,8 +112,10 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }
   }, [subscriptions]);
 
-  const openSubscriptionModalFor = useCallback((bean: any) => {
-    setSelectedBean(bean);
+  const openSubscriptionModalFor = useCallback((bean: any, initialFreq: string = 'biweekly') => {
+    const beanWithFreq = bean ? { ...bean, initialFrequency: initialFreq } : bean;
+    setSelectedBean(beanWithFreq);
+    setInitialFrequency(initialFreq);
     setIsSubscribeModalOpen(true);
   }, []);
 
@@ -118,7 +125,7 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
       ...subData,
       id: `sub-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
       createdAt: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-      nextDispatchDate: calculateNextDispatch(freq.days || 14),
+      nextDispatchDate: calculateNextDispatch(freq?.days ?? 14),
       totalDeliveredCount: 0,
       status: 'active',
     };
@@ -133,12 +140,21 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
     );
   }, []);
 
+  // Respect subscription's actual frequency interval (freq?.days ?? 14) when resuming instead of hardcoding 7 days
   const resumeSubscription = useCallback((id: string) => {
     setSubscriptions((prev) =>
       Array.isArray(prev)
-        ? prev.map((sub) =>
-            sub.id === id ? { ...sub, status: 'active', nextDispatchDate: calculateNextDispatch(7) } : sub
-          )
+        ? prev.map((sub) => {
+            if (sub.id === id) {
+              const freq = SUBSCRIPTION_FREQUENCIES.find((f) => f.id === sub.frequencyId);
+              return {
+                ...sub,
+                status: 'active',
+                nextDispatchDate: calculateNextDispatch(freq?.days ?? 14),
+              };
+            }
+            return sub;
+          })
         : []
     );
   }, []);
@@ -147,6 +163,7 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
     setSubscriptions((prev) => (Array.isArray(prev) ? prev.filter((sub) => sub.id !== id) : []));
   }, []);
 
+  // Retain custom bean base prices, do not calculate imminent dispatch date on paused subs, use nullish coalescing
   const updateFrequency = useCallback((id: string, newFreqId: string) => {
     const freq = SUBSCRIPTION_FREQUENCIES.find((f) => f.id === newFreqId);
     if (!freq) return;
@@ -154,16 +171,54 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
       Array.isArray(prev)
         ? prev.map((sub) => {
             if (sub.id === id) {
-              const bean = ROASTERY_BEANS.find((b) => b.id === sub.beanId);
               const bagSize = BAG_SIZES.find((s) => s.id === sub.bagSizeId) || BAG_SIZES[0];
-              const baseRaw = (bean?.basePrice || 20) * bagSize.multiplier;
+
+              let beanBasePrice = sub.basePrice;
+              if (beanBasePrice === undefined && typeof window !== 'undefined' && window.localStorage) {
+                try {
+                  const saved = window.localStorage.getItem('brew_co_tenant_beans');
+                  if (saved) {
+                    const beans = JSON.parse(saved);
+                    const found = Array.isArray(beans) ? beans.find((b: any) => b?.id === sub.beanId) : null;
+                    if (found && typeof found.basePrice === 'number') {
+                      beanBasePrice = found.basePrice;
+                    }
+                  }
+                } catch {
+                  // ignore
+                }
+              }
+              if (beanBasePrice === undefined) {
+                const canonicalBean = ROASTERY_BEANS.find((b) => b.id === sub.beanId);
+                if (canonicalBean) {
+                  beanBasePrice = canonicalBean.basePrice;
+                }
+              }
+
+              let baseRaw: number;
+              if (beanBasePrice !== undefined) {
+                baseRaw = beanBasePrice * bagSize.multiplier;
+              } else {
+                const oldFreq = SUBSCRIPTION_FREQUENCIES.find((f) => f.id === sub.frequencyId);
+                const oldDiscount = oldFreq ? oldFreq.discountPct / 100 : 0;
+                baseRaw = oldDiscount < 1 && oldDiscount > 0 ? sub.unitPrice / (1 - oldDiscount) : sub.unitPrice;
+              }
+
               const discountedPrice = Number((baseRaw * (1 - freq.discountPct / 100)).toFixed(2));
+
+              // Do not calculate imminent dispatch date on paused subscriptions
+              const nextDispatchDate =
+                sub.status === 'paused'
+                  ? sub.nextDispatchDate
+                  : calculateNextDispatch(freq?.days ?? 14);
+
               return {
                 ...sub,
                 frequencyId: freq.id,
                 frequencyName: freq.name,
                 unitPrice: discountedPrice,
-                nextDispatchDate: calculateNextDispatch(freq.days || 14),
+                nextDispatchDate,
+                basePrice: beanBasePrice ?? sub.basePrice,
               };
             }
             return sub;
@@ -192,6 +247,7 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
       setIsSubscribeModalOpen,
       selectedBean,
       setSelectedBean,
+      initialFrequency,
       isManageDrawerOpen,
       setIsManageDrawerOpen,
       openSubscriptionModalFor,
@@ -207,6 +263,7 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
       activeSubscriptionCount,
       isSubscribeModalOpen,
       selectedBean,
+      initialFrequency,
       isManageDrawerOpen,
       openSubscriptionModalFor,
       addSubscription,

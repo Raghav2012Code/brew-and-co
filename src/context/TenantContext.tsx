@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { ROASTERY_BEANS } from '../data/roasteryData';
+import type { RoasteryBean } from '../types';
 
 export interface RoasteryBrandProfile {
   brandName: string;
@@ -31,10 +32,10 @@ const DEFAULT_PROFILE: RoasteryBrandProfile = {
 
 interface TenantContextType {
   brandProfile: RoasteryBrandProfile;
-  roasteryBeans: any[];
+  roasteryBeans: RoasteryBean[];
   updateBrandProfile: (fields: Partial<RoasteryBrandProfile>) => void;
-  updateRoastItem: (id: string, fields: Partial<any>) => void;
-  addRoastItem: (newBean: any) => void;
+  updateRoastItem: (id: string, fields: Partial<RoasteryBean>) => void;
+  addRoastItem: (newBean: RoasteryBean) => void;
   resetToDefaults: () => void;
 }
 
@@ -60,24 +61,41 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return DEFAULT_PROFILE;
   });
 
-  const [roasteryBeans, setRoasteryBeans] = useState<any[]>(() => {
+  // Merge canonical ROASTERY_BEANS with saved modifications by ID, allowing new catalog items to populate
+  const [roasteryBeans, setRoasteryBeans] = useState<RoasteryBean[]>(() => {
     try {
-      if (typeof window === 'undefined' || !window.localStorage) return ROASTERY_BEANS;
+      if (typeof window === 'undefined' || !window.localStorage) return ROASTERY_BEANS as RoasteryBean[];
       const saved = window.localStorage.getItem(BEANS_STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // Merge with latest image paths and data from ROASTERY_BEANS
-          return parsed.map((item) => {
-            const canonical = ROASTERY_BEANS.find((b) => b.id === item.id);
-            return canonical ? { ...item, image: canonical.image } : item;
+          const savedMap = new Map<string, Partial<RoasteryBean>>(parsed.map((item) => [item?.id, item]));
+
+          // 1. Merge canonical beans with saved modifications by ID
+          const mergedCanonical = (ROASTERY_BEANS as RoasteryBean[]).map((canonical) => {
+            const savedItem = savedMap.get(canonical.id);
+            if (savedItem) {
+              return {
+                ...canonical,
+                ...savedItem,
+                image: canonical.image, // keep latest image asset path
+              };
+            }
+            return canonical;
           });
+
+          // 2. Include any custom items created by the user not in ROASTERY_BEANS
+          const customItems = parsed.filter(
+            (item: RoasteryBean) => item?.id && !ROASTERY_BEANS.some((b) => b.id === item.id)
+          );
+
+          return [...mergedCanonical, ...customItems];
         }
       }
     } catch (e) {
       console.error(e);
     }
-    return ROASTERY_BEANS;
+    return ROASTERY_BEANS as RoasteryBean[];
   });
 
   const syncAccentToDOM = useCallback((profile: RoasteryBrandProfile) => {
@@ -136,19 +154,19 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     });
   }, []);
 
-  const updateRoastItem = useCallback((id: string, fields: Partial<any>) => {
+  const updateRoastItem = useCallback((id: string, fields: Partial<RoasteryBean>) => {
     setRoasteryBeans((prev) =>
-      Array.isArray(prev) ? prev.map((bean) => (bean?.id === id ? { ...bean, ...fields } : bean)) : ROASTERY_BEANS
+      Array.isArray(prev) ? prev.map((bean) => (bean?.id === id ? { ...bean, ...fields } : bean)) : (ROASTERY_BEANS as RoasteryBean[])
     );
   }, []);
 
-  const addRoastItem = useCallback((newBean: any) => {
-    setRoasteryBeans((prev) => (Array.isArray(prev) ? [newBean, ...prev] : [newBean, ...ROASTERY_BEANS]));
+  const addRoastItem = useCallback((newBean: RoasteryBean) => {
+    setRoasteryBeans((prev) => (Array.isArray(prev) ? [newBean, ...prev] : [newBean, ...(ROASTERY_BEANS as RoasteryBean[])]));
   }, []);
 
   const resetToDefaults = useCallback(() => {
     setBrandProfile(DEFAULT_PROFILE);
-    setRoasteryBeans(ROASTERY_BEANS);
+    setRoasteryBeans(ROASTERY_BEANS as RoasteryBean[]);
     try {
       localStorage.removeItem(BRAND_STORAGE_KEY);
       localStorage.removeItem(BEANS_STORAGE_KEY);
@@ -158,7 +176,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const value = useMemo(
     () => ({
       brandProfile: brandProfile || DEFAULT_PROFILE,
-      roasteryBeans: Array.isArray(roasteryBeans) ? roasteryBeans : ROASTERY_BEANS,
+      roasteryBeans: Array.isArray(roasteryBeans) ? roasteryBeans : (ROASTERY_BEANS as RoasteryBean[]),
       updateBrandProfile,
       updateRoastItem,
       addRoastItem,

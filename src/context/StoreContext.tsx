@@ -1,39 +1,18 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { STORE_HOURS } from '../data/menuData';
+import type { CartItem, CartItemOptions, OrderStatus, MenuItem } from '../types';
+
+// Re-export types for backward compatibility
+export type { CartItem, CartItemOptions, OrderStatus } from '../types';
 
 // ----- Types -----
-
-export interface CartItemOptions {
-  size?: { id?: string; name: string; priceDelta?: number } | null;
-  temp?: string | null;
-  milk?: { name: string; priceDelta?: number } | null;
-  shot?: { id?: string; name: string; priceDelta?: number } | null;
-  syrup?: { name: string; priceDelta?: number } | null;
-  sweetness?: string | null;
-  specialNotes?: string;
-}
-
-export interface CartItem {
-  id: string;
-  productId?: string;
-  name: string;
-  category?: string;
-  basePrice?: number;
-  unitPrice: number;
-  quantity: number;
-  image: string;
-  isSubscription?: boolean;
-  subscriptionMeta?: Record<string, unknown> | null;
-  beanMeta?: Record<string, unknown> | null;
-  options?: CartItemOptions;
-}
 
 export interface LiveOrder {
   orderId: string;
   timestamp: string;
   date?: string;
   pickupName: string;
-  status: string;
+  status: OrderStatus;
   items: CartItem[];
   total: number;
   elapsedMinutes?: number;
@@ -66,8 +45,8 @@ export interface StoreContextType {
   cartSubtotal: number;
   isCartOpen: boolean;
   setIsCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  customizerItem: any | null;
-  setCustomizerItem: React.Dispatch<React.SetStateAction<any | null>>;
+  customizerItem: MenuItem | null;
+  setCustomizerItem: React.Dispatch<React.SetStateAction<MenuItem | null>>;
   addToCart: (product: any, options?: any) => void;
   removeFromCart: (cartItemId: string) => void;
   updateQuantity: (cartItemId: string, delta: number) => void;
@@ -88,7 +67,7 @@ export interface StoreContextType {
   setActiveOrder: React.Dispatch<React.SetStateAction<LiveOrder | null>>;
   liveOrders: LiveOrder[];
   activeOrdersCount: number;
-  updateOrderStatus: (orderId: string, nextStatus: string) => void;
+  updateOrderStatus: (orderId: string, nextStatus: OrderStatus) => void;
   clearCompletedOrders: () => void;
   placeOrder: (params: PlaceOrderParams) => void;
   favorites: string[];
@@ -114,13 +93,35 @@ const triggerConfetti = async (opts: unknown) => {
   }
 };
 
-// Web Audio API pure synth chime for Barista KDS alerts
+// Web Audio API pure synth chime for Barista KDS alerts with shared singleton context
+let sharedAudioCtx: AudioContext | null = null;
+
+const getSharedAudioContext = (): AudioContext | null => {
+  if (typeof window === 'undefined') return null;
+  try {
+    if (!sharedAudioCtx) {
+      const AudioContextClass =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (AudioContextClass) {
+        sharedAudioCtx = new AudioContextClass();
+      }
+    }
+    if (sharedAudioCtx && sharedAudioCtx.state === 'suspended') {
+      sharedAudioCtx.resume().catch(() => {
+        // AudioContext resume failed (user gesture required)
+      });
+    }
+  } catch (e) {
+    console.warn('Failed to initialize AudioContext:', e);
+  }
+  return sharedAudioCtx;
+};
+
 export const playBaristaChime = (type: string = 'new-order') => {
   try {
-    if (typeof window === 'undefined') return;
-    const AudioContextClass: typeof AudioContext | undefined = (window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext }).AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-    if (!AudioContextClass) return;
-    const ctx = new AudioContextClass();
+    const ctx = getSharedAudioContext();
+    if (!ctx) return;
 
     if (type === 'new-order') {
       const osc1 = ctx.createOscillator();
@@ -202,6 +203,34 @@ const DEFAULT_SEED_ORDERS: LiveOrder[] = [
   },
 ];
 
+// Helper to calculate deterministic cart item composite key for deduplication
+const getCartItemKey = (item: {
+  productId?: string;
+  options?: CartItemOptions | null;
+  isSubscription?: boolean;
+  subscriptionMeta?: Record<string, unknown> | null;
+  beanMeta?: Record<string, unknown> | null;
+}): string => {
+  const normOptions = {
+    size: item.options?.size?.name || item.options?.size?.id || '',
+    temp: item.options?.temp || '',
+    milk: item.options?.milk?.name || '',
+    shot: item.options?.shot?.name || item.options?.shot?.id || '',
+    syrup: item.options?.syrup?.name || '',
+    sweetness: item.options?.sweetness || '',
+    specialNotes: (item.options?.specialNotes || '').trim(),
+  };
+
+  const normSubMeta = item.subscriptionMeta
+    ? JSON.stringify(item.subscriptionMeta, Object.keys(item.subscriptionMeta).sort())
+    : '';
+  const normBeanMeta = item.beanMeta
+    ? JSON.stringify(item.beanMeta, Object.keys(item.beanMeta).sort())
+    : '';
+
+  return `${item.productId || ''}::${JSON.stringify(normOptions)}::${Boolean(item.isSubscription)}::${normSubMeta}::${normBeanMeta}`;
+};
+
 export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Cart State with LocalStorage
   const [cart, setCart] = useState<CartItem[]>(() => {
@@ -219,7 +248,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   });
 
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
-  const [customizerItem, setCustomizerItem] = useState<any | null>(null);
+  const [customizerItem, setCustomizerItem] = useState<MenuItem | null>(null);
 
   const [loyaltyStamps, setLoyaltyStamps] = useState<number>(() => {
     try {
@@ -255,13 +284,14 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [isMatchmakerOpen, setIsMatchmakerOpen] = useState<boolean>(false);
   const [isRoasteryStudioOpen, setIsRoasteryStudioOpen] = useState<boolean>(false);
 
+  // Live orders hydration: allow empty array [] so clearing completed orders persists across reloads
   const [liveOrders, setLiveOrders] = useState<LiveOrder[]>(() => {
     try {
       if (typeof window === 'undefined' || !window.localStorage) return DEFAULT_SEED_ORDERS;
       const saved = window.localStorage.getItem('brew_co_live_orders');
-      if (saved) {
+      if (saved !== null) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed as LiveOrder[];
+        if (Array.isArray(parsed)) return parsed as LiveOrder[];
       }
     } catch (e) {
       console.error(e);
@@ -338,39 +368,6 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
   }, [isAnyModalOpen]);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        if (customizerItem) {
-          setCustomizerItem(null);
-        } else if (activeOrder) {
-          setActiveOrder(null);
-        } else if (isLoyaltyModalOpen) {
-          setIsLoyaltyModalOpen(false);
-        } else if (isCartOpen) {
-          setIsCartOpen(false);
-        } else if (isBaristaModalOpen) {
-          setIsBaristaModalOpen(false);
-        } else if (isMatchmakerOpen) {
-          setIsMatchmakerOpen(false);
-        } else if (isRoasteryStudioOpen) {
-          setIsRoasteryStudioOpen(false);
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [
-    customizerItem,
-    activeOrder,
-    isLoyaltyModalOpen,
-    isCartOpen,
-    isBaristaModalOpen,
-    isMatchmakerOpen,
-    isRoasteryStudioOpen,
-  ]);
-
   const [theme, setTheme] = useState<string>(() => {
     try {
       if (typeof window === 'undefined' || !window.localStorage) return 'system';
@@ -398,6 +395,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
+  // Single source of truth for DOM theme class & localStorage
   useEffect(() => {
     if (typeof document === 'undefined') return;
     const root = document.documentElement;
@@ -417,22 +415,11 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [theme, effectiveTheme]);
 
   const toggleTheme = useCallback(() => {
-    const nextTheme = effectiveTheme === 'dark' ? 'light' : 'dark';
-    const root = document.documentElement;
-    if (nextTheme === 'dark') {
-      root.classList.add('dark');
-      root.style.colorScheme = 'dark';
-    } else {
-      root.classList.remove('dark');
-      root.style.colorScheme = 'light';
-    }
-    setTheme(nextTheme);
-    try {
-      localStorage.setItem('brew_co_theme', nextTheme);
-    } catch (e) {
-      console.error(e);
-    }
-  }, [effectiveTheme]);
+    setTheme((prev) => {
+      const currentEffective = prev === 'system' ? (systemIsDark ? 'dark' : 'light') : prev;
+      return currentEffective === 'dark' ? 'light' : 'dark';
+    });
+  }, [systemIsDark]);
 
   const [storeStatus, setStoreStatus] = useState<StoreStatus>({
     isOpen: true,
@@ -441,13 +428,36 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     isClosingSoon: false,
   });
 
+  // Pacific Time (America/Los_Angeles) calculation for store hours using Intl.DateTimeFormat
   useEffect(() => {
     const calculateStatus = () => {
       try {
         const now = new Date();
-        const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-        const dayName = days[now.getDay()];
-        const todayHours = (STORE_HOURS as Record<string, { open?: string; close?: string; label?: string }>)[dayName] || (STORE_HOURS as Record<string, unknown>).monday as { open?: string; close?: string; label?: string };
+        const formatter = new Intl.DateTimeFormat('en-US', {
+          timeZone: 'America/Los_Angeles',
+          weekday: 'long',
+          hour: 'numeric',
+          minute: 'numeric',
+          hourCycle: 'h23',
+        });
+        const parts = formatter.formatToParts(now);
+        let dayName = 'monday';
+        let ptHour = 0;
+        let ptMin = 0;
+        for (const part of parts) {
+          if (part.type === 'weekday') {
+            dayName = part.value.toLowerCase();
+          } else if (part.type === 'hour') {
+            ptHour = parseInt(part.value, 10);
+            if (ptHour === 24) ptHour = 0;
+          } else if (part.type === 'minute') {
+            ptMin = parseInt(part.value, 10);
+          }
+        }
+
+        const todayHours =
+          (STORE_HOURS as Record<string, { open?: string; close?: string; label?: string }>)[dayName] ||
+          ((STORE_HOURS as Record<string, unknown>).monday as { open?: string; close?: string; label?: string });
 
         if (!todayHours || !todayHours.open || !todayHours.close) {
           setStoreStatus({
@@ -462,7 +472,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         const [openHour = 7, openMin = 0] = todayHours.open.split(':').map(Number);
         const [closeHour = 18, closeMin = 0] = todayHours.close.split(':').map(Number);
 
-        const currentMinutes = now.getHours() * 60 + now.getMinutes();
+        const currentMinutes = ptHour * 60 + ptMin;
         const openMinutes = openHour * 60 + openMin;
         const closeMinutes = closeHour * 60 + closeMin;
 
@@ -491,7 +501,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           setStoreStatus({
             isOpen: false,
             statusText: `Closed • Opens at ${openingTimeLabel}`,
-            closesAt: openingTimeLabel,
+            closesAt: closingTimeLabel,
             isClosingSoon: false,
           });
         }
@@ -505,6 +515,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return () => clearInterval(interval);
   }, []);
 
+  // Cart line-item deduplication: composite key matching based on productId, options hash, and subscription metadata
   const addToCart = useCallback<StoreContextType['addToCart']>((product, options = {}) => {
     if (!product) return;
     const sizeDelta = (options.size as { priceDelta?: number } | undefined)?.priceDelta || 0;
@@ -513,30 +524,64 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const syrupDelta = (options.syrup as { priceDelta?: number } | undefined)?.priceDelta || 0;
     const unitPrice = Number((((product.price as number) || 0) + sizeDelta + milkDelta + shotDelta + syrupDelta).toFixed(2));
 
-    const cartItem: CartItem = {
-      id: `${(product.id as string) || 'item'}-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
-      productId: product.id as string | undefined,
-      name: (product.name as string) || 'Coffee Item',
-      category: (product.category as string) || 'all',
-      basePrice: (product.price as number) || 0,
-      unitPrice,
-      quantity: (options.quantity as number) || 1,
-      image: (product.image as string) || '/images/flat-white.jpg',
-      isSubscription: (product.isSubscription as boolean) || false,
-      subscriptionMeta: (product.subscriptionMeta as Record<string, unknown>) || null,
-      beanMeta: (product.beanMeta as Record<string, unknown>) || null,
-      options: {
-        size: (options.size as CartItemOptions['size']) || { id: 'standard', name: 'Standard' },
-        temp: (options.temp as string) || (product.defaultTemp as string) || 'hot',
-        milk: (options.milk as CartItemOptions['milk']) || null,
-        shot: (options.shot as CartItemOptions['shot']) || null,
-        syrup: (options.syrup as CartItemOptions['syrup']) || null,
-        sweetness: (options.sweetness as string) || null,
-        specialNotes: (options.specialNotes as string) || '',
-      },
+    const itemOptions: CartItemOptions = {
+      size: (options.size as CartItemOptions['size']) || { id: 'standard', name: 'Standard' },
+      temp: (options.temp as string) || (product.defaultTemp as string) || 'hot',
+      milk: (options.milk as CartItemOptions['milk']) || null,
+      shot: (options.shot as CartItemOptions['shot']) || null,
+      syrup: (options.syrup as CartItemOptions['syrup']) || null,
+      sweetness: (options.sweetness as string) || null,
+      specialNotes: (options.specialNotes as string) || '',
     };
 
-    setCart((prev) => (Array.isArray(prev) ? [...prev, cartItem] : [cartItem]));
+    const productId = (product.id || (product as CartItem).productId) as string | undefined;
+    const isSubscription = Boolean(product.isSubscription);
+    const subscriptionMeta = (product.subscriptionMeta as Record<string, unknown>) || null;
+    const beanMeta = (product.beanMeta as Record<string, unknown>) || null;
+    const addQuantity = (options.quantity as number) || 1;
+
+    const key = getCartItemKey({
+      productId,
+      options: itemOptions,
+      isSubscription,
+      subscriptionMeta,
+      beanMeta,
+    });
+
+    setCart((prev) => {
+      const safePrev = Array.isArray(prev) ? prev : [];
+      const existingIndex = safePrev.findIndex((item) => getCartItemKey(item) === key);
+
+      if (existingIndex > -1) {
+        return safePrev.map((item, idx) => {
+          if (idx === existingIndex) {
+            return {
+              ...item,
+              quantity: (item.quantity || 1) + addQuantity,
+            };
+          }
+          return item;
+        });
+      }
+
+      const cartItem: CartItem = {
+        id: `${(product.id as string) || 'item'}-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+        productId,
+        name: (product.name as string) || 'Coffee Item',
+        category: (product.category as string) || 'all',
+        basePrice: (product.price as number) || 0,
+        unitPrice,
+        quantity: addQuantity,
+        image: (product.image as string) || '/images/flat-white.jpg',
+        isSubscription,
+        subscriptionMeta,
+        beanMeta,
+        options: itemOptions,
+      };
+
+      return [...safePrev, cartItem];
+    });
+
     setIsCartOpen(true);
   }, []);
 
@@ -569,7 +614,8 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     });
   }, []);
 
-  const updateOrderStatus = useCallback((orderId: string, nextStatus: string) => {
+  // Sync activeOrder in updateOrderStatus so receipt modal updates in real time
+  const updateOrderStatus = useCallback((orderId: string, nextStatus: OrderStatus) => {
     setLiveOrders((prev) =>
       Array.isArray(prev)
         ? prev.map((order) => {
@@ -583,6 +629,13 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           })
         : []
     );
+
+    setActiveOrder((prev) => {
+      if (prev && prev.orderId === orderId) {
+        return { ...prev, status: nextStatus };
+      }
+      return prev;
+    });
   }, []);
 
   const clearCompletedOrders = useCallback(() => {
@@ -590,20 +643,37 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, []);
 
   const placeOrder = useCallback(
-    ({ pickupName, tipAmount = 0, appliedFreeDrink }: PlaceOrderParams) => {
+    ({ pickupName, tipPercent, tipAmount, tip, appliedFreeDrink }: PlaceOrderParams) => {
       const safeCart = Array.isArray(cart) ? cart : [];
-      const subtotal = safeCart.reduce((sum, item) => sum + (item?.unitPrice || 0) * (item?.quantity || 1), 0);
+      const rawSubtotal = safeCart.reduce((sum, item) => sum + (item?.unitPrice || 0) * (item?.quantity || 1), 0);
+
+      // Free drink discount: strictly gate to drink categories ('espresso', 'cold', 'filter'),
+      // return 0 if no drinks in cart, and enforce appliedFreeDrink && freeDrinksAvailable > 0
+      const DRINK_CATEGORIES = ['espresso', 'cold', 'filter'];
       const discount = (() => {
-        if (!appliedFreeDrink) return 0;
-        if (safeCart.length === 0) return 0;
-        const eligible = safeCart.filter((i) => !i?.isSubscription && !i?.subscriptionMeta);
-        const pool = eligible.length > 0 ? eligible : safeCart;
-        const cheapest = Math.min(...pool.map((i) => i?.unitPrice || 0));
-        return isFinite(cheapest) ? cheapest : 5.5;
+        if (!appliedFreeDrink || (freeDrinksAvailable || 0) <= 0 || safeCart.length === 0) return 0;
+        const drinkItems = safeCart.filter(
+          (i) => !i?.isSubscription && !i?.subscriptionMeta && DRINK_CATEGORIES.includes(i?.category || '')
+        );
+        if (drinkItems.length === 0) return 0;
+        const cheapest = Math.min(...drinkItems.map((i) => i?.unitPrice || 0));
+        return isFinite(cheapest) && cheapest > 0 ? cheapest : 0;
       })();
-      const finalSubtotal = Math.max(0, subtotal - discount);
+
+      const finalSubtotal = Math.max(0, rawSubtotal - discount);
       const tax = Number((finalSubtotal * 0.0825).toFixed(2));
-      const total = Number((finalSubtotal + tax + tipAmount).toFixed(2));
+
+      // Pre-discount tip calculation on rawSubtotal; support tipAmount and tipPercent
+      let finalTip = 0;
+      if (typeof tipPercent === 'number' && !isNaN(tipPercent)) {
+        finalTip = Number(((rawSubtotal * tipPercent) / 100).toFixed(2));
+      } else if (typeof tipAmount === 'number' && !isNaN(tipAmount)) {
+        finalTip = Number(tipAmount.toFixed(2));
+      } else if (typeof tip === 'number' && !isNaN(tip)) {
+        finalTip = Number(tip.toFixed(2));
+      }
+
+      const total = Number((finalSubtotal + tax + finalTip).toFixed(2));
 
       const orderNumber = `BC-${Math.floor(1000 + Math.random() * 9000)}`;
       const prepMinutes = Math.floor(7 + Math.random() * 6);
@@ -614,10 +684,10 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
         pickupName: pickupName || 'Counter Guest',
         items: [...safeCart],
-        subtotal,
+        subtotal: rawSubtotal,
         discount,
         tax,
-        tipAmount,
+        tipAmount: finalTip,
         total,
         prepMinutes,
         qrToken: `BREWCO:${orderNumber}:${Date.now()}`,
@@ -630,7 +700,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       let newStamps = (loyaltyStamps || 0) + safeCart.reduce((count, item) => count + (item?.quantity || 1), 0);
       let newFreeDrinks = freeDrinksAvailable || 0;
 
-      if (appliedFreeDrink && newFreeDrinks > 0) {
+      if (appliedFreeDrink && discount > 0 && newFreeDrinks > 0) {
         newFreeDrinks -= 1;
       }
 

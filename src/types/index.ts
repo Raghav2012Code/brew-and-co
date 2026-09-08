@@ -31,10 +31,34 @@ export interface RoasteryBean {
   isDirectTrade?: boolean;
 }
 
-export interface CartProduct extends MenuItem {
+export interface CartItemOptions {
+  size?: { id?: string; name: string; priceDelta?: number } | null;
+  temp?: string | null;
+  milk?: { name: string; priceDelta?: number } | null;
+  shot?: { id?: string; name: string; priceDelta?: number } | null;
+  syrup?: { name: string; priceDelta?: number } | null;
+  sweetness?: string | null;
+  specialNotes?: string;
+}
+
+export interface CartItem {
+  id: string;
+  productId?: string;
+  name: string;
+  category?: string;
+  basePrice?: number;
+  unitPrice: number;
+  quantity: number;
+  image: string;
   isSubscription?: boolean;
   subscriptionMeta?: Record<string, unknown> | null;
   beanMeta?: Record<string, unknown> | null;
+  options?: CartItemOptions;
 }
+
+/**
+ * Unified CartItem and CartProduct
+ */
+export type CartProduct = CartItem;
 
 export type OrderStatus = 'received' | 'brewing' | 'ready' | 'completed';
