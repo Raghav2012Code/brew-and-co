@@ -2,11 +2,8 @@ import React, { useState } from 'react';
 import {
   Sparkles,
   Zap,
-  Flame,
   ArrowUpRight,
-  ShieldCheck,
   Package,
-  SlidersHorizontal,
   Compass,
 } from 'lucide-react';
 import { useSubscription } from '../context/SubscriptionContext';
@@ -79,62 +76,42 @@ export const RoasterySection: React.FC = () => {
         </div>
       </div>
 
-      {/* Subscription Value Proposition Banner */}
-      <div className="my-8 sm:my-10 p-5 sm:p-6 bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="flex items-start gap-3">
-          <div className="w-8 h-8 rounded-full bg-vermillion/10 dark:bg-dark-vermillion/20 flex items-center justify-center shrink-0">
-            <Zap className="w-4 h-4 text-vermillion dark:text-dark-vermillion" />
-          </div>
-          <div>
-            <h3 className="font-bold text-xs uppercase tracking-wider font-mono text-ink dark:text-dark-text-main">
-              {brandProfile.roastDiscountPct}% Recurring Discount
-            </h3>
-            <p className="text-xs text-ink-muted dark:text-dark-text-muted mt-1 leading-snug">
-              Save on every bag compared to retail. Applied automatically.
-            </p>
-          </div>
+      {/* Subscription value proposition — a ruled typographic list, not icon tiles */}
+      <div className="my-8 sm:my-10 py-5 sm:py-6 border-y border-hairline dark:border-dark-hairline grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-5">
+        <div>
+          <h3 className="font-bold text-xs uppercase tracking-wider font-mono text-ink dark:text-dark-text-main">
+            {brandProfile.roastDiscountPct}% Recurring Discount
+          </h3>
+          <p className="text-xs text-ink-muted dark:text-dark-text-muted mt-1.5 leading-snug">
+            Save on every bag compared to retail. Applied automatically.
+          </p>
         </div>
 
-        <div className="flex items-start gap-3">
-          <div className="w-8 h-8 rounded-full bg-vermillion/10 dark:bg-dark-vermillion/20 flex items-center justify-center shrink-0">
-            <Flame className="w-4 h-4 text-vermillion dark:text-dark-vermillion" />
-          </div>
-          <div>
-            <h3 className="font-bold text-xs uppercase tracking-wider font-mono text-ink dark:text-dark-text-main">
-              Roasted Within 48 Hours
-            </h3>
-            <p className="text-xs text-ink-muted dark:text-dark-text-muted mt-1 leading-snug">
-              Small batch roasted to order. Never sitting on a shelf.
-            </p>
-          </div>
+        <div>
+          <h3 className="font-bold text-xs uppercase tracking-wider font-mono text-ink dark:text-dark-text-main">
+            Roasted Within 48 Hours
+          </h3>
+          <p className="text-xs text-ink-muted dark:text-dark-text-muted mt-1.5 leading-snug">
+            Small batch roasted to order. Never sitting on a shelf.
+          </p>
         </div>
 
-        <div className="flex items-start gap-3">
-          <div className="w-8 h-8 rounded-full bg-vermillion/10 dark:bg-dark-vermillion/20 flex items-center justify-center shrink-0">
-            <SlidersHorizontal className="w-4 h-4 text-vermillion dark:text-dark-vermillion" />
-          </div>
-          <div>
-            <h3 className="font-bold text-xs uppercase tracking-wider font-mono text-ink dark:text-dark-text-main">
-              Precision Grinding
-            </h3>
-            <p className="text-xs text-ink-muted dark:text-dark-text-muted mt-1 leading-snug">
-              Whole bean or dialed for Chemex, Espresso, or French Press.
-            </p>
-          </div>
+        <div>
+          <h3 className="font-bold text-xs uppercase tracking-wider font-mono text-ink dark:text-dark-text-main">
+            Precision Grinding
+          </h3>
+          <p className="text-xs text-ink-muted dark:text-dark-text-muted mt-1.5 leading-snug">
+            Whole bean or dialed for Chemex, Espresso, or French Press.
+          </p>
         </div>
 
-        <div className="flex items-start gap-3">
-          <div className="w-8 h-8 rounded-full bg-vermillion/10 dark:bg-dark-vermillion/20 flex items-center justify-center shrink-0">
-            <ShieldCheck className="w-4 h-4 text-vermillion dark:text-dark-vermillion" />
-          </div>
-          <div>
-            <h3 className="font-bold text-xs uppercase tracking-wider font-mono text-ink dark:text-dark-text-main">
-              Total Freedom
-            </h3>
-            <p className="text-xs text-ink-muted dark:text-dark-text-muted mt-1 leading-snug">
-              Skip weeks, swap origins, or cancel anytime in 1 click.
-            </p>
-          </div>
+        <div>
+          <h3 className="font-bold text-xs uppercase tracking-wider font-mono text-ink dark:text-dark-text-main">
+            Total Freedom
+          </h3>
+          <p className="text-xs text-ink-muted dark:text-dark-text-muted mt-1.5 leading-snug">
+            Skip weeks, swap origins, or cancel anytime in 1 click.
+          </p>
         </div>
       </div>
 

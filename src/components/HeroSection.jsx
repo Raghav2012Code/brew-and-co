@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, Clock, Coffee, Sparkles, MapPin, Star, Flame } from 'lucide-react';
+import { ArrowRight, MapPin, Star } from 'lucide-react';
 
 const TODAY_TASTING_SPECIMENS = [
   { name: 'Ethiopia Guji Anaerobic', notes: 'Candied Lime • Jasmine', badge: 'Special Roast' },
@@ -97,32 +97,28 @@ export const HeroSection = () => {
               </div>
             </div>
 
-            {/* 4 Rich Roastery Metric Ribbon Cells */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-hairline dark:border-dark-hairline text-xs">
-              <div className="p-3 rounded-xl bg-surface dark:bg-dark-card border border-hairline-strong dark:border-dark-hairline space-y-1">
-                <Coffee className="w-4 h-4 text-vermillion" aria-hidden="true" />
-                <strong className="block font-semibold text-ink dark:text-dark-text-main">Single-Origin</strong>
-                <span className="text-[11px] text-ink-faint block leading-tight">High-altitude micro-lots</span>
+            {/* Roastery facts — a ruled typographic list, not icon tiles */}
+            <dl className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4 pt-6 border-t border-hairline dark:border-dark-hairline text-xs">
+              <div>
+                <dt className="font-semibold text-ink dark:text-dark-text-main">Single-Origin</dt>
+                <dd className="text-[11px] text-ink-faint mt-0.5 leading-tight">High-altitude micro-lots</dd>
               </div>
 
-              <div className="p-3 rounded-xl bg-surface dark:bg-dark-card border border-hairline-strong dark:border-dark-hairline space-y-1">
-                <Clock className="w-4 h-4 text-vermillion" aria-hidden="true" />
-                <strong className="block font-semibold text-ink dark:text-dark-text-main">Quick Pickup</strong>
-                <span className="text-[11px] text-ink-faint block leading-tight">Ready in ~8 mins</span>
+              <div>
+                <dt className="font-semibold text-ink dark:text-dark-text-main">Quick Pickup</dt>
+                <dd className="text-[11px] text-ink-faint mt-0.5 leading-tight">Ready in ~8 mins</dd>
               </div>
 
-              <div className="p-3 rounded-xl bg-surface dark:bg-dark-card border border-hairline-strong dark:border-dark-hairline space-y-1">
-                <Flame className="w-4 h-4 text-vermillion" aria-hidden="true" />
-                <strong className="block font-semibold text-ink dark:text-dark-text-main">Roasted in SF</strong>
-                <span className="text-[11px] text-ink-faint block leading-tight">Small batches weekly</span>
+              <div>
+                <dt className="font-semibold text-ink dark:text-dark-text-main">Roasted in SF</dt>
+                <dd className="text-[11px] text-ink-faint mt-0.5 leading-tight">Small batches weekly</dd>
               </div>
 
-              <div className="p-3 rounded-xl bg-surface dark:bg-dark-card border border-hairline-strong dark:border-dark-hairline space-y-1">
-                <Sparkles className="w-4 h-4 text-vermillion" aria-hidden="true" />
-                <strong className="block font-semibold text-ink dark:text-dark-text-main">Tasting Pass</strong>
-                <span className="text-[11px] text-ink-faint block leading-tight">7th coffee on the house</span>
+              <div>
+                <dt className="font-semibold text-ink dark:text-dark-text-main">Tasting Pass</dt>
+                <dd className="text-[11px] text-ink-faint mt-0.5 leading-tight">7th coffee on the house</dd>
               </div>
-            </div>
+            </dl>
 
           </div>
 

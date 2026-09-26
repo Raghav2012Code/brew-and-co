@@ -46,21 +46,21 @@ export const LocationSection = () => {
               </div>
             </div>
 
-            {/* Atmosphere Badges */}
-            <div className="grid grid-cols-3 gap-3 pt-4 border-t border-hairline dark:border-dark-hairline text-center text-xs text-ink-muted dark:text-dark-text-muted">
-              <div className="p-3 rounded-lg bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong space-y-1">
-                <Wifi className="w-4 h-4 mx-auto text-vermillion" aria-hidden="true" />
-                <span className="block font-semibold text-ink dark:text-dark-text-main">Free Wi-Fi</span>
-              </div>
-              <div className="p-3 rounded-lg bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong space-y-1">
-                <Music className="w-4 h-4 mx-auto text-vermillion" aria-hidden="true" />
-                <span className="block font-semibold text-ink dark:text-dark-text-main">Patio Seating</span>
-              </div>
-              <div className="p-3 rounded-lg bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong space-y-1">
-                <Bike className="w-4 h-4 mx-auto text-vermillion" aria-hidden="true" />
-                <span className="block font-semibold text-ink dark:text-dark-text-main">Bike Parking</span>
-              </div>
-            </div>
+            {/* Amenities — icons inline with their labels, no boxes */}
+            <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 pt-4 border-t border-hairline dark:border-dark-hairline text-xs text-ink-muted dark:text-dark-text-muted">
+              <li className="flex items-center gap-2">
+                <Wifi className="w-4 h-4 text-vermillion" aria-hidden="true" />
+                <span className="font-semibold text-ink dark:text-dark-text-main">Free Wi-Fi</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Music className="w-4 h-4 text-vermillion" aria-hidden="true" />
+                <span className="font-semibold text-ink dark:text-dark-text-main">Patio Seating</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Bike className="w-4 h-4 text-vermillion" aria-hidden="true" />
+                <span className="font-semibold text-ink dark:text-dark-text-main">Bike Parking</span>
+              </li>
+            </ul>
           </div>
 
           {/* Right: Address & Maps Link (6 cols) */}
