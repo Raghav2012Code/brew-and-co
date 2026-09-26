@@ -100,23 +100,23 @@ export const Navbar = memo(() => {
         </a>
 
         <div className="flex items-center justify-between gap-3 lg:justify-end">
-          <nav className="hidden md:flex items-center gap-6 text-sm text-ink-muted dark:text-dark-text-muted" aria-label="Primary Navigation">
-            <a href="#menu" className="hover:text-ink dark:hover:text-dark-text-main transition-colors py-1">
+          <nav className="hidden md:flex shrink-0 items-center gap-6 text-sm text-ink-muted dark:text-dark-text-muted" aria-label="Primary Navigation">
+            <a href="#menu" className="hover:text-ink dark:hover:text-dark-text-main transition-colors py-1 whitespace-nowrap">
               Menu &amp; Order
             </a>
-            <a href="#roastery" className="hover:text-ink dark:hover:text-dark-text-main transition-colors py-1 flex items-center gap-1.5">
+            <a href="#roastery" className="hover:text-ink dark:hover:text-dark-text-main transition-colors py-1 flex items-center gap-1.5 whitespace-nowrap">
               <span>Roastery &amp; Subscriptions</span>
               <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 bg-vermillion/10 text-vermillion dark:text-dark-vermillion border border-vermillion/30 whitespace-nowrap">
                 15% Off
               </span>
             </a>
-            <a href="#brew-guide" className="hover:text-ink dark:hover:text-dark-text-main transition-colors py-1">
+            <a href="#brew-guide" className="hover:text-ink dark:hover:text-dark-text-main transition-colors py-1 whitespace-nowrap">
               Brew Guide
             </a>
-            <a href="#rewards" className="hover:text-ink dark:hover:text-dark-text-main transition-colors py-1">
+            <a href="#rewards" className="hover:text-ink dark:hover:text-dark-text-main transition-colors py-1 whitespace-nowrap">
               Tasting Pass
             </a>
-            <a href="#location" className="hover:text-ink dark:hover:text-dark-text-main transition-colors py-1">
+            <a href="#location" className="hover:text-ink dark:hover:text-dark-text-main transition-colors py-1 whitespace-nowrap">
               Visit &amp; Hours
             </a>
           </nav>

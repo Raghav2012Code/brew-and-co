@@ -53,7 +53,7 @@ export const HeroSection = () => {
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
                 <a
                   href="#menu"
-                  className="min-h-[50px] inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion dark:hover:bg-vermillion dark:hover:text-paper font-semibold text-sm shadow-md transition-[color,background-color,border-color,opacity,transform] text-center"
+                  className="min-h-[50px] inline-flex items-center justify-center gap-2.5 whitespace-nowrap px-7 py-3.5 rounded-xl bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion dark:hover:bg-vermillion dark:hover:text-paper font-semibold text-sm shadow-md transition-[color,background-color,border-color,opacity,transform] text-center"
                 >
                   <span>Order Ahead</span>
                   <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -61,7 +61,7 @@ export const HeroSection = () => {
 
                 <a
                   href="#location"
-                  className="min-h-[50px] inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-hairline-strong dark:border-dark-hairline-strong bg-paper dark:bg-dark-canvas text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main font-medium text-sm transition-[color,background-color,border-color,opacity,transform] text-center"
+                  className="min-h-[50px] inline-flex items-center justify-center gap-2 whitespace-nowrap px-6 py-3.5 rounded-xl border border-hairline-strong dark:border-dark-hairline-strong bg-paper dark:bg-dark-canvas text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main font-medium text-sm transition-[color,background-color,border-color,opacity,transform] text-center"
                 >
                   <MapPin className="w-4 h-4 text-ink-faint" aria-hidden="true" />
                   <span>Find Our Cafe</span>

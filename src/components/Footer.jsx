@@ -20,7 +20,7 @@ export const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
           
           {/* Brand Col (5 cols) */}
-          <div className="md:col-span-5 space-y-3">
+          <div className="md:col-span-4 space-y-3">
             <LogoMark className="w-8 h-8" showText={true} />
 
             <p className="text-sm text-ink-muted dark:text-dark-text-muted leading-relaxed max-w-sm">
@@ -35,7 +35,7 @@ export const Footer = () => {
           </div>
 
           {/* Quick Navigation Links (3 cols) */}
-          <div className="md:col-span-3 space-y-3">
+          <div className="md:col-span-4 space-y-3">
             <h4 className="font-serif font-bold text-lg text-ink dark:text-dark-text-main">
               Explore
             </h4>

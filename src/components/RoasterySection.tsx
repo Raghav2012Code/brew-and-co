@@ -49,7 +49,7 @@ export const RoasterySection: React.FC = () => {
           {/* Interactive Palate Quiz Launcher */}
           <button
             onClick={() => setIsMatchmakerOpen(true)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-vermillion dark:bg-dark-vermillion text-paper dark:text-dark-canvas text-xs font-mono font-bold hover:opacity-90 transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-xs"
+            className="inline-flex items-center gap-2 whitespace-nowrap px-4 py-2.5 bg-vermillion dark:bg-dark-vermillion text-paper dark:text-dark-canvas text-xs font-mono font-bold hover:opacity-90 transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-xs"
           >
             <Compass className="w-3.5 h-3.5" />
             <span>Find Your Roast (30s Quiz)</span>
@@ -59,7 +59,7 @@ export const RoasterySection: React.FC = () => {
             <button
               onClick={() => setIsManageDrawerOpen(true)}
               aria-label="Manage your active subscriptions"
-              className="inline-flex items-center gap-2 px-4 py-2.5 border border-ink dark:border-dark-text-main bg-surface dark:bg-dark-card text-xs font-mono font-bold text-ink dark:text-dark-text-main hover:bg-ink hover:text-paper dark:hover:bg-dark-text-main dark:hover:text-dark-canvas transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-xs"
+              className="inline-flex items-center gap-2 whitespace-nowrap px-4 py-2.5 border border-ink dark:border-dark-text-main bg-surface dark:bg-dark-card text-xs font-mono font-bold text-ink dark:text-dark-text-main hover:bg-ink hover:text-paper dark:hover:bg-dark-text-main dark:hover:text-dark-canvas transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-xs"
             >
               <Package className="w-3.5 h-3.5 text-vermillion dark:text-dark-vermillion" />
               <span>Subscription Vault ({activeSubscriptionCount} Active)</span>
@@ -68,7 +68,7 @@ export const RoasterySection: React.FC = () => {
 
           <a
             href="#brew-guide"
-            className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-vermillion dark:text-dark-vermillion hover:underline py-2"
+            className="inline-flex items-center gap-1.5 whitespace-nowrap text-xs font-mono font-bold text-vermillion dark:text-dark-vermillion hover:underline py-2"
           >
             <span>Dial-In Guide</span>
             <ArrowUpRight className="w-3.5 h-3.5" />
