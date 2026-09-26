@@ -180,31 +180,29 @@ export const DialInGuide = () => {
             </h3>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* The routine — a numbered sequence, not three equal cards */}
+          <ol className="text-left">
             {BREW_STEPS.map((step) => (
-              <div
+              <li
                 key={step.num}
-                className="p-6 rounded-2xl bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline flex flex-col justify-between space-y-4 text-left transition-colors hover:border-ink dark:hover:border-dark-text-main"
+                className="py-6 first:pt-0 border-t border-hairline dark:border-dark-hairline last:border-b"
               >
-                <div className="space-y-3">
-                  <div className="w-9 h-9 rounded-full bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas flex items-center justify-center font-serif font-bold text-base shadow-sm">
-                    {step.num}
-                  </div>
-                  <h4 className="font-serif font-bold text-xl text-ink dark:text-dark-text-main">
-                    {step.title}
-                  </h4>
-                  <p className="text-xs sm:text-sm text-ink-muted dark:text-dark-text-muted leading-relaxed">
-                    {step.desc}
-                  </p>
-                </div>
-
-                <div className="pt-3 border-t border-hairline-strong dark:border-dark-hairline text-xs text-ink-faint dark:text-ink-faint">
-                  <strong className="text-ink dark:text-dark-text-main block mb-0.5">Barista Tip:</strong>
+                <span className="font-serif text-3xl font-bold text-vermillion block leading-none">
+                  {step.num}
+                </span>
+                <h4 className="font-serif font-bold text-xl sm:text-2xl text-ink dark:text-dark-text-main mt-2">
+                  {step.title}
+                </h4>
+                <p className="text-sm text-ink-muted dark:text-dark-text-muted leading-relaxed mt-1.5 max-w-prose">
+                  {step.desc}
+                </p>
+                <p className="text-xs text-ink-faint mt-2.5 max-w-prose">
+                  <strong className="text-ink dark:text-dark-text-main">Barista tip:</strong>{' '}
                   {step.tip}
-                </div>
-              </div>
+                </p>
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
 
         {/* 3 Friendly Roaster Secrets */}
