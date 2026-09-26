@@ -61,11 +61,8 @@ export const MenuSection = () => {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-hairline dark:border-dark-hairline pb-6 text-left">
           <div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-vermillion block mb-1">
-              Cafe Menu
-            </span>
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-ink dark:text-dark-text-main tracking-tight">
-              Drinks & Pastries
+              Drinks &amp; Pastries
             </h2>
           </div>
 

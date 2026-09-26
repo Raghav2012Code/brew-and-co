@@ -12,11 +12,8 @@ export const LocationSection = () => {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-hairline dark:border-dark-hairline pb-6">
           <div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-vermillion block mb-1">
-              Find Us
-            </span>
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-ink dark:text-dark-text-main tracking-tight">
-              Hours & Location
+              Hours &amp; Location
             </h2>
           </div>
           <p className="text-sm text-ink-muted dark:text-dark-text-muted max-w-md">

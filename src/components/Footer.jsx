@@ -36,7 +36,7 @@ export const Footer = () => {
 
           {/* Quick Navigation Links (3 cols) */}
           <div className="md:col-span-3 space-y-3">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-vermillion">
+            <h4 className="font-serif font-bold text-lg text-ink dark:text-dark-text-main">
               Explore
             </h4>
             <ul className="space-y-2 text-sm text-ink-muted dark:text-dark-text-muted">
@@ -50,7 +50,7 @@ export const Footer = () => {
 
           {/* Newsletter Signup (4 cols) */}
           <div className="md:col-span-4 space-y-3">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-vermillion">
+            <h4 className="font-serif font-bold text-lg text-ink dark:text-dark-text-main">
               Roastery Newsletter
             </h4>
             <p className="text-xs text-ink-muted dark:text-dark-text-muted">

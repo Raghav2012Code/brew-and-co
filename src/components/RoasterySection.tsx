@@ -39,12 +39,6 @@ export const RoasterySection: React.FC = () => {
       {/* Section Pre-header & Title */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 sm:pb-12 border-b border-hairline dark:border-dark-hairline">
         <div className="space-y-3 max-w-2xl">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-vermillion dark:bg-dark-vermillion" aria-hidden="true" />
-            <span className="text-xs font-mono font-bold tracking-widest uppercase text-ink-muted dark:text-dark-text-muted">
-              Micro-Lot Roastery & Doorstep Subscriptions • {brandProfile.locationCity}
-            </span>
-          </div>
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-ink dark:text-dark-text-main tracking-tight leading-none">
             Freshly Roasted Beans, Calibrated to Your Cup.
           </h2>

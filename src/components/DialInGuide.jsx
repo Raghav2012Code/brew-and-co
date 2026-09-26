@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Droplets, Thermometer, Coffee, Sparkles } from 'lucide-react';
+import { Droplets, Thermometer, Coffee } from 'lucide-react';
 
 const CUP_PRESETS = [
   {
@@ -76,10 +76,6 @@ export const DialInGuide = () => {
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-xs font-semibold text-vermillion">
-            <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
-            <span>Home Brew Guide</span>
-          </div>
           <h2 className="font-serif text-3xl sm:text-4xl font-bold text-ink dark:text-dark-text-main tracking-tight">
             How to Brew at Home
           </h2>

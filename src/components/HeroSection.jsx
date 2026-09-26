@@ -46,9 +46,6 @@ export const HeroSection = () => {
 
             {/* Today on the Bar: Interactive Specimen Tags */}
             <div className="space-y-2 pt-1">
-              <span className="text-[11px] font-mono uppercase tracking-widest text-ink-faint block">
-                On Bar Today:
-              </span>
               <div className="flex flex-wrap items-center gap-2">
                 {TODAY_TASTING_SPECIMENS.map((specimen, idx) => (
                   <a
