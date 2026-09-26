@@ -13,7 +13,7 @@ export interface RoasteryBrandProfile {
 }
 
 export const ACCENT_COLOR_PRESETS: Record<string, { name: string; hex: string; darkHex: string }> = {
-  vermillion: { name: 'Artisan Vermillion', hex: '#C84B31', darkHex: '#FF451A' },
+  vermillion: { name: 'Artisan Vermillion', hex: '#BC3010', darkHex: '#FF451A' },
   amber: { name: 'Kissa Roasted Amber', hex: '#D97706', darkHex: '#F59E0B' },
   emerald: { name: 'Highland Forest', hex: '#15803D', darkHex: '#22C55E' },
   cobalt: { name: 'Direct Trade Cobalt', hex: '#2563EB', darkHex: '#3B82F6' },
@@ -25,7 +25,7 @@ const DEFAULT_PROFILE: RoasteryBrandProfile = {
   tagline: 'Single-Origin Roastery & Cafe',
   locationCity: 'San Francisco, CA',
   accentColorId: 'vermillion',
-  accentHex: '#C84B31',
+  accentHex: '#BC3010',
   currencySymbol: '$',
   roastDiscountPct: 15,
 };

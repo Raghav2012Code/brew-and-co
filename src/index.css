@@ -18,7 +18,7 @@
   --secondary-foreground: #1A1816;
   --muted: #F3EFE6;
   --muted-foreground: #666056;
-  --accent: #C84B31;
+  --accent: #BC3010;
   --accent-foreground: #FBF9F5;
   --destructive: #C62828;
   --destructive-foreground: #FFFFFF;
@@ -78,16 +78,16 @@
   --color-surface-hover: #E8E4DC;
   --color-ink: #1A1816;
   --color-ink-muted: #666056;
-  --color-ink-faint: #888276;
+  --color-ink-faint: #6E685D;
   --color-hairline: #E8E4DC;
   --color-hairline-strong: #E0DACB;
   --color-on-ink: #33302C;
-  --color-vermillion: #C84B31;
+  --color-vermillion: #BC3010;
   --color-success: #2E7D32;
   --color-danger: #C62828;
-  --color-rating: #E5A93C;
-  --color-status-ready: #059669;
-  --color-status-brewing: #D97706;
+  --color-rating: #A9761A;
+  --color-status-ready: #047857;
+  --color-status-brewing: #B45309;
 
   --color-dark-canvas: #11100F;
   --color-dark-sunken: #0E0D0C;
@@ -99,7 +99,7 @@
   --color-dark-hairline-strong: #302D27;
   --color-dark-text-main: #EAE6DF;
   --color-dark-text-muted: #A09A8E;
-  --color-dark-text-faint: #777064;
+  --color-dark-text-faint: #8F887C;
   --color-dark-vermillion: #FF451A;
   --color-dark-success: #34D399;
   --color-dark-danger: #F87171;

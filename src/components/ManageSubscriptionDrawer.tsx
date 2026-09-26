@@ -125,7 +125,7 @@ export const ManageSubscriptionDrawer: React.FC = () => {
                             className={`px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-wider ${
                               isPaused
                                 ? 'bg-ink-muted/15 text-ink-muted dark:text-dark-text-muted'
-                                : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+                                : 'bg-status-ready/10 text-status-ready dark:text-dark-status-ready border border-status-ready/25'
                             }`}
                           >
                             {isPaused ? 'Paused' : 'Active Dispatch'}
@@ -246,12 +246,12 @@ export const ManageSubscriptionDrawer: React.FC = () => {
                         >
                           {isPaused ? (
                             <>
-                              <Play className="w-3 h-3 text-emerald-600" />
+                              <Play className="w-3 h-3 text-status-ready dark:text-dark-status-ready" />
                               <span>Resume</span>
                             </>
                           ) : (
                             <>
-                              <Pause className="w-3 h-3 text-amber-600" />
+                              <Pause className="w-3 h-3 text-status-brewing dark:text-dark-status-brewing" />
                               <span>Pause</span>
                             </>
                           )}

@@ -208,7 +208,7 @@ export const BaristaQueueModal: React.FC = () => {
             <div>
               {filteredOrders.length === 0 ? (
                 <div className="py-24 text-center space-y-3">
-                  <CheckCircle2 className="w-12 h-12 mx-auto text-emerald-500 stroke-[1.5]" />
+                  <CheckCircle2 className="w-12 h-12 mx-auto text-status-ready dark:text-dark-status-ready stroke-[1.5]" />
                   <h3 className="font-serif text-2xl font-bold text-ink dark:text-dark-text-main">
                     All Orders Clear & Dispatched
                   </h3>
@@ -231,14 +231,14 @@ export const BaristaQueueModal: React.FC = () => {
                           isCompleted
                             ? 'border-hairline dark:border-dark-hairline bg-paper/60 dark:bg-dark-card/60 opacity-80'
                             : isReady
-                            ? 'border-emerald-500 bg-emerald-50/20 dark:bg-emerald-950/20'
+                            ? 'border-status-ready dark:border-dark-status-ready bg-status-ready/10 dark:bg-dark-status-ready/15'
                             : isBrewing
                             ? 'border-vermillion bg-paper dark:bg-dark-card ring-1 ring-vermillion/40'
                             : 'border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-card'
                         }`}
                       >
                         {/* Brass Rail Clip simulation */}
-                        <div className="h-1.5 w-full bg-linear-to-r from-amber-600 via-amber-400 to-amber-700 opacity-80" />
+                        <div className="h-1.5 w-full bg-linear-to-r from-status-brewing via-rating to-status-brewing opacity-80" />
 
                         {/* Ticket Header */}
                         <div className="p-4 border-b border-hairline/60 dark:border-dark-hairline/60 flex items-start justify-between gap-2">
@@ -250,11 +250,11 @@ export const BaristaQueueModal: React.FC = () => {
                               <span
                                 className={`px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-wider ${
                                   isCompleted
-                                    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+                                    ? 'bg-status-ready/10 text-status-ready dark:text-dark-status-ready border border-status-ready/25'
                                     : isReady
-                                    ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 animate-pulse'
+                                    ? 'bg-status-ready/15 text-status-ready dark:text-dark-status-ready border border-status-ready/35 animate-pulse'
                                     : isBrewing
-                                    ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30'
+                                    ? 'bg-status-brewing/15 text-status-brewing dark:text-dark-status-brewing border border-status-brewing/35'
                                     : 'bg-ink-muted/15 text-ink-muted dark:text-dark-text-muted'
                                 }`}
                               >
@@ -308,7 +308,7 @@ export const BaristaQueueModal: React.FC = () => {
                         {/* Status Transition Action Bar */}
                         <div className="p-3 bg-surface dark:bg-dark-subtle border-t border-hairline dark:border-dark-hairline">
                           {isCompleted ? (
-                            <div className="w-full min-h-[38px] px-3 py-1.5 text-xs font-mono font-bold flex items-center justify-center gap-1.5 bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline text-emerald-600 dark:text-emerald-400 shadow-xs">
+                            <div className="w-full min-h-[38px] px-3 py-1.5 text-xs font-mono font-bold flex items-center justify-center gap-1.5 bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline text-status-ready dark:text-dark-status-ready shadow-xs">
                               <CheckCircle2 className="w-3.5 h-3.5" />
                               <span>Order Completed & Dispatched</span>
                             </div>
@@ -318,10 +318,8 @@ export const BaristaQueueModal: React.FC = () => {
                               onClick={() => handleStatusAdvance(order.orderId, order.status)}
                               className={`w-full min-h-[38px] px-3 py-1.5 text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-xs ${
                                 isReceived
-                                  ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion'
-                                  : isBrewing
-                                  ? 'bg-amber-600 text-white hover:bg-amber-700'
-                                  : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                                  ? 'bg-ink text-paper hover:bg-vermillion dark:bg-dark-text-main dark:text-dark-canvas dark:hover:bg-dark-vermillion'
+                                  : 'bg-ink text-paper dark:bg-dark-text-main dark:text-dark-canvas'
                               }`}
                             >
                               {isReceived && (
@@ -478,7 +476,7 @@ export const BaristaQueueModal: React.FC = () => {
         {/* Footer actions */}
         <div className="p-4 sm:p-5 bg-surface dark:bg-dark-subtle border-t border-hairline dark:border-dark-hairline flex items-center justify-between">
           <div className="text-xs font-mono text-ink-muted dark:text-dark-text-muted">
-            Status: <span className="text-emerald-600 font-bold">● Live KDS Stream Active</span>
+            Status: <span className="text-status-ready dark:text-dark-status-ready font-bold">● Live KDS Stream Active</span>
           </div>
 
           <div className="flex items-center gap-2">
