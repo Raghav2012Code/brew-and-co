@@ -71,13 +71,22 @@ const ConfirmDialog = ({
           role="alertdialog"
           className={cn(
             // `anim-panel-in`, not `anim-panel`. The data-state variants hinge
-            // unmounting on the closed-state animation firing `animationend`,
-            // and Radix's Presence does not reliably observe that for a dialog
-            // nested inside another one — it held the node in the DOM forever
-            // with `pointer-events: auto`, silently eating every click behind
-            // it. The unconditioned class always has a finite animation
-            // running, so the exit can never hang. A confirmation gate gaining
-            // or losing 150ms of slide is not worth an invisible click sink.
+            // unmounting on the closed-state animation firing `animationend`.
+            // With `anim-panel` this dialog — nested inside the studio — was
+            // still in the DOM, `data-state="closed"`, with
+            // `pointer-events: auto`, long after the exit should have
+            // finished. The unconditioned class always has a finite animation
+            // running, so the exit cannot depend on a new one starting.
+            //
+            // CAVEAT: that was measured on a machine with no compositor, where
+            // requestAnimationFrame fires ~3x/second and `animationend` cannot
+            // be dispatched promptly. So "it never unmounted" may really have
+            // been "frames were not being produced". The suspicion that
+            // Presence mishandles a nested dialog is unconfirmed, and #5 records
+            // the same limitation. What is solid: the unconditioned class is
+            // harmless either way, and this dialog must never be the reason a
+            // click is swallowed. Re-verify on a machine that renders frames
+            // before treating the data-state variant as buggy.
             "anim-panel-in fixed left-[50%] top-[50%] z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 border border-hairline bg-paper p-6 shadow-2xl dark:border-dark-hairline dark:bg-dark-subtle"
           )}
           // Keep the gate a gate: a stray click beside the panel must not
