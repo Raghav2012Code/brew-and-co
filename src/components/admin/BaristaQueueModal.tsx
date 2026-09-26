@@ -250,11 +250,11 @@ export const BaristaQueueModal: React.FC = () => {
                               <span
                                 className={`px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-wider ${
                                   isCompleted
-                                    ? 'bg-status-ready/10 text-status-ready dark:text-dark-status-ready border border-status-ready/25'
+                                    ? 'bg-surface dark:bg-dark-card text-status-ready dark:text-dark-status-ready border border-status-ready/30'
                                     : isReady
-                                    ? 'bg-status-ready/15 text-status-ready dark:text-dark-status-ready border border-status-ready/35 animate-pulse'
+                                    ? 'bg-surface dark:bg-dark-card text-status-ready dark:text-dark-status-ready border border-status-ready/45 animate-pulse'
                                     : isBrewing
-                                    ? 'bg-status-brewing/15 text-status-brewing dark:text-dark-status-brewing border border-status-brewing/35'
+                                    ? 'bg-surface dark:bg-dark-card text-status-brewing dark:text-dark-status-brewing border border-status-brewing/45'
                                     : 'bg-ink-muted/15 text-ink-muted dark:text-dark-text-muted'
                                 }`}
                               >
