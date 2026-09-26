@@ -349,7 +349,7 @@ export const CartDrawer: React.FC = () => {
                   value={pickupName}
                   onChange={(e) => setPickupName(e.target.value)}
                   placeholder="Your full name"
-                  className="w-full min-h-[42px] p-3 bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main placeholder:text-ink-faint font-sans text-xs focus:outline-none focus:border-ink dark:focus:border-dark-text-main"
+                  className="w-full min-h-[42px] p-3 bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main placeholder:text-ink-faint font-sans text-xs focus:border-ink dark:focus:border-dark-text-main"
                 />
               </div>
 

@@ -163,7 +163,7 @@ export const RoasteryStudioModal: React.FC = () => {
                       type="text"
                       value={draftProfile.brandName}
                       onChange={(e) => setDraftProfile((prev) => ({ ...prev, brandName: e.target.value }))}
-                      className="w-full p-2.5 bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline text-xs font-serif font-bold text-lg text-ink dark:text-dark-text-main focus:outline-none"
+                      className="w-full p-2.5 bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline text-xs font-serif font-bold text-lg text-ink dark:text-dark-text-main"
                     />
                   </div>
 
@@ -175,7 +175,7 @@ export const RoasteryStudioModal: React.FC = () => {
                       type="text"
                       value={draftProfile.tagline}
                       onChange={(e) => setDraftProfile((prev) => ({ ...prev, tagline: e.target.value }))}
-                      className="w-full p-2.5 bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline text-xs font-sans text-ink dark:text-dark-text-main focus:outline-none"
+                      className="w-full p-2.5 bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline text-xs font-sans text-ink dark:text-dark-text-main"
                     />
                   </div>
 
@@ -187,7 +187,7 @@ export const RoasteryStudioModal: React.FC = () => {
                       type="text"
                       value={draftProfile.locationCity}
                       onChange={(e) => setDraftProfile((prev) => ({ ...prev, locationCity: e.target.value }))}
-                      className="w-full p-2.5 bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline text-xs font-sans text-ink dark:text-dark-text-main focus:outline-none"
+                      className="w-full p-2.5 bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline text-xs font-sans text-ink dark:text-dark-text-main"
                     />
                   </div>
                 </div>
@@ -282,7 +282,7 @@ export const RoasteryStudioModal: React.FC = () => {
                                 prev.map((b) => (b.id === bean.id ? { ...b, basePrice: valid } : b))
                               );
                             }}
-                            className="w-20 p-1.5 text-xs font-mono font-bold bg-paper dark:bg-dark-card border border-hairline text-ink dark:text-dark-text-main focus:outline-none"
+                            className="w-20 p-1.5 text-xs font-mono font-bold bg-paper dark:bg-dark-card border border-hairline text-ink dark:text-dark-text-main"
                           />
                         </div>
 
@@ -305,7 +305,7 @@ export const RoasteryStudioModal: React.FC = () => {
                                 prev.map((b) => (b.id === bean.id ? { ...b, cuppingScore: valid } : b))
                               );
                             }}
-                            className="w-16 p-1.5 text-xs font-mono font-bold bg-paper dark:bg-dark-card border border-hairline text-ink dark:text-dark-text-main focus:outline-none"
+                            className="w-16 p-1.5 text-xs font-mono font-bold bg-paper dark:bg-dark-card border border-hairline text-ink dark:text-dark-text-main"
                           />
                         </div>
                       </div>

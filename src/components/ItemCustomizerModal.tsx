@@ -331,7 +331,7 @@ export const ItemCustomizerModal: React.FC = () => {
               value={specialNotes}
               onChange={(e) => setSpecialNotes(e.target.value.slice(0, 150))}
               placeholder="e.g. extra hot, light ice, oat milk foam..."
-              className="w-full min-h-[42px] p-3 bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main placeholder:text-ink-faint text-xs focus:outline-none focus:border-ink dark:focus:border-dark-text-main"
+              className="w-full min-h-[42px] p-3 bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main placeholder:text-ink-faint text-xs focus:border-ink dark:focus:border-dark-text-main"
             />
           </div>
 

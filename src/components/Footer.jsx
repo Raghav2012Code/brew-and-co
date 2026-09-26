@@ -77,7 +77,7 @@ export const Footer = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Your email address"
-                  className="flex-1 min-h-[44px] bg-paper dark:bg-dark-card border border-hairline-strong dark:border-dark-hairline-strong text-ink dark:text-dark-text-main text-xs rounded-xl px-3.5 py-2.5 focus:outline-none focus:border-ink dark:focus:border-dark-text-main"
+                  className="flex-1 min-h-[44px] bg-paper dark:bg-dark-card border border-hairline-strong dark:border-dark-hairline-strong text-ink dark:text-dark-text-main text-xs rounded-xl px-3.5 py-2.5 focus:border-ink dark:focus:border-dark-text-main"
                 />
                 <button
                   type="submit"

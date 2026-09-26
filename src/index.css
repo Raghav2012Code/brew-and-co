@@ -27,6 +27,7 @@
   --border: #E8E4DC;
   --input: #E8E4DC;
   --ring: #1A1816;
+  --focus-ring: #1A1816;
   --radius: 0.125rem;
 }
 
@@ -52,6 +53,7 @@
   --border: #262420;
   --input: #262420;
   --ring: #EAE6DF;
+  --focus-ring: #EAE6DF;
 }
 
 @theme {
@@ -212,4 +214,18 @@
 }
 .animate-marquee:hover {
   animation-play-state: paused;
+}
+
+/* ---------------------------------------------------------------------------
+ * Focus ring — deliberately unlayered.
+ * Tailwind emits its utilities inside `@layer utilities`, and a layered rule
+ * loses to it regardless of specificity. This rule must outrank
+ * `transition-colors` (which includes outline-color and would fade the ring in)
+ * and any component that opts out of a visible focus indicator, so it sits
+ * outside every layer. Keyboard users get the ring on the first frame.
+ * ------------------------------------------------------------------------- */
+:where(button, a, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 1px;
+  transition-property: color, background-color, border-color, opacity, transform;
 }

@@ -198,7 +198,7 @@ export const ManageSubscriptionDrawer: React.FC = () => {
                           <select
                             value={sub.frequencyId}
                             onChange={(e) => updateFrequency(sub.id, e.target.value)}
-                            className="w-full p-2 text-xs bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main focus:outline-none"
+                            className="w-full p-2 text-xs bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main"
                           >
                             {SUBSCRIPTION_FREQUENCIES.filter((f) => f.id !== 'onetime').map((freq) => (
                               <option key={freq.id} value={freq.id}>
@@ -215,7 +215,7 @@ export const ManageSubscriptionDrawer: React.FC = () => {
                           <select
                             value={sub.grindId}
                             onChange={(e) => updateGrind(sub.id, e.target.value)}
-                            className="w-full p-2 text-xs bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main focus:outline-none"
+                            className="w-full p-2 text-xs bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main"
                           >
                             {GRIND_PROFILES.map((grind) => (
                               <option key={grind.id} value={grind.id}>

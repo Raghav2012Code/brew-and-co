@@ -79,7 +79,7 @@ export const MenuSection = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search coffee, tea, or pastries..."
-              className="w-full bg-surface dark:bg-dark-card border border-hairline-strong dark:border-dark-hairline-strong text-ink dark:text-dark-text-main placeholder:text-ink-faint text-sm rounded-lg pl-10 pr-9 py-2.5 focus:outline-none focus:border-ink dark:focus:border-dark-text-main transition-colors"
+              className="w-full bg-surface dark:bg-dark-card border border-hairline-strong dark:border-dark-hairline-strong text-ink dark:text-dark-text-main placeholder:text-ink-faint text-sm rounded-lg pl-10 pr-9 py-2.5 focus:border-ink dark:focus:border-dark-text-main transition-colors"
             />
             {searchQuery && (
               <button
