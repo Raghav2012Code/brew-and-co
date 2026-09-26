@@ -74,8 +74,8 @@ export const DialInGuide = () => {
     <section id="brew-guide" className="border-b border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas py-14 sm:py-20 scroll-mt-16 text-left transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-12">
         
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto space-y-3">
+        {/* Header — left-biased, matching every other section head */}
+        <div className="max-w-2xl space-y-3">
           <h2 className="font-serif text-3xl sm:text-4xl font-bold text-ink dark:text-dark-text-main tracking-tight">
             How to Brew at Home
           </h2>
