@@ -32,10 +32,10 @@ export const HeroSection = () => {
               </div>
             </div>
 
-            {/* Authoritative Editorial Headline */}
+            {/* Authoritative Editorial Headline — roman display, emphasis by weight + accent */}
             <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-ink dark:text-dark-text-main leading-[1.08]">
               Exceptional coffee, <br />
-              <span className="font-light italic text-vermillion dark:text-dark-vermillion">
+              <span className="font-light text-vermillion dark:text-dark-vermillion">
                 roasted fresh daily.
               </span>
             </h1>
