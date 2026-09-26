@@ -178,7 +178,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
           <button
             onClick={() => setIsSubscribeModalOpen(false)}
             aria-label="Close modal"
-            className="min-h-[40px] min-w-[40px] flex items-center justify-center text-ink-muted hover:text-ink dark:hover:text-dark-text-main border border-transparent hover:border-hairline dark:hover:border-dark-hairline active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
+            className="min-h-[40px] min-w-[40px] flex items-center justify-center text-ink-muted hover:text-ink dark:hover:text-dark-text-main border border-transparent hover:border-hairline dark:hover:border-dark-hairline transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -384,7 +384,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
                 type="button"
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
                 aria-label="Decrease quantity"
-                className="min-h-[38px] min-w-[38px] flex items-center justify-center text-ink-muted hover:text-ink dark:hover:text-dark-text-main active:scale-90 transition-transform cursor-pointer"
+                className="min-h-[38px] min-w-[38px] flex items-center justify-center text-ink-muted hover:text-ink dark:hover:text-dark-text-main transition-colors cursor-pointer"
               >
                 -
               </button>
@@ -395,7 +395,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
                 type="button"
                 onClick={() => setQuantity(quantity + 1)}
                 aria-label="Increase quantity"
-                className="min-h-[38px] min-w-[38px] flex items-center justify-center text-ink-muted hover:text-ink dark:hover:text-dark-text-main active:scale-90 transition-transform cursor-pointer"
+                className="min-h-[38px] min-w-[38px] flex items-center justify-center text-ink-muted hover:text-ink dark:hover:text-dark-text-main transition-colors cursor-pointer"
               >
                 +
               </button>
@@ -423,7 +423,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
           <button
             type="button"
             onClick={handleAddToCart}
-            className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion dark:hover:bg-dark-vermillion dark:hover:text-paper text-xs sm:text-sm font-bold flex items-center justify-center gap-2 active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-md"
+            className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion dark:hover:bg-dark-vermillion dark:hover:text-paper text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-md"
           >
             {isSubscription ? (
               <>

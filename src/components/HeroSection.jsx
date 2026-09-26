@@ -54,7 +54,7 @@ export const HeroSection = () => {
                   <a
                     key={idx}
                     href="#menu"
-                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong hover:border-ink dark:hover:border-dark-text-main transition-[color,background-color,border-color,opacity,transform] group active:scale-95"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong hover:border-ink dark:hover:border-dark-text-main transition-[color,background-color,border-color,opacity,transform] group"
                   >
                     <span className="text-xs font-semibold text-ink dark:text-dark-text-main group-hover:text-vermillion transition-colors">
                       {specimen.name}
@@ -72,7 +72,7 @@ export const HeroSection = () => {
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
                 <a
                   href="#menu"
-                  className="min-h-[50px] inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion dark:hover:bg-vermillion dark:hover:text-paper font-semibold text-sm shadow-md active:scale-98 transition-[color,background-color,border-color,opacity,transform] text-center"
+                  className="min-h-[50px] inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-xl bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion dark:hover:bg-vermillion dark:hover:text-paper font-semibold text-sm shadow-md transition-[color,background-color,border-color,opacity,transform] text-center"
                 >
                   <span>Order Ahead</span>
                   <ArrowRight className="w-4 h-4" aria-hidden="true" />
@@ -80,7 +80,7 @@ export const HeroSection = () => {
 
                 <a
                   href="#location"
-                  className="min-h-[50px] inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-hairline-strong dark:border-dark-hairline-strong bg-paper dark:bg-dark-canvas text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main font-medium text-sm active:scale-98 transition-[color,background-color,border-color,opacity,transform] text-center"
+                  className="min-h-[50px] inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border border-hairline-strong dark:border-dark-hairline-strong bg-paper dark:bg-dark-canvas text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main font-medium text-sm transition-[color,background-color,border-color,opacity,transform] text-center"
                 >
                   <MapPin className="w-4 h-4 text-ink-faint" aria-hidden="true" />
                   <span>Find Our Cafe</span>
@@ -157,7 +157,7 @@ export const HeroSection = () => {
                   </div>
                   <a
                     href="#menu"
-                    className="shrink-0 min-h-[40px] px-4 py-2 rounded-xl bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion text-xs font-semibold active:scale-95 transition-[color,background-color,border-color,opacity,transform] flex items-center justify-center shadow-xs cursor-pointer"
+                    className="shrink-0 min-h-[40px] px-4 py-2 rounded-xl bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion text-xs font-semibold transition-[color,background-color,border-color,opacity,transform] flex items-center justify-center shadow-xs cursor-pointer"
                   >
                     Order $5.50
                   </a>

@@ -99,7 +99,7 @@ export const LocationSection = () => {
               href="https://maps.google.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full min-h-[48px] py-3.5 px-6 rounded-xl bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion dark:hover:bg-vermillion dark:hover:text-paper text-sm font-semibold active:scale-98 transition-[color,background-color,border-color,opacity,transform] flex items-center justify-between shadow-sm"
+              className="w-full min-h-[48px] py-3.5 px-6 rounded-xl bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion dark:hover:bg-vermillion dark:hover:text-paper text-sm font-semibold transition-[color,background-color,border-color,opacity,transform] flex items-center justify-between shadow-sm"
             >
               <span>Get Directions</span>
               <ArrowUpRight className="w-4 h-4" aria-hidden="true" />

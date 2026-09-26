@@ -318,7 +318,7 @@ export const BaristaQueueModal: React.FC = () => {
                             <button
                               type="button"
                               onClick={() => handleStatusAdvance(order.orderId, order.status)}
-                              className={`w-full min-h-[38px] px-3 py-1.5 text-xs font-mono font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-xs ${
+                              className={`w-full min-h-[38px] px-3 py-1.5 text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-xs ${
                                 isReceived
                                   ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion'
                                   : isBrewing

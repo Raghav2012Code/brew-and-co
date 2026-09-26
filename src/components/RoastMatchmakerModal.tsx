@@ -209,7 +209,7 @@ export const RoastMatchmakerModal: React.FC = () => {
                   <button
                     key={opt.id}
                     onClick={() => handleSelectAnswer('brewMethod', opt.id)}
-                    className="p-3.5 text-left border border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-subtle hover:border-ink dark:hover:border-dark-text-main hover:bg-paper dark:hover:bg-dark-canvas active:scale-98 transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
+                    className="p-3.5 text-left border border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-subtle hover:border-ink dark:hover:border-dark-text-main hover:bg-paper dark:hover:bg-dark-canvas transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
                   >
                     <span className="font-bold text-xs sm:text-sm block">{opt.title}</span>
                     <span className="text-[11px] text-ink-muted dark:text-dark-text-muted">{opt.desc}</span>
@@ -241,7 +241,7 @@ export const RoastMatchmakerModal: React.FC = () => {
                   <button
                     key={opt.id}
                     onClick={() => handleSelectAnswer('flavorPreference', opt.id)}
-                    className="p-3.5 text-left border border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-subtle hover:border-ink dark:hover:border-dark-text-main hover:bg-paper dark:hover:bg-dark-canvas active:scale-98 transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
+                    className="p-3.5 text-left border border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-subtle hover:border-ink dark:hover:border-dark-text-main hover:bg-paper dark:hover:bg-dark-canvas transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
                   >
                     <span className="font-bold text-xs sm:text-sm block">{opt.title}</span>
                     <span className="text-[11px] text-ink-muted dark:text-dark-text-muted">{opt.desc}</span>
@@ -270,7 +270,7 @@ export const RoastMatchmakerModal: React.FC = () => {
                   <button
                     key={opt.id}
                     onClick={() => handleSelectAnswer('milkPreference', opt.id)}
-                    className="p-4 text-left border border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-subtle hover:border-ink dark:hover:border-dark-text-main hover:bg-paper dark:hover:bg-dark-canvas active:scale-98 transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
+                    className="p-4 text-left border border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-subtle hover:border-ink dark:hover:border-dark-text-main hover:bg-paper dark:hover:bg-dark-canvas transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
                   >
                     <span className="font-bold text-sm block">{opt.title}</span>
                     <span className="text-xs text-ink-muted dark:text-dark-text-muted mt-1 block">{opt.desc}</span>
@@ -345,7 +345,7 @@ export const RoastMatchmakerModal: React.FC = () => {
                     handleDismiss();
                     openSubscriptionModalFor(matchedBean, 'biweekly');
                   }}
-                  className="min-h-[44px] px-4 py-2.5 bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion text-xs sm:text-sm font-bold flex items-center justify-center gap-2 active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-md"
+                  className="min-h-[44px] px-4 py-2.5 bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-md"
                 >
                   <Zap className="w-4 h-4 text-vermillion dark:text-dark-canvas fill-current" />
                   <span>Subscribe & Save 15%</span>
@@ -357,7 +357,7 @@ export const RoastMatchmakerModal: React.FC = () => {
                     handleDismiss();
                     openSubscriptionModalFor(matchedBean, 'onetime');
                   }}
-                  className="min-h-[44px] px-4 py-2.5 bg-paper dark:bg-dark-subtle border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main text-xs sm:text-sm font-bold flex items-center justify-center gap-2 active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
+                  className="min-h-[44px] px-4 py-2.5 bg-paper dark:bg-dark-subtle border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
                 >
                   <span>Buy One-Time Bag</span>
                   <ArrowRight className="w-4 h-4" />

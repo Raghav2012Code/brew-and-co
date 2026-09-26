@@ -4,7 +4,7 @@ export const LogoMark = ({ className = 'w-9 h-9', showText = false, textClassNam
   return (
     <div className="inline-flex items-center gap-3 group">
       {/* Precision Vector Roastery Emblem */}
-      <div className={`relative ${className} shrink-0 transition-transform duration-300 group-hover:scale-105`}>
+      <div className={`relative ${className} shrink-0`}>
         <svg
           viewBox="0 0 64 64"
           fill="none"
