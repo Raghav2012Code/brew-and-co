@@ -1,4 +1,4 @@
-import React, { useState, useCallback, memo } from 'react';
+import React, { useState, useCallback, memo, useEffect, useRef } from 'react';
 import { ShoppingBag, Menu as MenuIcon, X, Sun, Moon, MapPin, Package, Coffee, Settings } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { useSubscription } from '../context/SubscriptionContext';
@@ -30,9 +30,41 @@ export const Navbar = memo(() => {
   const { subscriptions, activeSubscriptionCount, setIsManageDrawerOpen } = useSubscription();
   const { brandProfile } = useTenant();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const mobileToggleRef = useRef(null);
+  const mobileDrawerRef = useRef(null);
 
   const toggleMobile = useCallback(() => setMobileOpen((v) => !v), []);
   const closeMobile = useCallback(() => setMobileOpen(false), []);
+
+  /**
+   * The mobile drawer is a push-down disclosure inside the sticky header,
+   * not a modal: it has no scrim and deliberately does not lock the page,
+   * so `ui/dialog` would be the wrong primitive — Radix would add both.
+   * It still needs the three things a modal gets for free, which is what
+   * this effect restores: Escape to dismiss, focus moved into the panel on
+   * open, and focus returned to the control that opened it.
+   *
+   * Focus is only returned on Escape. The other exits are link clicks and
+   * buttons that hand off to another surface, and pulling focus back to the
+   * toggle would fight whatever took it.
+   */
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    const panel = mobileDrawerRef.current;
+    const firstTarget = panel?.querySelector('a[href], button:not([disabled])');
+    firstTarget?.focus();
+
+    const onKeyDown = (e) => {
+      if (e.key !== 'Escape') return;
+      e.stopPropagation();
+      setMobileOpen(false);
+      mobileToggleRef.current?.focus();
+    };
+
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [mobileOpen]);
 
   return (
     <header className="sticky top-0 z-40 w-full bg-paper/95 dark:bg-dark-canvas/95 backdrop-blur-md border-b border-hairline dark:border-dark-hairline transition-colors">
@@ -117,11 +149,13 @@ export const Navbar = memo(() => {
             </button>
 
             <button
+              ref={mobileToggleRef}
               type="button"
               onClick={toggleMobile}
               className="md:hidden min-h-[42px] min-w-[42px] flex items-center justify-center p-2.5 bg-surface dark:bg-dark-surface text-ink dark:text-dark-text-main transition-colors cursor-pointer"
               aria-label="Toggle Navigation Menu"
               aria-expanded={mobileOpen}
+              aria-controls="mobile-nav-drawer"
             >
               {mobileOpen ? <X className="w-5 h-5" aria-hidden="true" /> : <MenuIcon className="w-5 h-5" aria-hidden="true" />}
             </button>
@@ -177,7 +211,11 @@ export const Navbar = memo(() => {
 
       {/* Mobile Drawer */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas p-4 sm:p-5 space-y-2.5 anim-panel-in-sm">
+        <div
+          ref={mobileDrawerRef}
+          id="mobile-nav-drawer"
+          className="md:hidden border-t border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas p-4 sm:p-5 space-y-2.5 anim-panel-in-sm"
+        >
           <a
             href="#menu"
             onClick={closeMobile}
