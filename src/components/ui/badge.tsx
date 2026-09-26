@@ -12,7 +12,7 @@ const badgeVariants = cva(
         secondary:
           "border-hairline bg-surface text-ink-muted dark:border-dark-hairline dark:bg-dark-card dark:text-dark-text-muted",
         destructive:
-          "border-transparent bg-vermillion text-white dark:bg-dark-vermillion",
+          "border-transparent bg-vermillion text-paper dark:bg-dark-vermillion dark:text-dark-canvas",
         outline:
           "text-ink border-hairline dark:text-dark-text-main dark:border-dark-hairline",
         editorial:

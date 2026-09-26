@@ -30,7 +30,7 @@ export class ErrorBoundary extends Component {
       return (
         <div className="min-h-screen bg-paper text-ink flex flex-col items-center justify-center p-6 text-center">
           <div className="max-w-md w-full p-8 rounded-2xl bg-surface border border-hairline-strong space-y-4 shadow-lg">
-            <div className="w-12 h-12 rounded-full bg-vermillion text-white flex items-center justify-center mx-auto text-xl font-bold font-serif shadow-sm">
+            <div className="w-12 h-12 rounded-full bg-vermillion text-paper flex items-center justify-center mx-auto text-xl font-bold font-serif shadow-sm">
               !
             </div>
             <h1 className="font-serif font-bold text-2xl text-ink">

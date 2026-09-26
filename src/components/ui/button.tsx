@@ -11,7 +11,7 @@ const buttonVariants = cva(
         default:
           "bg-ink text-paper hover:bg-ink/90 dark:bg-dark-text-main dark:text-dark-canvas dark:hover:bg-dark-text-main/90 active:scale-[0.99]",
         destructive:
-          "bg-vermillion text-white hover:bg-vermillion/90 dark:bg-dark-vermillion dark:hover:bg-dark-vermillion/90 active:scale-[0.99]",
+          "bg-vermillion text-paper hover:bg-vermillion/90 dark:bg-dark-vermillion dark:text-dark-canvas dark:hover:bg-dark-vermillion/90 active:scale-[0.99]",
         outline:
           "border border-hairline bg-transparent hover:bg-surface text-ink dark:border-dark-hairline dark:hover:bg-dark-subtle dark:text-dark-text-main",
         secondary:
@@ -19,7 +19,7 @@ const buttonVariants = cva(
         ghost: "hover:bg-surface text-ink dark:text-dark-text-main dark:hover:bg-dark-subtle",
         link: "text-ink underline-offset-4 hover:underline dark:text-dark-text-main",
         editorial:
-          "bg-ink text-paper hover:bg-vermillion transition-[color,background-color,border-color,opacity,transform] duration-200 dark:bg-dark-text-main dark:text-dark-canvas dark:hover:bg-dark-vermillion dark:hover:text-white active:scale-[0.99]",
+          "bg-ink text-paper hover:bg-vermillion transition-[color,background-color,border-color,opacity,transform] duration-200 dark:bg-dark-text-main dark:text-dark-canvas dark:hover:bg-dark-vermillion dark:hover:text-dark-canvas active:scale-[0.99]",
       },
       size: {
         default: "h-11 px-6 py-2",

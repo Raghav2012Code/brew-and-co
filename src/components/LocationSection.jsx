@@ -31,7 +31,7 @@ export const LocationSection = () => {
                 <h3 className="font-serif font-bold text-xl text-ink dark:text-dark-text-main">
                   Cafe Hours
                 </h3>
-                <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${storeStatus.isOpen ? 'bg-success text-white' : 'bg-danger text-white'}`}>
+                <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full text-paper dark:text-dark-canvas ${storeStatus.isOpen ? 'bg-success dark:bg-dark-success' : 'bg-danger dark:bg-dark-danger'}`}>
                   {storeStatus.isOpen ? (storeStatus.isClosingSoon ? storeStatus.statusText : 'Open Today') : 'Closed'}
                 </span>
               </div>
