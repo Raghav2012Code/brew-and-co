@@ -29,18 +29,13 @@
   --input: #E8E4DC;
   --ring: #1A1816;
   --focus-ring: #1A1816;
-  /* Sticky masthead height (dateline band + nameplate band). Anchor targets
-     scroll to this, so it must track the header. The nameplate stacks below
-     `lg`, so the mobile value is the taller one. Measured: 174px @375,
-     186px @768, 126px @1280. */
-  --header-height: 11.75rem;
+  /* Sticky masthead height: dateline band + nameplate band + link strip.
+     Anchor targets scroll to this, so it must track the header. Measured
+     after the three-band masthead: 162px @320, 121px @375, 163px @768 and
+     @1280 — one value covers every width because the bands no longer
+     reflow by breakpoint. */
+  --header-height: 10.5rem;
   --radius: 0.125rem;
-}
-
-@media (min-width: 64rem) {
-  :root {
-    --header-height: 8rem;
-  }
 }
 
 .dark {

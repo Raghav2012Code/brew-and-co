@@ -93,55 +93,17 @@ export const Navbar = memo(() => {
         </div>
       </div>
 
-      {/* Nameplate band — wordmark, then section links and the bag */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-4 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-        <a href="#hero" className="flex items-center" aria-label={`${brandProfile.brandName} Home`}>
-          <LogoMark className="w-10 h-10 sm:w-11 sm:h-11" showText nameplate />
-        </a>
-
-        <div className="flex items-center justify-between gap-3 lg:justify-end">
-          <nav className="hidden md:flex shrink-0 items-center gap-6 text-sm text-ink-muted dark:text-dark-text-muted" aria-label="Primary Navigation">
-            <a href="#menu" className="hover:text-ink dark:hover:text-dark-text-main transition-colors py-1 whitespace-nowrap">
-              Menu &amp; Order
-            </a>
-            <a href="#roastery" className="hover:text-ink dark:hover:text-dark-text-main transition-colors py-1 flex items-center gap-1.5 whitespace-nowrap">
-              <span>Roastery &amp; Subscriptions</span>
-              <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 bg-vermillion/10 text-vermillion dark:text-dark-vermillion border border-vermillion/30 whitespace-nowrap">
-                15% Off
-              </span>
-            </a>
-            <a href="#brew-guide" className="hover:text-ink dark:hover:text-dark-text-main transition-colors py-1 whitespace-nowrap">
-              Brew Guide
-            </a>
-            <a href="#rewards" className="hover:text-ink dark:hover:text-dark-text-main transition-colors py-1 whitespace-nowrap">
-              Tasting Pass
-            </a>
-            <a href="#location" className="hover:text-ink dark:hover:text-dark-text-main transition-colors py-1 whitespace-nowrap">
-              Visit &amp; Hours
-            </a>
-          </nav>
+      {/* Nameplate band — the wordmark alone, at display scale. Newspaper
+          mastheads put the name on its own line; the section links live in
+          the strip below it, so no single band carries wordmark + links +
+          button, which is the AI-nav fingerprint. */}
+      <div className="border-b border-hairline dark:border-dark-hairline">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 py-2.5 flex items-center justify-between gap-3">
+          <a href="#hero" className="flex items-center" aria-label={`${brandProfile.brandName} Home`}>
+            <LogoMark className="w-10 h-10 sm:w-11 sm:h-11" showText nameplate />
+          </a>
 
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            {subscriptions.length > 0 && (
-              <button
-                onClick={() => setIsManageDrawerOpen(true)}
-                aria-label={`View Subscriptions: ${activeSubscriptionCount} active plans`}
-                className="hidden lg:inline-flex items-center gap-1.5 px-3 py-2 min-h-[42px] text-xs font-medium bg-surface dark:bg-dark-surface text-ink dark:text-dark-text-main hover:bg-surface-hover dark:hover:bg-dark-card-hover transition-colors"
-              >
-                <Package className="w-3.5 h-3.5 text-vermillion dark:text-dark-vermillion" aria-hidden="true" />
-                <span>Vault: {activeSubscriptionCount}</span>
-              </button>
-            )}
-
-            <button
-              onClick={() => setIsLoyaltyModalOpen(true)}
-              aria-label={`View Tasting Pass: ${loyaltyStamps} of 6 stamps completed`}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 min-h-[42px] text-xs font-medium bg-surface dark:bg-dark-surface text-ink dark:text-dark-text-main hover:bg-surface-hover dark:hover:bg-dark-card-hover transition-colors"
-            >
-              <SparkleMark />
-              <span>Pass: {loyaltyStamps}/6</span>
-            </button>
-
             <button
               onClick={() => setIsCartOpen(true)}
               aria-label={`View Bag: ${cartCount} items`}
@@ -164,6 +126,52 @@ export const Navbar = memo(() => {
               {mobileOpen ? <X className="w-5 h-5" aria-hidden="true" /> : <MenuIcon className="w-5 h-5" aria-hidden="true" />}
             </button>
           </div>
+        </div>
+      </div>
+
+      {/* Link strip — section links and the account pills, no wordmark */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-1.5 flex items-center justify-between gap-4">
+        <nav className="hidden md:flex shrink-0 items-center gap-6 text-sm text-ink-muted dark:text-dark-text-muted" aria-label="Primary Navigation">
+          <a href="#menu" className="hover:text-ink dark:hover:text-dark-text-main transition-colors py-1 whitespace-nowrap">
+            Menu &amp; Order
+          </a>
+          <a href="#roastery" className="hover:text-ink dark:hover:text-dark-text-main transition-colors py-1 flex items-center gap-1.5 whitespace-nowrap">
+            <span>Roastery &amp; Subscriptions</span>
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 bg-vermillion/10 text-vermillion dark:text-dark-vermillion border border-vermillion/30 whitespace-nowrap">
+              15% Off
+            </span>
+          </a>
+          <a href="#brew-guide" className="hover:text-ink dark:hover:text-dark-text-main transition-colors py-1 whitespace-nowrap">
+            Brew Guide
+          </a>
+          <a href="#rewards" className="hover:text-ink dark:hover:text-dark-text-main transition-colors py-1 whitespace-nowrap">
+            Tasting Pass
+          </a>
+          <a href="#location" className="hover:text-ink dark:hover:text-dark-text-main transition-colors py-1 whitespace-nowrap">
+            Visit &amp; Hours
+          </a>
+        </nav>
+
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {subscriptions.length > 0 && (
+            <button
+              onClick={() => setIsManageDrawerOpen(true)}
+              aria-label={`View Subscriptions: ${activeSubscriptionCount} active plans`}
+              className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] text-xs font-medium bg-surface dark:bg-dark-surface text-ink dark:text-dark-text-main hover:bg-surface-hover dark:hover:bg-dark-card-hover transition-colors"
+            >
+              <Package className="w-3.5 h-3.5 text-vermillion dark:text-dark-vermillion" aria-hidden="true" />
+              <span>Vault: {activeSubscriptionCount}</span>
+            </button>
+          )}
+
+          <button
+            onClick={() => setIsLoyaltyModalOpen(true)}
+            aria-label={`View Tasting Pass: ${loyaltyStamps} of 6 stamps completed`}
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] text-xs font-medium bg-surface dark:bg-dark-surface text-ink dark:text-dark-text-main hover:bg-surface-hover dark:hover:bg-dark-card-hover transition-colors"
+          >
+            <SparkleMark />
+            <span>Pass: {loyaltyStamps}/6</span>
+          </button>
         </div>
       </div>
 
