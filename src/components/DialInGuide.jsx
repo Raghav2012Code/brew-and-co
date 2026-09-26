@@ -71,7 +71,7 @@ export const DialInGuide = () => {
   const activePreset = CUP_PRESETS.find((p) => p.id === selectedPresetId) || CUP_PRESETS[0];
 
   return (
-    <section id="brew-guide" className="border-b border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas py-14 sm:py-20 anchor-offset text-left transition-colors">
+    <section id="brew-guide" className="bg-surface dark:bg-dark-card py-16 sm:py-24 anchor-offset text-left transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-12">
         
         {/* Header — left-biased, matching every other section head */}
@@ -85,7 +85,7 @@ export const DialInGuide = () => {
         </div>
 
         {/* Interactive Cup Size Selector & Quick Recipe Card */}
-        <div className="p-6 sm:p-8 rounded-2xl bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline shadow-sm space-y-6">
+        <div className="p-6 sm:p-8 rounded-2xl bg-paper dark:bg-dark-surface border border-hairline dark:border-dark-hairline shadow-sm space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-hairline-strong dark:border-dark-hairline pb-4">
             <div>
               <span className="text-xs font-semibold uppercase tracking-wider text-vermillion block">
@@ -206,7 +206,7 @@ export const DialInGuide = () => {
         </div>
 
         {/* 3 Friendly Roaster Secrets */}
-        <div className="p-6 sm:p-8 rounded-2xl bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline text-left space-y-4">
+        <div className="p-6 sm:p-8 rounded-2xl bg-paper dark:bg-dark-surface border border-hairline dark:border-dark-hairline text-left space-y-4">
           <h4 className="font-serif font-bold text-lg text-ink dark:text-dark-text-main">
             Three Barista Tips for Better Taste
           </h4>

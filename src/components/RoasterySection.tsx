@@ -30,7 +30,7 @@ export const RoasterySection: React.FC = () => {
   return (
     <section
       id="roastery"
-      className="py-16 sm:py-24 px-4 sm:px-8 max-w-7xl mx-auto border-b border-hairline dark:border-dark-hairline transition-colors"
+      className="py-20 sm:py-28 px-4 sm:px-8 max-w-7xl mx-auto border-b border-hairline dark:border-dark-hairline transition-colors"
       aria-label="Direct Trade Roastery & Subscriptions"
     >
       {/* Section Pre-header & Title */}
