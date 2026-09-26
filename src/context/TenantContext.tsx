@@ -61,6 +61,25 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return DEFAULT_PROFILE;
   });
 
+  // The only fields the studio lets a tenant change. Everything else on a
+  // canonical bean — name, description, tastingNotes, process, origin,
+  // elevation, image — is editorial copy that ships in roasteryData.js.
+  //
+  // The persisted blob used to be merged wholesale, which meant a browser
+  // that had visited before kept a frozen snapshot of every description
+  // and could never see a copy fix again. `image` was already being
+  // special-cased for exactly this reason; this generalises it. Tenant-added
+  // beans have no canonical version, so they are exempt below.
+  const TENANT_EDITABLE_BEAN_FIELDS = ['basePrice', 'cuppingScore'] as const;
+
+  const pickTenantEdits = (saved: Partial<RoasteryBean>): Partial<RoasteryBean> => {
+    const edits: Record<string, unknown> = {};
+    for (const key of TENANT_EDITABLE_BEAN_FIELDS) {
+      if (saved[key] !== undefined) edits[key] = saved[key];
+    }
+    return edits as Partial<RoasteryBean>;
+  };
+
   // Merge canonical ROASTERY_BEANS with saved modifications by ID, allowing new catalog items to populate
   const [roasteryBeans, setRoasteryBeans] = useState<RoasteryBean[]>(() => {
     try {
@@ -71,17 +90,12 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         if (Array.isArray(parsed) && parsed.length > 0) {
           const savedMap = new Map<string, Partial<RoasteryBean>>(parsed.map((item) => [item?.id, item]));
 
-          // 1. Merge canonical beans with saved modifications by ID
+          // 1. Merge canonical beans with the tenant's edits, by ID. Editorial
+          //    fields are outside the whitelist, so they stay canonical even
+          //    when the stored blob carries a stale copy of them.
           const mergedCanonical = (ROASTERY_BEANS as RoasteryBean[]).map((canonical) => {
             const savedItem = savedMap.get(canonical.id);
-            if (savedItem) {
-              return {
-                ...canonical,
-                ...savedItem,
-                image: canonical.image, // keep latest image asset path
-              };
-            }
-            return canonical;
+            return savedItem ? { ...canonical, ...pickTenantEdits(savedItem) } : canonical;
           });
 
           // 2. Include any custom items created by the user not in ROASTERY_BEANS
