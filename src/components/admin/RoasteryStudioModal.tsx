@@ -3,6 +3,7 @@ import { X, Palette, Coffee, Check, RotateCcw, Store } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { useTenant, ACCENT_COLOR_PRESETS, RoasteryBrandProfile } from '../../context/TenantContext';
 import { Dialog, DialogContent, DialogTitle } from '../ui/dialog';
+import { ConfirmDialog } from '../ui/confirm-dialog';
 
 export const RoasteryStudioModal: React.FC = () => {
   const { isRoasteryStudioOpen, setIsRoasteryStudioOpen } = useStore();
@@ -15,6 +16,7 @@ export const RoasteryStudioModal: React.FC = () => {
   } = useTenant();
 
   const [activeTab, setActiveTab] = useState<'brand' | 'catalog'>('brand');
+  const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
 
   // Local draft state: changes are only committed to TenantContext upon "Save & Exit"
   const [draftProfile, setDraftProfile] = useState<RoasteryBrandProfile>({ ...brandProfile });
@@ -70,10 +72,11 @@ export const RoasteryStudioModal: React.FC = () => {
   };
 
   const handleResetDefaults = () => {
-    if (window.confirm('Reset all brand and catalog settings to factory default?')) {
-      resetToDefaults();
-      setIsRoasteryStudioOpen(false);
-    }
+    // No gate here — the ConfirmDialog below owns it. This clears
+    // localStorage, so it gets the typed-phrase variant rather than a
+    // click-to-confirm.
+    resetToDefaults();
+    setIsRoasteryStudioOpen(false);
   };
 
   return (
@@ -312,7 +315,7 @@ export const RoasteryStudioModal: React.FC = () => {
         <div className="p-4 sm:p-5 bg-surface dark:bg-dark-subtle border-t border-hairline dark:border-dark-hairline flex items-center justify-between gap-3">
           <button
             type="button"
-            onClick={handleResetDefaults}
+            onClick={() => setIsResetConfirmOpen(true)}
             className="inline-flex items-center gap-1 text-xs font-mono text-ink-faint hover:text-ink cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5" />
@@ -337,6 +340,24 @@ export const RoasteryStudioModal: React.FC = () => {
             </button>
           </div>
         </div>
+
+        {/* Nested inside the studio dialog: Radix stacks the dismissable
+            layers, so Escape closes this one and leaves the studio open. */}
+        <ConfirmDialog
+          open={isResetConfirmOpen}
+          onOpenChange={setIsResetConfirmOpen}
+          title="Reset to factory defaults?"
+          description={
+            <>
+              This clears the brand theme and every catalog price and cupping
+              score from this browser&rsquo;s local storage. Any live storefront
+              using them reverts to the shipped defaults. This cannot be undone.
+            </>
+          }
+          confirmLabel="Reset everything"
+          confirmPhrase="RESET"
+          onConfirm={handleResetDefaults}
+        />
       </DialogContent>
     </Dialog>
   );
