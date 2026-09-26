@@ -212,6 +212,15 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
             <div role="radiogroup" aria-labelledby={freqGroupId} className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {SUBSCRIPTION_FREQUENCIES.map((freq) => {
                 const isSelected = selectedFrequency === freq.id;
+                // The accent is 3:1 on the ink fill, so a selected tile takes
+                // the dark-theme accent instead; secondary text drops to 80%.
+                const badgeTone = isSelected
+                  ? freq.discountPct > 0
+                    ? 'text-dark-vermillion'
+                    : 'text-paper/80'
+                  : freq.discountPct > 0
+                    ? 'text-vermillion dark:text-dark-vermillion'
+                    : 'text-ink-muted dark:text-dark-text-muted';
                 return (
                   <button
                     key={freq.id}
@@ -227,18 +236,18 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
                   >
                     <div>
                       <div className="flex items-center justify-between mb-1">
-                        <span className="font-mono font-bold text-xs text-ink dark:text-dark-text-main">
+                        <span className={`font-mono font-bold text-xs ${isSelected ? 'text-paper' : 'text-ink dark:text-dark-text-main'}`}>
                           {freq.name}
                         </span>
-                        {isSelected && <Check className="w-3.5 h-3.5 text-vermillion dark:text-dark-vermillion" />}
+                        {isSelected && <Check className="w-3.5 h-3.5 text-dark-vermillion" />}
                       </div>
-                      <p className="text-[11px] text-ink-muted dark:text-dark-text-muted leading-snug line-clamp-2">
+                      <p className={`text-[11px] leading-snug line-clamp-2 ${isSelected ? 'text-paper/80' : 'text-ink-muted dark:text-dark-text-muted'}`}>
                         {freq.description}
                       </p>
                     </div>
 
                     <div className="mt-2 pt-1 border-t border-hairline/40 dark:border-dark-hairline/40">
-                      <span className={`text-[10px] font-mono font-bold ${freq.discountPct > 0 ? 'text-vermillion dark:text-dark-vermillion' : 'text-ink-muted dark:text-dark-text-muted'}`}>
+                      <span className={`text-[10px] font-mono font-bold ${badgeTone}`}>
                         {freq.badge}
                       </span>
                     </div>
@@ -277,25 +286,25 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${isSelected ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas' : 'border-ink-muted dark:border-dark-text-muted'}`}>
-                        {isSelected && <div className="w-1.5 h-1.5 bg-paper dark:bg-dark-canvas rounded-full" />}
+                      <div className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${isSelected ? 'border-paper bg-paper' : 'border-ink-muted dark:border-dark-text-muted'}`}>
+                        {isSelected && <div className="w-1.5 h-1.5 bg-ink dark:bg-dark-canvas rounded-full" />}
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-sans font-bold text-xs sm:text-sm text-ink dark:text-dark-text-main">
+                          <span className={`font-sans font-bold text-xs sm:text-sm ${isSelected ? 'text-paper' : 'text-ink dark:text-dark-text-main'}`}>
                             {grind.name}
                           </span>
-                          <span className="text-[10px] font-mono text-ink-muted dark:text-dark-text-muted bg-paper dark:bg-dark-card px-1.5 py-0.5 border border-hairline/60 dark:border-dark-hairline/60">
+                          <span className={`text-[10px] font-mono px-1.5 py-0.5 border ${isSelected ? 'text-paper/90 bg-paper/15 border-paper/25' : 'text-ink-muted dark:text-dark-text-muted bg-paper dark:bg-dark-card border-hairline/60 dark:border-dark-hairline/60'}`}>
                             {grind.subtitle}
                           </span>
                         </div>
-                        <p className="text-[11px] text-ink-muted dark:text-dark-text-muted mt-0.5">
+                        <p className={`text-[11px] mt-0.5 ${isSelected ? 'text-paper/80' : 'text-ink-muted dark:text-dark-text-muted'}`}>
                           {grind.description}
                         </p>
                       </div>
                     </div>
 
-                    <div className="text-right shrink-0 font-mono text-[11px] text-ink-muted dark:text-dark-text-muted hidden sm:block">
+                    <div className={`text-right shrink-0 font-mono text-[11px] hidden sm:block ${isSelected ? 'text-paper/80' : 'text-ink-muted dark:text-dark-text-muted'}`}>
                       {grind.micron}
                     </div>
                   </button>
@@ -335,25 +344,25 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
                   >
                     <div>
                       <div className="flex items-center justify-between">
-                        <span className="font-bold font-sans text-xs text-ink dark:text-dark-text-main">
+                        <span className={`font-bold font-sans text-xs ${isSelected ? 'text-paper' : 'text-ink dark:text-dark-text-main'}`}>
                           {bag.name}
                         </span>
                         {bag.volumeDiscountPct > 0 && (
-                          <span className="text-[10px] font-mono text-vermillion dark:text-dark-vermillion font-semibold">
+                          <span className={`text-[10px] font-mono font-semibold ${isSelected ? 'text-dark-vermillion' : 'text-vermillion dark:text-dark-vermillion'}`}>
                             Save {bag.volumeDiscountPct}%
                           </span>
                         )}
                       </div>
-                      <p className="text-[11px] font-mono text-ink-muted dark:text-dark-text-muted mt-0.5">
+                      <p className={`text-[11px] font-mono mt-0.5 ${isSelected ? 'text-paper/80' : 'text-ink-muted dark:text-dark-text-muted'}`}>
                         {bag.weightOz} • {bag.cupYield}
                       </p>
                     </div>
 
                     <div className="mt-3 pt-2 border-t border-hairline/40 dark:border-dark-hairline/40 flex items-baseline justify-between font-mono">
-                      <span className="text-xs font-bold text-ink dark:text-dark-text-main">
+                      <span className={`text-xs font-bold ${isSelected ? 'text-paper' : 'text-ink dark:text-dark-text-main'}`}>
                         ${priceForThisBag.toFixed(2)}
                       </span>
-                      <span className="text-[10px] text-ink-muted dark:text-dark-text-muted">
+                      <span className={`text-[10px] ${isSelected ? 'text-paper/80' : 'text-ink-muted dark:text-dark-text-muted'}`}>
                         / bag
                       </span>
                     </div>
