@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles } from 'lucide-react';
+import { Droplets, Thermometer, Coffee, Sparkles } from 'lucide-react';
 
 const CUP_PRESETS = [
   {
@@ -219,8 +219,9 @@ export const DialInGuide = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
             <div className="p-4 rounded-xl bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong space-y-1.5">
-              <span className="font-semibold text-sm text-ink dark:text-dark-text-main block">
-                💧 Use Filtered Water
+              <span className="font-semibold text-sm text-ink dark:text-dark-text-main flex items-center gap-2">
+                <Droplets className="w-4 h-4 text-vermillion dark:text-dark-vermillion shrink-0" aria-hidden="true" />
+                Use Filtered Water
               </span>
               <p className="text-ink-muted dark:text-dark-text-muted leading-relaxed">
                 Coffee is mostly water. Filtered tap water removes mineral harshness and brings out natural fruit and chocolate notes.
@@ -228,8 +229,9 @@ export const DialInGuide = () => {
             </div>
 
             <div className="p-4 rounded-xl bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong space-y-1.5">
-              <span className="font-semibold text-sm text-ink dark:text-dark-text-main block">
-                🌡️ Let Water Cool 30 Seconds
+              <span className="font-semibold text-sm text-ink dark:text-dark-text-main flex items-center gap-2">
+                <Thermometer className="w-4 h-4 text-vermillion dark:text-dark-vermillion shrink-0" aria-hidden="true" />
+                Let Water Cool 30 Seconds
               </span>
               <p className="text-ink-muted dark:text-dark-text-muted leading-relaxed">
                 Water straight off the boil (212°F) can over-extract and turn bitter. Let the kettle rest for 30–45 seconds (~200°F) before pouring.
@@ -237,8 +239,9 @@ export const DialInGuide = () => {
             </div>
 
             <div className="p-4 rounded-xl bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong space-y-1.5">
-              <span className="font-semibold text-sm text-ink dark:text-dark-text-main block">
-                ☕ Use Fresh Beans
+              <span className="font-semibold text-sm text-ink dark:text-dark-text-main flex items-center gap-2">
+                <Coffee className="w-4 h-4 text-vermillion dark:text-dark-vermillion shrink-0" aria-hidden="true" />
+                Use Fresh Beans
               </span>
               <p className="text-ink-muted dark:text-dark-text-muted leading-relaxed">
                 Coffee beans taste best within 4 weeks of their roast date, when the natural sugars and aromas are freshest.

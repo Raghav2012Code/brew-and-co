@@ -200,9 +200,10 @@ export const Navbar = memo(() => {
               closeMobile();
               setIsBaristaModalOpen(true);
             }}
-            className="w-full text-left min-h-[44px] block p-3 rounded-xl bg-surface dark:bg-dark-surface text-sm font-semibold text-ink dark:text-dark-text-main active:bg-surface-hover dark:active:bg-dark-hairline transition-colors"
+            className="w-full text-left min-h-[44px] flex items-center gap-2.5 p-3 rounded-xl bg-surface dark:bg-dark-surface text-sm font-semibold text-ink dark:text-dark-text-main active:bg-surface-hover dark:active:bg-dark-hairline transition-colors"
           >
-            ☕ Barista Rail & KDS ({activeOrdersCount} Active)
+            <Coffee className="w-4 h-4 shrink-0 text-vermillion dark:text-dark-vermillion" aria-hidden="true" />
+            <span>Barista Rail &amp; KDS ({activeOrdersCount} Active)</span>
           </button>
           <button
             type="button"
@@ -210,9 +211,10 @@ export const Navbar = memo(() => {
               closeMobile();
               setIsRoasteryStudioOpen(true);
             }}
-            className="w-full text-left min-h-[44px] block p-3 rounded-xl bg-surface dark:bg-dark-surface text-sm font-semibold text-ink dark:text-dark-text-main active:bg-surface-hover dark:active:bg-dark-hairline transition-colors"
+            className="w-full text-left min-h-[44px] flex items-center gap-2.5 p-3 rounded-xl bg-surface dark:bg-dark-surface text-sm font-semibold text-ink dark:text-dark-text-main active:bg-surface-hover dark:active:bg-dark-hairline transition-colors"
           >
-            ⚙ Roastery Studio & Customizer
+            <Settings className="w-4 h-4 shrink-0 text-ink-muted dark:text-dark-text-muted" aria-hidden="true" />
+            <span>Roastery Studio &amp; Customizer</span>
           </button>
           <button
             type="button"
