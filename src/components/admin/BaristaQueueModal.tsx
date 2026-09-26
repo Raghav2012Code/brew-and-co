@@ -104,11 +104,11 @@ export const BaristaQueueModal: React.FC = () => {
       role="dialog"
       aria-modal="true"
       aria-labelledby="barista-kds-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/80 backdrop-blur-md anim-overlay"
       onClick={() => setIsBaristaModalOpen(false)}
     >
       <div
-        className="relative w-full max-w-5xl h-[94vh] flex flex-col bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-5xl h-[94vh] flex flex-col bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline shadow-2xl overflow-hidden anim-panel"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top KDS Header */}

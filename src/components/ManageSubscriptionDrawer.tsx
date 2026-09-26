@@ -190,7 +190,7 @@ export const ManageSubscriptionDrawer: React.FC = () => {
 
                     {/* Edit Form (Expanded) */}
                     {isEditing && (
-                      <div className="mt-3 p-3 bg-paper dark:bg-dark-subtle border border-ink/20 dark:border-dark-text-main/20 space-y-3 animate-in fade-in duration-150">
+                      <div className="mt-3 p-3 bg-paper dark:bg-dark-subtle border border-ink/20 dark:border-dark-text-main/20 space-y-3 anim-panel-sm">
                         <div>
                           <label className="text-[11px] font-mono font-bold text-ink-muted dark:text-dark-text-muted block mb-1">
                             Change Frequency:

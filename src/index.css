@@ -217,6 +217,81 @@
 }
 
 /* ---------------------------------------------------------------------------
+ * Entrances.
+ * The 26 `animate-in` / `animate-out` / `animate-spin-slow` utilities this
+ * app used came from tailwindcss-animate, which is not installed — they were
+ * dead classes, so no modal actually animated. These are the real thing:
+ * one opacity fade for scrims, one short rise for panels, driven by Radix
+ * `data-state` so exits wait for animationend via Presence.
+ * ------------------------------------------------------------------------- */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes panel-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes panel-out {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(4px); }
+}
+
+.anim-overlay[data-state='open'] { animation: fade-in 200ms ease-out; }
+.anim-overlay[data-state='closed'] { animation: fade-out 150ms ease-in; }
+.anim-panel[data-state='open'] { animation: panel-in 220ms cubic-bezier(0.2, 0.9, 0.3, 1); }
+.anim-panel[data-state='closed'] { animation: panel-out 150ms ease-in; }
+.anim-panel-sm[data-state='open'] { animation: fade-in 180ms ease-out; }
+.anim-panel-sm[data-state='closed'] { animation: fade-out 150ms ease-in; }
+
+/* Drawers enter from their own edge. Radix Sheet does not expose data-side,
+   so the offset is keyed off the variant class the primitive already sets. */
+@keyframes sheet-in {
+  from { opacity: 0; transform: translate(var(--sheet-x, 0), var(--sheet-y, 0)); }
+  to { opacity: 1; transform: none; }
+}
+
+.anim-sheet-right { --sheet-x: 16px; }
+.anim-sheet-left { --sheet-x: -16px; }
+.anim-sheet-top { --sheet-y: -16px; }
+.anim-sheet-bottom { --sheet-y: 16px; }
+.anim-sheet[data-state='open'] { animation: sheet-in 240ms cubic-bezier(0.2, 0.9, 0.3, 1); }
+.anim-sheet[data-state='closed'] { animation: fade-out 150ms ease-in; }
+
+/* ---------------------------------------------------------------------------
+ * Reduced motion (Hallmark gate 27).
+ * The marquee ran forever and four elements pulsed indefinitely, with no
+ * reduced-motion fallback anywhere. Spatial motion collapses to an instant
+ * state change; the loop stops rather than merely slowing.
+ * ------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-marquee {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
  * Focus ring — deliberately unlayered.
  * Tailwind emits its utilities inside `@layer utilities`, and a layered rule
  * loses to it regardless of specificity. This rule must outrank

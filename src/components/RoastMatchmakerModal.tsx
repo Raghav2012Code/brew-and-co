@@ -149,17 +149,17 @@ export const RoastMatchmakerModal: React.FC = () => {
       role="dialog"
       aria-modal="true"
       aria-labelledby="matchmaker-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-sm anim-overlay"
       onClick={handleDismiss}
     >
       <div
-        className="relative w-full max-w-xl flex flex-col bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-xl flex flex-col bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline shadow-2xl overflow-hidden anim-panel"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="p-4 sm:p-6 bg-surface dark:bg-dark-subtle border-b border-hairline dark:border-dark-hairline flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <Compass className="w-5 h-5 text-vermillion dark:text-dark-vermillion animate-spin-slow" />
+            <Compass className="w-5 h-5 text-vermillion dark:text-dark-vermillion" />
             <h2 id="matchmaker-modal-title" className="font-serif font-bold text-xl sm:text-2xl text-ink dark:text-dark-text-main">
               Find Your Ideal Roast
             </h2>
@@ -188,7 +188,7 @@ export const RoastMatchmakerModal: React.FC = () => {
         {/* Modal Body */}
         <div className="p-5 sm:p-8 text-ink dark:text-dark-text-main">
           {step === 1 && (
-            <div className="space-y-5 animate-in fade-in slide-in-from-right-4 duration-200">
+            <div className="space-y-5 anim-panel">
               <div className="space-y-1">
                 <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-vermillion dark:text-dark-vermillion">
                   Step 1 of 3 • Brewing Routine
@@ -220,7 +220,7 @@ export const RoastMatchmakerModal: React.FC = () => {
           )}
 
           {step === 2 && (
-            <div className="space-y-5 animate-in fade-in slide-in-from-right-4 duration-200">
+            <div className="space-y-5 anim-panel">
               <div className="space-y-1">
                 <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-vermillion dark:text-dark-vermillion">
                   Step 2 of 3 • Flavor Palate
@@ -252,7 +252,7 @@ export const RoastMatchmakerModal: React.FC = () => {
           )}
 
           {step === 3 && (
-            <div className="space-y-5 animate-in fade-in slide-in-from-right-4 duration-200">
+            <div className="space-y-5 anim-panel">
               <div className="space-y-1">
                 <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-vermillion dark:text-dark-vermillion">
                   Step 3 of 3 • Drinking Style
@@ -281,7 +281,7 @@ export const RoastMatchmakerModal: React.FC = () => {
           )}
 
           {step === 4 && matchedBean && (
-            <div className="space-y-6 animate-in zoom-in-95 duration-200">
+            <div className="space-y-6 anim-panel">
               {/* Match Score Badge */}
               <div className="flex items-center justify-between border-b border-hairline/60 dark:border-dark-hairline/60 pb-3">
                 <div className="flex items-center gap-2">

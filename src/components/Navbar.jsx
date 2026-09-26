@@ -169,7 +169,7 @@ export const Navbar = memo(() => {
 
       {/* Mobile Drawer */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-hairline dark:border-dark-hairline bg-paper/98 dark:bg-dark-canvas/98 backdrop-blur-lg p-4 sm:p-5 space-y-2.5 shadow-xl animate-in slide-in-from-top-2 duration-200">
+        <div className="md:hidden border-t border-hairline dark:border-dark-hairline bg-paper/98 dark:bg-dark-canvas/98 backdrop-blur-lg p-4 sm:p-5 space-y-2.5 shadow-xl anim-panel">
           <a
             href="#menu"
             onClick={closeMobile}

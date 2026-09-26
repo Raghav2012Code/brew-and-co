@@ -60,7 +60,7 @@ export const RoasterySection: React.FC = () => {
             onClick={() => setIsMatchmakerOpen(true)}
             className="inline-flex items-center gap-2 px-4 py-2.5 bg-vermillion dark:bg-dark-vermillion text-paper dark:text-dark-canvas text-xs font-mono font-bold hover:opacity-90 transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-xs"
           >
-            <Compass className="w-3.5 h-3.5 animate-spin-slow" />
+            <Compass className="w-3.5 h-3.5" />
             <span>Find Your Roast (30s Quiz)</span>
           </button>
 

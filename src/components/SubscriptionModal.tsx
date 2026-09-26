@@ -142,11 +142,11 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
       role="dialog"
       aria-modal="true"
       aria-labelledby="subscription-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/70 backdrop-blur-sm anim-overlay"
       onClick={() => setIsSubscribeModalOpen(false)}
     >
       <div
-        className="relative w-full max-w-2xl max-h-[92vh] flex flex-col bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-2xl max-h-[92vh] flex flex-col bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline shadow-2xl overflow-hidden anim-panel"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Spec Banner */}
