@@ -295,7 +295,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
                       </div>
                     </div>
 
-                    <div className="text-right shrink-0 font-mono text-[11px] text-ink-muted dark:text-dark-text-muted hidden xs:block">
+                    <div className="text-right shrink-0 font-mono text-[11px] text-ink-muted dark:text-dark-text-muted hidden sm:block">
                       {grind.micron}
                     </div>
                   </button>

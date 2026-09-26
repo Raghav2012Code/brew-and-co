@@ -67,7 +67,7 @@ export const Footer = () => {
                 <span>You're on the list. Thank you for following along.</span>
               </div>
             ) : (
-              <form onSubmit={handleSubscribe} className="flex flex-col xs:flex-row gap-2">
+              <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-2">
                 <label htmlFor="newsletter-email" className="sr-only">Your email address</label>
                 <input
                   id="newsletter-email"
