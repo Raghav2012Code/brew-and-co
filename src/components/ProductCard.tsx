@@ -28,7 +28,7 @@ export const ProductCard: React.FC<{ item: MenuItem }> = memo(({ item }) => {
   }, [item.id, toggleFavorite]);
 
   return (
-    <div className="group border border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-card hover:border-ink dark:hover:border-dark-text-main p-4 flex flex-col justify-between text-left transition-all relative">
+    <div className="group border border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-card hover:border-ink dark:hover:border-dark-text-main p-4 flex flex-col justify-between text-left transition-colors relative">
       <div>
         {/* Specimen Photo */}
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-surface dark:bg-dark-subtle mb-3.5 border border-hairline dark:border-dark-hairline">
@@ -54,7 +54,7 @@ export const ProductCard: React.FC<{ item: MenuItem }> = memo(({ item }) => {
             type="button"
             onClick={handleToggleFavorite}
             aria-label={isFavorite ? `Remove ${item.name} from favorites` : `Save ${item.name} to favorites`}
-            className="absolute top-2 right-2 min-h-[40px] min-w-[40px] flex items-center justify-center bg-paper/90 dark:bg-dark-subtle/90 text-ink-muted dark:text-dark-text-muted hover:text-vermillion dark:hover:text-dark-vermillion active:scale-90 transition-all cursor-pointer border border-hairline/60 dark:border-dark-hairline/60"
+            className="absolute top-2 right-2 min-h-[40px] min-w-[40px] flex items-center justify-center bg-paper/90 dark:bg-dark-subtle/90 text-ink-muted dark:text-dark-text-muted hover:text-vermillion dark:hover:text-dark-vermillion active:scale-90 transition-[color,background-color,border-color,opacity,transform] cursor-pointer border border-hairline/60 dark:border-dark-hairline/60"
           >
             <Heart className={`w-4 h-4 ${isFavorite ? 'fill-vermillion text-vermillion dark:fill-dark-vermillion dark:text-dark-vermillion' : ''}`} aria-hidden="true" />
           </button>

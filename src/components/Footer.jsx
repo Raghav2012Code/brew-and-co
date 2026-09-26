@@ -82,7 +82,7 @@ export const Footer = () => {
                 <button
                   type="submit"
                   aria-label="Subscribe to newsletter"
-                  className="min-h-[44px] px-5 py-2.5 rounded-xl bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion dark:hover:bg-vermillion dark:hover:text-paper text-xs font-semibold active:scale-95 transition-all cursor-pointer"
+                  className="min-h-[44px] px-5 py-2.5 rounded-xl bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion dark:hover:bg-vermillion dark:hover:text-paper text-xs font-semibold active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
                 >
                   Subscribe
                 </button>

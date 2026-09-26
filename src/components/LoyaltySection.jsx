@@ -103,7 +103,7 @@ export const LoyaltySection = () => {
                 return (
                   <div
                     key={index}
-                    className={`aspect-square rounded-full border-2 flex flex-col items-center justify-center transition-all ${
+                    className={`aspect-square rounded-full border-2 flex flex-col items-center justify-center transition-colors ${
                       isStamped
                         ? 'border-vermillion bg-vermillion text-paper shadow-sm'
                         : isLast
@@ -169,7 +169,7 @@ export const LoyaltySection = () => {
             <button
               onClick={() => setIsLoyaltyModalOpen(false)}
               aria-label="Close Tasting Pass Modal"
-              className="absolute top-4 right-4 z-20 min-h-[38px] min-w-[38px] flex items-center justify-center rounded-full bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-ink dark:text-dark-text-main hover:bg-ink dark:hover:bg-dark-text-main hover:text-paper dark:hover:text-dark-canvas active:scale-90 transition-all cursor-pointer shadow-md"
+              className="absolute top-4 right-4 z-20 min-h-[38px] min-w-[38px] flex items-center justify-center rounded-full bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-ink dark:text-dark-text-main hover:bg-ink dark:hover:bg-dark-text-main hover:text-paper dark:hover:text-dark-canvas active:scale-90 transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-md"
             >
               <X className="w-4 h-4" aria-hidden="true" />
             </button>

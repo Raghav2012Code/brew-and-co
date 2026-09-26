@@ -19,7 +19,7 @@ const buttonVariants = cva(
         ghost: "hover:bg-surface text-ink dark:text-dark-text-main dark:hover:bg-dark-subtle",
         link: "text-ink underline-offset-4 hover:underline dark:text-dark-text-main",
         editorial:
-          "bg-ink text-paper hover:bg-vermillion transition-all duration-200 dark:bg-dark-text-main dark:text-dark-canvas dark:hover:bg-dark-vermillion dark:hover:text-white active:scale-[0.99]",
+          "bg-ink text-paper hover:bg-vermillion transition-[color,background-color,border-color,opacity,transform] duration-200 dark:bg-dark-text-main dark:text-dark-canvas dark:hover:bg-dark-vermillion dark:hover:text-white active:scale-[0.99]",
       },
       size: {
         default: "h-11 px-6 py-2",

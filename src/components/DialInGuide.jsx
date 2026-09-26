@@ -114,7 +114,7 @@ export const DialInGuide = () => {
                   type="button"
                   onClick={() => setSelectedPresetId(preset.id)}
                   aria-pressed={isSelected}
-                  className={`p-4 rounded-xl border text-left transition-all ${
+                  className={`p-4 rounded-xl border text-left transition-colors ${
                     isSelected
                       ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-sm'
                       : 'border-hairline-strong dark:border-dark-hairline-strong bg-paper dark:bg-dark-surface text-ink dark:text-dark-text-main hover:border-ink'
@@ -188,7 +188,7 @@ export const DialInGuide = () => {
             {BREW_STEPS.map((step) => (
               <div
                 key={step.num}
-                className="p-6 rounded-2xl bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline flex flex-col justify-between space-y-4 text-left transition-all hover:border-ink dark:hover:border-dark-text-main"
+                className="p-6 rounded-2xl bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline flex flex-col justify-between space-y-4 text-left transition-colors hover:border-ink dark:hover:border-dark-text-main"
               >
                 <div className="space-y-3">
                   <div className="w-9 h-9 rounded-full bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas flex items-center justify-center font-serif font-bold text-base shadow-sm">

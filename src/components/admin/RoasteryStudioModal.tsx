@@ -122,7 +122,7 @@ export const RoasteryStudioModal: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveTab('brand')}
-            className={`px-4 py-2.5 text-xs font-mono font-bold border-b-2 flex items-center gap-2 transition-all cursor-pointer ${
+            className={`px-4 py-2.5 text-xs font-mono font-bold border-b-2 flex items-center gap-2 transition-colors cursor-pointer ${
               activeTab === 'brand'
                 ? 'border-vermillion text-vermillion dark:text-dark-vermillion'
                 : 'border-transparent text-ink-muted hover:text-ink'
@@ -135,7 +135,7 @@ export const RoasteryStudioModal: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveTab('catalog')}
-            className={`px-4 py-2.5 text-xs font-mono font-bold border-b-2 flex items-center gap-2 transition-all cursor-pointer ${
+            className={`px-4 py-2.5 text-xs font-mono font-bold border-b-2 flex items-center gap-2 transition-colors cursor-pointer ${
               activeTab === 'catalog'
                 ? 'border-vermillion text-vermillion dark:text-dark-vermillion'
                 : 'border-transparent text-ink-muted hover:text-ink'
@@ -213,7 +213,7 @@ export const RoasteryStudioModal: React.FC = () => {
                         onClick={() => {
                           setDraftProfile((prev) => ({ ...prev, accentColorId: key as any }));
                         }}
-                        className={`p-3 text-left border flex items-center justify-between gap-3 transition-all cursor-pointer ${
+                        className={`p-3 text-left border flex items-center justify-between gap-3 transition-colors cursor-pointer ${
                           isSelected
                             ? 'border-ink dark:border-dark-text-main bg-paper dark:bg-dark-canvas ring-1 ring-ink'
                             : 'border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-card hover:border-ink-muted'

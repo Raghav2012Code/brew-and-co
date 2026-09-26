@@ -178,7 +178,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
           <button
             onClick={() => setIsSubscribeModalOpen(false)}
             aria-label="Close modal"
-            className="min-h-[40px] min-w-[40px] flex items-center justify-center text-ink-muted hover:text-ink dark:hover:text-dark-text-main border border-transparent hover:border-hairline dark:hover:border-dark-hairline active:scale-95 transition-all cursor-pointer"
+            className="min-h-[40px] min-w-[40px] flex items-center justify-center text-ink-muted hover:text-ink dark:hover:text-dark-text-main border border-transparent hover:border-hairline dark:hover:border-dark-hairline active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -222,7 +222,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
                     aria-checked={isSelected}
                     type="button"
                     onClick={() => setSelectedFrequency(freq.id)}
-                    className={`relative p-3 text-left border flex flex-col justify-between transition-all cursor-pointer ${
+                    className={`relative p-3 text-left border flex flex-col justify-between transition-colors cursor-pointer ${
                       isSelected
                         ? 'border-ink dark:border-dark-text-main bg-surface dark:bg-dark-canvas shadow-xs ring-1 ring-ink dark:ring-dark-text-main'
                         : 'border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-subtle hover:border-ink-muted dark:hover:border-dark-text-muted'
@@ -273,7 +273,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
                     aria-checked={isSelected}
                     type="button"
                     onClick={() => setSelectedGrind(grind.id)}
-                    className={`w-full p-2.5 sm:p-3 text-left border flex items-center justify-between gap-3 transition-all cursor-pointer ${
+                    className={`w-full p-2.5 sm:p-3 text-left border flex items-center justify-between gap-3 transition-colors cursor-pointer ${
                       isSelected
                         ? 'border-ink dark:border-dark-text-main bg-surface dark:bg-dark-canvas ring-1 ring-ink dark:ring-dark-text-main'
                         : 'border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-subtle hover:border-ink-muted dark:hover:border-dark-text-muted'
@@ -330,7 +330,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
                     aria-checked={isSelected}
                     type="button"
                     onClick={() => setSelectedBagSize(bag.id)}
-                    className={`p-3 text-left border flex flex-col justify-between transition-all cursor-pointer ${
+                    className={`p-3 text-left border flex flex-col justify-between transition-colors cursor-pointer ${
                       isSelected
                         ? 'border-ink dark:border-dark-text-main bg-surface dark:bg-dark-canvas ring-1 ring-ink dark:ring-dark-text-main'
                         : 'border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-subtle hover:border-ink-muted dark:hover:border-dark-text-muted'
@@ -423,7 +423,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
           <button
             type="button"
             onClick={handleAddToCart}
-            className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion dark:hover:bg-dark-vermillion dark:hover:text-paper text-xs sm:text-sm font-bold flex items-center justify-center gap-2 active:scale-95 transition-all cursor-pointer shadow-md"
+            className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion dark:hover:bg-dark-vermillion dark:hover:text-paper text-xs sm:text-sm font-bold flex items-center justify-center gap-2 active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-md"
           >
             {isSubscription ? (
               <>

@@ -160,7 +160,7 @@ export const BaristaQueueModal: React.FC = () => {
             <button
               type="button"
               onClick={() => setActiveTab('barista')}
-              className={`px-4 py-2.5 text-xs font-mono font-bold border-b-2 flex items-center gap-2 transition-all cursor-pointer ${
+              className={`px-4 py-2.5 text-xs font-mono font-bold border-b-2 flex items-center gap-2 transition-colors cursor-pointer ${
                 activeTab === 'barista'
                   ? 'border-vermillion text-vermillion dark:text-dark-vermillion'
                   : 'border-transparent text-ink-muted dark:text-dark-text-muted hover:text-ink dark:hover:text-dark-text-main'
@@ -173,7 +173,7 @@ export const BaristaQueueModal: React.FC = () => {
             <button
               type="button"
               onClick={() => setActiveTab('roaster')}
-              className={`px-4 py-2.5 text-xs font-mono font-bold border-b-2 flex items-center gap-2 transition-all cursor-pointer ${
+              className={`px-4 py-2.5 text-xs font-mono font-bold border-b-2 flex items-center gap-2 transition-colors cursor-pointer ${
                 activeTab === 'roaster'
                   ? 'border-vermillion text-vermillion dark:text-dark-vermillion'
                   : 'border-transparent text-ink-muted dark:text-dark-text-muted hover:text-ink dark:hover:text-dark-text-main'
@@ -190,7 +190,7 @@ export const BaristaQueueModal: React.FC = () => {
                 <button
                   key={st}
                   onClick={() => setFilterStatus(st)}
-                  className={`px-2.5 py-1 text-[11px] font-mono capitalize transition-all cursor-pointer ${
+                  className={`px-2.5 py-1 text-[11px] font-mono capitalize transition-colors cursor-pointer ${
                     filterStatus === st
                       ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas font-bold'
                       : 'bg-surface dark:bg-dark-subtle text-ink-muted dark:text-dark-text-muted border border-hairline/60'
@@ -229,7 +229,7 @@ export const BaristaQueueModal: React.FC = () => {
                     return (
                       <div
                         key={order.orderId}
-                        className={`relative flex flex-col justify-between border transition-all duration-200 shadow-sm ${
+                        className={`relative flex flex-col justify-between border transition-[color,background-color,border-color,opacity,transform] duration-200 shadow-sm ${
                           isCompleted
                             ? 'border-hairline dark:border-dark-hairline bg-paper/60 dark:bg-dark-card/60 opacity-80'
                             : isReady
@@ -318,7 +318,7 @@ export const BaristaQueueModal: React.FC = () => {
                             <button
                               type="button"
                               onClick={() => handleStatusAdvance(order.orderId, order.status)}
-                              className={`w-full min-h-[38px] px-3 py-1.5 text-xs font-mono font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer shadow-xs ${
+                              className={`w-full min-h-[38px] px-3 py-1.5 text-xs font-mono font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-xs ${
                                 isReceived
                                   ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion'
                                   : isBrewing

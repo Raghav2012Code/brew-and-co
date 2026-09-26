@@ -111,7 +111,7 @@ export const ManageSubscriptionDrawer: React.FC = () => {
                 return (
                   <div
                     key={sub.id}
-                    className={`p-4 border transition-all ${
+                    className={`p-4 border transition-[color,background-color,border-color,opacity,transform] ${
                       isPaused
                         ? 'border-hairline/60 dark:border-dark-hairline/60 bg-surface/50 dark:bg-dark-card/50 opacity-80'
                         : 'border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-card shadow-xs'
@@ -242,7 +242,7 @@ export const ManageSubscriptionDrawer: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => handlePauseToggle(sub)}
-                          className="min-h-[34px] px-2.5 py-1 text-xs font-mono font-medium border border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas hover:border-ink dark:hover:border-dark-text-main flex items-center gap-1.5 transition-all cursor-pointer"
+                          className="min-h-[34px] px-2.5 py-1 text-xs font-mono font-medium border border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas hover:border-ink dark:hover:border-dark-text-main flex items-center gap-1.5 transition-colors cursor-pointer"
                         >
                           {isPaused ? (
                             <>
@@ -260,7 +260,7 @@ export const ManageSubscriptionDrawer: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => setEditingSubId(isEditing ? null : sub.id)}
-                          className="min-h-[34px] px-2.5 py-1 text-xs font-mono font-medium border border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas hover:border-ink dark:hover:border-dark-text-main flex items-center gap-1.5 transition-all cursor-pointer"
+                          className="min-h-[34px] px-2.5 py-1 text-xs font-mono font-medium border border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas hover:border-ink dark:hover:border-dark-text-main flex items-center gap-1.5 transition-colors cursor-pointer"
                         >
                           <RotateCcw className="w-3 h-3" />
                           <span>{isEditing ? 'Close' : 'Adjust'}</span>

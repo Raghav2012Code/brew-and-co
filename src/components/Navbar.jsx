@@ -47,7 +47,7 @@ export const Navbar = memo(() => {
             <button
               onClick={() => setIsBaristaModalOpen(true)}
               aria-label="Open Barista KDS and Roastery Operations Station"
-              className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-none border border-hairline-strong dark:border-dark-hairline-strong bg-paper dark:bg-dark-canvas text-xs text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main transition-all cursor-pointer shadow-2xs font-mono"
+              className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-none border border-hairline-strong dark:border-dark-hairline-strong bg-paper dark:bg-dark-canvas text-xs text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main transition-colors cursor-pointer shadow-2xs font-mono"
             >
               <Coffee className="w-3.5 h-3.5 text-vermillion dark:text-dark-vermillion" />
               <span>Barista Rail</span>
@@ -60,7 +60,7 @@ export const Navbar = memo(() => {
             <button
               onClick={() => setIsRoasteryStudioOpen(true)}
               aria-label="Open Roastery SaaS Studio Settings"
-              className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-none border border-hairline-strong dark:border-dark-hairline-strong bg-paper dark:bg-dark-canvas text-xs text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main transition-all cursor-pointer shadow-2xs font-mono"
+              className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-none border border-hairline-strong dark:border-dark-hairline-strong bg-paper dark:bg-dark-canvas text-xs text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main transition-colors cursor-pointer shadow-2xs font-mono"
             >
               <Settings className="w-3.5 h-3.5" />
               <span>Studio</span>
@@ -70,7 +70,7 @@ export const Navbar = memo(() => {
             <button
               onClick={toggleTheme}
               aria-label={effectiveTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-              className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-none border border-hairline-strong dark:border-dark-hairline-strong bg-paper dark:bg-dark-canvas text-xs text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main transition-all cursor-pointer shadow-2xs"
+              className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-none border border-hairline-strong dark:border-dark-hairline-strong bg-paper dark:bg-dark-canvas text-xs text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main transition-colors cursor-pointer shadow-2xs"
             >
               {effectiveTheme === 'dark' ? (
                 <>
@@ -124,7 +124,7 @@ export const Navbar = memo(() => {
             <button
               onClick={() => setIsManageDrawerOpen(true)}
               aria-label={`View Subscriptions: ${activeSubscriptionCount} active plans`}
-              className="hidden lg:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-full bg-surface dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main active:scale-95 transition-all"
+              className="hidden lg:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-full bg-surface dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main active:scale-95 transition-[color,background-color,border-color,opacity,transform]"
             >
               <Package className="w-3.5 h-3.5 text-vermillion" aria-hidden="true" />
               <span>Vault: {activeSubscriptionCount}</span>
@@ -135,7 +135,7 @@ export const Navbar = memo(() => {
           <button
             onClick={() => setIsLoyaltyModalOpen(true)}
             aria-label={`View Tasting Pass: ${loyaltyStamps} of 6 stamps completed`}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-full bg-surface dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main active:scale-95 transition-all"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-full bg-surface dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main active:scale-95 transition-[color,background-color,border-color,opacity,transform]"
           >
             <Sparkles className="w-3.5 h-3.5 text-vermillion" aria-hidden="true" />
             <span>Pass: {loyaltyStamps}/6</span>
@@ -145,7 +145,7 @@ export const Navbar = memo(() => {
           <button
             onClick={() => setIsCartOpen(true)}
             aria-label={`View Bag: ${cartCount} items`}
-            className="min-h-[42px] min-w-[42px] flex items-center justify-center gap-2 px-3.5 sm:px-4 py-2 rounded-lg bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion dark:hover:bg-vermillion dark:hover:text-paper text-xs sm:text-sm font-semibold shadow-sm active:scale-95 transition-all cursor-pointer"
+            className="min-h-[42px] min-w-[42px] flex items-center justify-center gap-2 px-3.5 sm:px-4 py-2 rounded-lg bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion dark:hover:bg-vermillion dark:hover:text-paper text-xs sm:text-sm font-semibold shadow-sm active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
           >
             <ShoppingBag className="w-4 h-4" aria-hidden="true" />
             <span className="hidden xs:inline">Bag</span>
@@ -158,7 +158,7 @@ export const Navbar = memo(() => {
           <button
             type="button"
             onClick={toggleMobile}
-            className="md:hidden min-h-[42px] min-w-[42px] flex items-center justify-center p-2.5 rounded-lg border border-hairline-strong dark:border-dark-hairline-strong bg-surface dark:bg-dark-surface text-ink dark:text-dark-text-main active:scale-95 transition-all cursor-pointer"
+            className="md:hidden min-h-[42px] min-w-[42px] flex items-center justify-center p-2.5 rounded-lg border border-hairline-strong dark:border-dark-hairline-strong bg-surface dark:bg-dark-surface text-ink dark:text-dark-text-main active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
             aria-label="Toggle Navigation Menu"
             aria-expanded={mobileOpen}
           >

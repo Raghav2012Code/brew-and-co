@@ -58,7 +58,7 @@ export const RoasterySection: React.FC = () => {
           {/* Interactive Palate Quiz Launcher */}
           <button
             onClick={() => setIsMatchmakerOpen(true)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-vermillion dark:bg-dark-vermillion text-paper dark:text-dark-canvas text-xs font-mono font-bold hover:opacity-90 active:scale-95 transition-all cursor-pointer shadow-xs"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-vermillion dark:bg-dark-vermillion text-paper dark:text-dark-canvas text-xs font-mono font-bold hover:opacity-90 active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-xs"
           >
             <Compass className="w-3.5 h-3.5 animate-spin-slow" />
             <span>Find Your Roast (30s Quiz)</span>
@@ -68,7 +68,7 @@ export const RoasterySection: React.FC = () => {
             <button
               onClick={() => setIsManageDrawerOpen(true)}
               aria-label="Manage your active subscriptions"
-              className="inline-flex items-center gap-2 px-4 py-2.5 border border-ink dark:border-dark-text-main bg-surface dark:bg-dark-card text-xs font-mono font-bold text-ink dark:text-dark-text-main hover:bg-ink hover:text-paper dark:hover:bg-dark-text-main dark:hover:text-dark-canvas active:scale-95 transition-all cursor-pointer shadow-xs"
+              className="inline-flex items-center gap-2 px-4 py-2.5 border border-ink dark:border-dark-text-main bg-surface dark:bg-dark-card text-xs font-mono font-bold text-ink dark:text-dark-text-main hover:bg-ink hover:text-paper dark:hover:bg-dark-text-main dark:hover:text-dark-canvas active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-xs"
             >
               <Package className="w-3.5 h-3.5 text-vermillion dark:text-dark-vermillion" />
               <span>Subscription Vault ({activeSubscriptionCount} Active)</span>
@@ -161,7 +161,7 @@ export const RoasterySection: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => setFilterRoast(tab.id as any)}
-              className={`px-3 py-1.5 text-xs font-mono font-medium transition-all shrink-0 cursor-pointer ${
+              className={`px-3 py-1.5 text-xs font-mono font-medium transition-colors shrink-0 cursor-pointer ${
                 isSelected
                   ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-xs font-bold'
                   : 'bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
@@ -183,7 +183,7 @@ export const RoasterySection: React.FC = () => {
           return (
             <article
               key={bean.id}
-              className="group flex flex-col justify-between bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline hover:border-ink dark:hover:border-dark-text-main transition-all duration-200 overflow-hidden shadow-xs hover:shadow-md"
+              className="group flex flex-col justify-between bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline hover:border-ink dark:hover:border-dark-text-main transition-colors duration-200 overflow-hidden shadow-xs hover:shadow-md"
             >
               {/* Top Image & Badge Header */}
               <div>
@@ -280,7 +280,7 @@ export const RoasterySection: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => openSubscriptionModalFor(bean, 'biweekly')}
-                    className="min-h-[42px] px-3 py-2 bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion dark:hover:bg-dark-vermillion dark:hover:text-paper text-xs font-bold font-sans flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer shadow-xs"
+                    className="min-h-[42px] px-3 py-2 bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion dark:hover:bg-dark-vermillion dark:hover:text-paper text-xs font-bold font-sans flex items-center justify-center gap-1.5 active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-xs"
                   >
                     <Zap className="w-3.5 h-3.5 fill-current text-vermillion dark:text-dark-canvas" />
                     <span>Subscribe</span>
@@ -289,7 +289,7 @@ export const RoasterySection: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => openSubscriptionModalFor(bean, 'onetime')}
-                    className="min-h-[42px] px-3 py-2 bg-paper dark:bg-dark-subtle border border-hairline dark:border-dark-hairline hover:border-ink dark:hover:border-dark-text-main text-ink dark:text-dark-text-main text-xs font-bold font-sans active:scale-95 transition-all cursor-pointer"
+                    className="min-h-[42px] px-3 py-2 bg-paper dark:bg-dark-subtle border border-hairline dark:border-dark-hairline hover:border-ink dark:hover:border-dark-text-main text-ink dark:text-dark-text-main text-xs font-bold font-sans active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
                   >
                     <span>One-Time Bag</span>
                   </button>

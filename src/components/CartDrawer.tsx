@@ -198,7 +198,7 @@ export const CartDrawer: React.FC = () => {
                           type="button"
                           onClick={() => handleRemove(item.id, item.name)}
                           aria-label={`Remove ${item.name} from bag`}
-                          className="min-h-[36px] min-w-[36px] flex items-center justify-center text-ink-faint hover:text-vermillion dark:hover:text-dark-vermillion active:scale-90 transition-all cursor-pointer"
+                          className="min-h-[36px] min-w-[36px] flex items-center justify-center text-ink-faint hover:text-vermillion dark:hover:text-dark-vermillion active:scale-90 transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -325,7 +325,7 @@ export const CartDrawer: React.FC = () => {
                         onClick={() => {
                           setTipPercent(pct);
                         }}
-                        className={`min-h-[38px] py-2 border text-xs font-mono font-semibold active:scale-95 transition-all cursor-pointer ${
+                        className={`min-h-[38px] py-2 border text-xs font-mono font-semibold active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer ${
                           isSelected
                             ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-sm'
                             : 'border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'

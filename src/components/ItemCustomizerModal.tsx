@@ -157,7 +157,7 @@ export const ItemCustomizerModal: React.FC = () => {
                     key={s.id}
                     type="button"
                     onClick={() => setSelectedSize(s)}
-                    className={`p-3 border text-left active:scale-95 transition-all cursor-pointer ${
+                    className={`p-3 border text-left active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer ${
                       isSelected
                         ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-sm font-semibold'
                         : 'border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
@@ -186,7 +186,7 @@ export const ItemCustomizerModal: React.FC = () => {
                     key={t.id}
                     type="button"
                     onClick={() => setSelectedTemp(t.id)}
-                    className={`min-h-[42px] py-2.5 px-4 border text-center font-mono text-xs active:scale-95 transition-all cursor-pointer ${
+                    className={`min-h-[42px] py-2.5 px-4 border text-center font-mono text-xs active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer ${
                       isSelected
                         ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-sm font-semibold'
                         : 'border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
@@ -213,7 +213,7 @@ export const ItemCustomizerModal: React.FC = () => {
                       key={m.id}
                       type="button"
                       onClick={() => setSelectedMilk(m)}
-                      className={`min-h-[42px] p-2.5 border text-left active:scale-95 transition-all cursor-pointer ${
+                      className={`min-h-[42px] p-2.5 border text-left active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer ${
                         isSelected
                           ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-sm font-semibold'
                           : 'border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
@@ -243,7 +243,7 @@ export const ItemCustomizerModal: React.FC = () => {
                     key={sh.id}
                     type="button"
                     onClick={() => setSelectedShot(sh)}
-                    className={`min-h-[42px] p-2.5 border text-left active:scale-95 transition-all cursor-pointer ${
+                    className={`min-h-[42px] p-2.5 border text-left active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer ${
                       isSelected
                         ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-sm font-semibold'
                         : 'border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
@@ -272,7 +272,7 @@ export const ItemCustomizerModal: React.FC = () => {
                     key={sy.id}
                     type="button"
                     onClick={() => setSelectedSyrup(sy)}
-                    className={`min-h-[42px] p-2.5 border text-left active:scale-95 transition-all cursor-pointer ${
+                    className={`min-h-[42px] p-2.5 border text-left active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer ${
                       isSelected
                         ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-sm font-semibold'
                         : 'border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
@@ -301,7 +301,7 @@ export const ItemCustomizerModal: React.FC = () => {
                     key={sw.id}
                     type="button"
                     onClick={() => setSelectedSweetness(sw)}
-                    className={`min-h-[42px] p-2.5 border text-center font-mono text-xs active:scale-95 transition-all cursor-pointer ${
+                    className={`min-h-[42px] p-2.5 border text-center font-mono text-xs active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer ${
                       isSelected
                         ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-sm font-semibold'
                         : 'border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'

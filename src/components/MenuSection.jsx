@@ -109,7 +109,7 @@ export const MenuSection = () => {
                   aria-selected={isActive}
                   aria-label={`Category ${cat.name}`}
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`min-h-[40px] px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap active:scale-95 transition-all cursor-pointer ${
+                  className={`min-h-[40px] px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap active:scale-95 transition-[color,background-color,border-color,opacity,transform] cursor-pointer ${
                     isActive
                       ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-sm'
                       : 'bg-surface dark:bg-dark-card text-ink-muted dark:text-dark-text-muted hover:text-ink dark:hover:text-dark-text-main border border-hairline-strong dark:border-dark-hairline-strong'
@@ -136,7 +136,7 @@ export const MenuSection = () => {
                   key={f.id}
                   onClick={() => toggleFilter(f.id)}
                   aria-pressed={isSelected}
-                  className={`min-h-[36px] px-3 py-1.5 rounded-lg text-xs font-medium border active:scale-95 transition-all ${
+                  className={`min-h-[36px] px-3 py-1.5 rounded-lg text-xs font-medium border active:scale-95 transition-[color,background-color,border-color,opacity,transform] ${
                     isSelected
                       ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas'
                       : 'border-hairline-strong dark:border-dark-hairline-strong bg-paper dark:bg-dark-canvas text-ink-muted dark:text-dark-text-muted hover:border-ink'
@@ -152,7 +152,7 @@ export const MenuSection = () => {
             <button
               onClick={() => setShowOnlyFavorites(!showOnlyFavorites)}
               aria-pressed={showOnlyFavorites}
-              className={`min-h-[36px] flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border active:scale-95 transition-all ${
+              className={`min-h-[36px] flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border active:scale-95 transition-[color,background-color,border-color,opacity,transform] ${
                 showOnlyFavorites
                   ? 'border-vermillion bg-vermillion text-paper'
                   : 'border-hairline-strong dark:border-dark-hairline-strong bg-paper dark:bg-dark-canvas text-ink-muted dark:text-dark-text-muted'
