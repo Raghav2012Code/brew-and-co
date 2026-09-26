@@ -3,8 +3,10 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* Canonical palette (Hallmark D1). One palette for the whole app:
-   paper #FBF9F5 · surface #F3EFE6 · ink #1A1816 · vermillion #C84B31.
-   Every colour in the app resolves through one of these tokens. */
+   paper #FBF9F5 · surface #F3EFE6 · ink #1A1816 · vermillion #BC3010.
+   Every colour in the app resolves through one of these tokens.
+   Vermillion and the faint inks were deepened from their first pass so
+   that small text clears 4.5:1 on both paper and surface. */
 :root {
   --background: #FBF9F5;
   --foreground: #1A1816;
@@ -23,7 +25,6 @@
   --destructive: #C62828;
   --destructive-foreground: #FFFFFF;
   --success: #2E7D32;
-  --rating: #E5A93C;
   --border: #E8E4DC;
   --input: #E8E4DC;
   --ring: #1A1816;
@@ -60,7 +61,6 @@
   --destructive: #F87171;
   --destructive-foreground: #11100F;
   --success: #34D399;
-  --rating: #FBBF24;
   --border: #262420;
   --input: #262420;
   --ring: #EAE6DF;
