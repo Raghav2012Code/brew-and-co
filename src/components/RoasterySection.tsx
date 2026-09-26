@@ -175,7 +175,7 @@ export const RoasterySection: React.FC = () => {
                   </div>
 
                   {/* Cupping Score Pill */}
-                  <div className="absolute bottom-3 right-3 px-2.5 py-1 bg-ink/90 dark:bg-dark-card/90 text-paper dark:text-dark-text-main border border-hairline/40 text-xs font-mono font-bold flex items-center gap-1 shadow-sm">
+                  <div className="absolute bottom-3 right-3 px-2.5 py-1 bg-ink/90 dark:bg-dark-card/90 text-paper dark:text-dark-text-main border border-hairline/40 text-xs font-mono tabular-nums font-bold flex items-center gap-1 shadow-sm">
                     <Sparkles className="w-3 h-3 text-vermillion dark:text-dark-vermillion" />
                     <span>Cupping {bean.cuppingScore}</span>
                   </div>
@@ -233,7 +233,7 @@ export const RoasterySection: React.FC = () => {
 
               {/* Card Footer: Pricing & Action Steppers */}
               <div className="p-5 sm:p-6 pt-0 border-t border-hairline/60 dark:border-dark-hairline/60 mt-auto">
-                <div className="flex items-baseline justify-between py-3 font-mono">
+                <div className="flex items-baseline justify-between py-3 font-mono tabular-nums">
                   <div>
                     <span className="text-xs text-ink-muted dark:text-dark-text-muted">From </span>
                     <span className="text-lg font-bold text-vermillion dark:text-dark-vermillion">

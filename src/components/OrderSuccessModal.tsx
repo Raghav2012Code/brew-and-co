@@ -101,7 +101,7 @@ export const OrderSuccessModal: React.FC = () => {
               <Clock className="w-4 h-4 text-vermillion dark:text-dark-vermillion" aria-hidden="true" />
               <span>Estimated Time:</span>
             </div>
-            <span className="font-mono font-bold text-xl text-vermillion dark:text-dark-vermillion">
+            <span className="font-mono tabular-nums font-bold text-xl text-vermillion dark:text-dark-vermillion">
               {prepStage === 3 ? 'Ready!' : formattedTime}
             </span>
           </div>
@@ -142,7 +142,7 @@ export const OrderSuccessModal: React.FC = () => {
           </div>
 
           {/* Receipt Breakdown */}
-          <div className="border-t border-hairline dark:border-dark-hairline pt-3 space-y-1.5 text-xs font-mono text-ink-muted dark:text-dark-text-muted">
+          <div className="border-t border-hairline dark:border-dark-hairline pt-3 space-y-1.5 text-xs font-mono tabular-nums text-ink-muted dark:text-dark-text-muted">
             <div className="flex justify-between">
               <span>Subtotal:</span>
               <span className="text-ink dark:text-dark-text-main">${subtotal.toFixed(2)}</span>

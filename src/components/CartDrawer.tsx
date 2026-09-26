@@ -185,7 +185,7 @@ export const CartDrawer: React.FC = () => {
                             <h4 className="font-serif font-bold text-base text-ink dark:text-dark-text-main leading-snug">
                               {item.name}
                             </h4>
-                            <p className="text-xs font-mono font-semibold text-vermillion dark:text-dark-vermillion">
+                            <p className="text-xs font-mono tabular-nums font-semibold text-vermillion dark:text-dark-vermillion">
                               ${(item.unitPrice * item.quantity).toFixed(2)}
                             </p>
                           </div>
@@ -308,7 +308,7 @@ export const CartDrawer: React.FC = () => {
 
               {/* Tip Selector */}
               <div className="space-y-2 pt-2">
-                <div className="flex justify-between text-xs font-mono font-medium text-ink-muted dark:text-dark-text-muted">
+                <div className="flex justify-between text-xs font-mono tabular-nums font-medium text-ink-muted dark:text-dark-text-muted">
                   <span>Add Tip:</span>
                   <span className="font-semibold text-ink dark:text-dark-text-main">${calculatedTip.toFixed(2)}</span>
                 </div>
@@ -352,7 +352,7 @@ export const CartDrawer: React.FC = () => {
 
               {/* Drawer Footer & Checkout (With Safe Area Inset) */}
               <div className="p-4 sm:p-6 bg-surface dark:bg-dark-card border-t border-hairline dark:border-dark-hairline space-y-3.5 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
-                <div className="space-y-1.5 text-xs text-ink-muted dark:text-dark-text-muted font-mono">
+                <div className="space-y-1.5 text-xs text-ink-muted dark:text-dark-text-muted font-mono tabular-nums">
                   <div className="flex justify-between">
                     <span>Subtotal:</span>
                     <span className="font-medium text-ink dark:text-dark-text-main">{formatPrice(rawSubtotal)}</span>

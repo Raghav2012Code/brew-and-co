@@ -64,7 +64,7 @@ export const ProductCard: React.FC<{ item: MenuItem }> = memo(({ item }) => {
           <h3 className="font-serif font-bold text-base sm:text-lg text-ink dark:text-dark-text-main group-hover:text-vermillion dark:group-hover:text-dark-vermillion transition-colors leading-snug">
             {item.name}
           </h3>
-          <span className="font-mono font-semibold text-sm sm:text-base text-ink dark:text-dark-text-main shrink-0">
+          <span className="font-mono tabular-nums font-semibold text-sm sm:text-base text-ink dark:text-dark-text-main shrink-0">
             ${item.price.toFixed(2)}
           </span>
         </div>
