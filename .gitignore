@@ -25,3 +25,7 @@ dist-ssr
 *.sw?
 
 .vercel
+
+# Agent tooling output (screenshots, traces)
+.playwright-mcp
+.hallmark
