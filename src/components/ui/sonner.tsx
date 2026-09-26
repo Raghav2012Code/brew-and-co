@@ -14,7 +14,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
           actionButton:
             "group-[.toast]:bg-ink group-[.toast]:text-paper font-mono text-xs rounded-none",
           cancelButton:
-            "group-[.toast]:bg-paper-dim group-[.toast]:text-ink-muted font-mono text-xs rounded-none",
+            "group-[.toast]:bg-surface group-[.toast]:text-ink-muted font-mono text-xs rounded-none",
         },
       }}
       {...props}

@@ -28,26 +28,26 @@ export class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-[#FBF9F5] text-[#1A1816] flex flex-col items-center justify-center p-6 text-center">
-          <div className="max-w-md w-full p-8 rounded-2xl bg-[#F3EFE6] border border-[#E0DACB] space-y-4 shadow-lg">
-            <div className="w-12 h-12 rounded-full bg-[#C84B31] text-white flex items-center justify-center mx-auto text-xl font-bold font-serif shadow-sm">
+        <div className="min-h-screen bg-paper text-ink flex flex-col items-center justify-center p-6 text-center">
+          <div className="max-w-md w-full p-8 rounded-2xl bg-surface border border-hairline-strong space-y-4 shadow-lg">
+            <div className="w-12 h-12 rounded-full bg-vermillion text-white flex items-center justify-center mx-auto text-xl font-bold font-serif shadow-sm">
               !
             </div>
-            <h1 className="font-serif font-bold text-2xl text-[#1A1816]">
+            <h1 className="font-serif font-bold text-2xl text-ink">
               Brew & Co. Roastery
             </h1>
-            <p className="text-xs text-[#666056] leading-relaxed">
+            <p className="text-xs text-ink-muted leading-relaxed">
               We encountered a minor glitch while reading cached local data. Click below to clear stored state and reload the website.
             </p>
             {this.state.error?.message && (
-              <div className="p-3 bg-[#E8E4DC]/60 rounded-lg text-[11px] font-mono text-left text-[#C84B31] overflow-x-auto max-h-24">
+              <div className="p-3 bg-surface-hover/60 rounded-lg text-[11px] font-mono text-left text-vermillion overflow-x-auto max-h-24">
                 {this.state.error.message}
               </div>
             )}
             <div className="pt-2">
               <button
                 onClick={this.handleReset}
-                className="w-full py-3 px-4 rounded-lg bg-[#1A1816] text-[#FBF9F5] hover:bg-[#C84B31] text-xs font-semibold transition-colors cursor-pointer"
+                className="w-full py-3 px-4 rounded-lg bg-ink text-paper hover:bg-vermillion text-xs font-semibold transition-colors cursor-pointer"
               >
                 Reset & Reload Website
               </button>

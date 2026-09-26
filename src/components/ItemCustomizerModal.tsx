@@ -120,7 +120,7 @@ export const ItemCustomizerModal: React.FC = () => {
     <Dialog open={Boolean(customizerItem)} onOpenChange={(open) => !open && setCustomizerItem(null)}>
       <DialogContent className="max-w-lg p-0 bg-paper dark:bg-dark-subtle border border-hairline dark:border-dark-hairline flex flex-col max-h-[90vh] overflow-hidden">
         {/* Modal Header */}
-        <DialogHeader className="p-4 sm:p-6 bg-paper-dim dark:bg-dark-card border-b border-hairline dark:border-dark-hairline space-y-0">
+        <DialogHeader className="p-4 sm:p-6 bg-surface dark:bg-dark-card border-b border-hairline dark:border-dark-hairline space-y-0">
           <div className="flex items-center gap-3 sm:gap-4 pr-6">
             <img
               src={customizerItem.image}
@@ -160,7 +160,7 @@ export const ItemCustomizerModal: React.FC = () => {
                     className={`p-3 border text-left active:scale-95 transition-all cursor-pointer ${
                       isSelected
                         ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-sm font-semibold'
-                        : 'border-hairline dark:border-dark-hairline bg-paper-dim dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
+                        : 'border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
                     }`}
                   >
                     <p className="text-xs sm:text-sm font-medium">{s.name}</p>
@@ -189,7 +189,7 @@ export const ItemCustomizerModal: React.FC = () => {
                     className={`min-h-[42px] py-2.5 px-4 border text-center font-mono text-xs active:scale-95 transition-all cursor-pointer ${
                       isSelected
                         ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-sm font-semibold'
-                        : 'border-hairline dark:border-dark-hairline bg-paper-dim dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
+                        : 'border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
                     }`}
                   >
                     {t.name}
@@ -216,7 +216,7 @@ export const ItemCustomizerModal: React.FC = () => {
                       className={`min-h-[42px] p-2.5 border text-left active:scale-95 transition-all cursor-pointer ${
                         isSelected
                           ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-sm font-semibold'
-                          : 'border-hairline dark:border-dark-hairline bg-paper-dim dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
+                          : 'border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
                       }`}
                     >
                       <span className="block text-xs font-medium">{m.name}</span>
@@ -246,7 +246,7 @@ export const ItemCustomizerModal: React.FC = () => {
                     className={`min-h-[42px] p-2.5 border text-left active:scale-95 transition-all cursor-pointer ${
                       isSelected
                         ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-sm font-semibold'
-                        : 'border-hairline dark:border-dark-hairline bg-paper-dim dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
+                        : 'border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
                     }`}
                   >
                     <span className="block text-xs font-medium">{sh.name}</span>
@@ -275,7 +275,7 @@ export const ItemCustomizerModal: React.FC = () => {
                     className={`min-h-[42px] p-2.5 border text-left active:scale-95 transition-all cursor-pointer ${
                       isSelected
                         ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-sm font-semibold'
-                        : 'border-hairline dark:border-dark-hairline bg-paper-dim dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
+                        : 'border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
                     }`}
                   >
                     <span className="block text-xs font-medium">{sy.name}</span>
@@ -304,7 +304,7 @@ export const ItemCustomizerModal: React.FC = () => {
                     className={`min-h-[42px] p-2.5 border text-center font-mono text-xs active:scale-95 transition-all cursor-pointer ${
                       isSelected
                         ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-sm font-semibold'
-                        : 'border-hairline dark:border-dark-hairline bg-paper-dim dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
+                        : 'border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
                     }`}
                   >
                     {sw.name}
@@ -331,14 +331,14 @@ export const ItemCustomizerModal: React.FC = () => {
               value={specialNotes}
               onChange={(e) => setSpecialNotes(e.target.value.slice(0, 150))}
               placeholder="e.g. extra hot, light ice, oat milk foam..."
-              className="w-full min-h-[42px] p-3 bg-paper-dim dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main placeholder:text-ink-faint text-xs focus:outline-none focus:border-ink dark:focus:border-dark-text-main"
+              className="w-full min-h-[42px] p-3 bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main placeholder:text-ink-faint text-xs focus:outline-none focus:border-ink dark:focus:border-dark-text-main"
             />
           </div>
 
         </div>
 
         {/* Modal Footer: Stepper & Add Button */}
-        <div className="p-4 sm:p-5 bg-paper-dim dark:bg-dark-card border-t border-hairline dark:border-dark-hairline flex items-center justify-between gap-3 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
+        <div className="p-4 sm:p-5 bg-surface dark:bg-dark-card border-t border-hairline dark:border-dark-hairline flex items-center justify-between gap-3 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
           {/* Quantity Stepper */}
           <div className="flex items-center border border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas">
             <button

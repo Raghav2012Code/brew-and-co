@@ -110,7 +110,7 @@ export const CartDrawer: React.FC = () => {
         className="w-full sm:max-w-md p-0 bg-paper dark:bg-dark-subtle border-l border-hairline dark:border-dark-hairline flex flex-col justify-between"
       >
         {/* Header */}
-        <SheetHeader className="p-4 sm:p-6 bg-paper-dim dark:bg-dark-card border-b border-hairline dark:border-dark-hairline flex-row items-center justify-between space-y-0">
+        <SheetHeader className="p-4 sm:p-6 bg-surface dark:bg-dark-card border-b border-hairline dark:border-dark-hairline flex-row items-center justify-between space-y-0">
           <div className="flex items-center gap-2.5">
             <ShoppingBag className="w-5 h-5 text-vermillion dark:text-dark-vermillion" aria-hidden="true" />
             <SheetTitle className="font-serif font-bold text-lg sm:text-xl text-ink dark:text-dark-text-main">
@@ -167,8 +167,8 @@ export const CartDrawer: React.FC = () => {
                       key={item.id}
                       className={`p-3.5 sm:p-4 border space-y-2.5 ${
                         isItemSub
-                          ? 'bg-paper-dim dark:bg-dark-card border-vermillion/40 dark:border-dark-vermillion/40 shadow-xs'
-                          : 'bg-paper-dim dark:bg-dark-card border-hairline dark:border-dark-hairline'
+                          ? 'bg-surface dark:bg-dark-card border-vermillion/40 dark:border-dark-vermillion/40 shadow-xs'
+                          : 'bg-surface dark:bg-dark-card border-hairline dark:border-dark-hairline'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-3">
@@ -288,7 +288,7 @@ export const CartDrawer: React.FC = () => {
 
               {/* Free Drink Reward Toggle */}
               {freeDrinksAvailable > 0 && (
-                <div className="p-3.5 bg-paper-dim dark:bg-dark-card border border-vermillion/40 dark:border-dark-vermillion/40 flex items-center justify-between">
+                <div className="p-3.5 bg-surface dark:bg-dark-card border border-vermillion/40 dark:border-dark-vermillion/40 flex items-center justify-between">
                   <div>
                     <p className="text-xs font-bold text-ink dark:text-dark-text-main flex items-center gap-1.5 font-mono">
                       <Sparkles className="w-3.5 h-3.5 text-vermillion dark:text-dark-vermillion" aria-hidden="true" />
@@ -328,7 +328,7 @@ export const CartDrawer: React.FC = () => {
                         className={`min-h-[38px] py-2 border text-xs font-mono font-semibold active:scale-95 transition-all cursor-pointer ${
                           isSelected
                             ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-sm'
-                            : 'border-hairline dark:border-dark-hairline bg-paper-dim dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
+                            : 'border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
                         }`}
                       >
                         {pct === 0 ? 'None' : `${pct}%`}
@@ -349,12 +349,12 @@ export const CartDrawer: React.FC = () => {
                   value={pickupName}
                   onChange={(e) => setPickupName(e.target.value)}
                   placeholder="Your full name"
-                  className="w-full min-h-[42px] p-3 bg-paper-dim dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main placeholder:text-ink-faint font-sans text-xs focus:outline-none focus:border-ink dark:focus:border-dark-text-main"
+                  className="w-full min-h-[42px] p-3 bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main placeholder:text-ink-faint font-sans text-xs focus:outline-none focus:border-ink dark:focus:border-dark-text-main"
                 />
               </div>
 
               {/* Drawer Footer & Checkout (With Safe Area Inset) */}
-              <div className="p-4 sm:p-6 bg-paper-dim dark:bg-dark-card border-t border-hairline dark:border-dark-hairline space-y-3.5 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
+              <div className="p-4 sm:p-6 bg-surface dark:bg-dark-card border-t border-hairline dark:border-dark-hairline space-y-3.5 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
                 <div className="space-y-1.5 text-xs text-ink-muted dark:text-dark-text-muted font-mono">
                   <div className="flex justify-between">
                     <span>Subtotal:</span>

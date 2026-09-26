@@ -71,35 +71,35 @@ export const DialInGuide = () => {
   const activePreset = CUP_PRESETS.find((p) => p.id === selectedPresetId) || CUP_PRESETS[0];
 
   return (
-    <section id="brew-guide" className="border-b border-[#E8E4DC] dark:border-[#262420] bg-[#FBF9F5] dark:bg-[#11100F] py-14 sm:py-20 scroll-mt-16 text-left transition-colors">
+    <section id="brew-guide" className="border-b border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas py-14 sm:py-20 scroll-mt-16 text-left transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-12">
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F3EFE6] dark:bg-[#1C1B18] border border-[#E0DACB] dark:border-[#302D27] text-xs font-semibold text-[#C84B31]">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-xs font-semibold text-vermillion">
             <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
             <span>Home Brew Guide</span>
           </div>
-          <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1816] dark:text-[#EAE6DF] tracking-tight">
+          <h2 className="font-serif text-3xl sm:text-4xl font-bold text-ink dark:text-dark-text-main tracking-tight">
             How to Brew at Home
           </h2>
-          <p className="text-sm sm:text-base text-[#666056] dark:text-[#A09A8E] leading-relaxed">
+          <p className="text-sm sm:text-base text-ink-muted dark:text-dark-text-muted leading-relaxed">
             A simple guide to making delicious coffee without special equipment. Choose your cup size below for the exact measurements.
           </p>
         </div>
 
         {/* Interactive Cup Size Selector & Quick Recipe Card */}
-        <div className="p-6 sm:p-8 rounded-2xl bg-[#F3EFE6] dark:bg-[#161513] border border-[#E8E4DC] dark:border-[#262420] shadow-sm space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#E0DACB] dark:border-[#262420] pb-4">
+        <div className="p-6 sm:p-8 rounded-2xl bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-hairline-strong dark:border-dark-hairline pb-4">
             <div>
-              <span className="text-xs font-semibold uppercase tracking-wider text-[#C84B31] block">
+              <span className="text-xs font-semibold uppercase tracking-wider text-vermillion block">
                 1. Choose Serving Size
               </span>
-              <h3 className="font-serif font-bold text-xl text-[#1A1816] dark:text-[#EAE6DF]">
+              <h3 className="font-serif font-bold text-xl text-ink dark:text-dark-text-main">
                 How much coffee are you making?
               </h3>
             </div>
-            <span className="text-xs text-[#888276]">
+            <span className="text-xs text-ink-faint">
               Standard 1:16 ratio
             </span>
           </div>
@@ -116,12 +116,12 @@ export const DialInGuide = () => {
                   aria-pressed={isSelected}
                   className={`p-4 rounded-xl border text-left transition-all ${
                     isSelected
-                      ? 'border-[#1A1816] dark:border-[#EAE6DF] bg-[#1A1816] dark:bg-[#EAE6DF] text-[#FBF9F5] dark:text-[#11100F] shadow-sm'
-                      : 'border-[#E0DACB] dark:border-[#302D27] bg-[#FBF9F5] dark:bg-[#1C1B18] text-[#1A1816] dark:text-[#EAE6DF] hover:border-[#1A1816]'
+                      ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-sm'
+                      : 'border-hairline-strong dark:border-dark-hairline-strong bg-paper dark:bg-dark-surface text-ink dark:text-dark-text-main hover:border-ink'
                   }`}
                 >
                   <p className="font-semibold text-sm">{preset.label}</p>
-                  <p className={`text-xs mt-0.5 ${isSelected ? 'text-[#D5CFBF] dark:text-[#555047]' : 'text-[#888276]'}`}>
+                  <p className={`text-xs mt-0.5 ${isSelected ? 'text-hairline-strong dark:text-ink-muted' : 'text-ink-faint'}`}>
                     {preset.subtitle}
                   </p>
                 </button>
@@ -131,42 +131,42 @@ export const DialInGuide = () => {
 
           {/* Clean Recipe Summary Bar */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-            <div className="p-3.5 rounded-xl bg-[#FBF9F5] dark:bg-[#1C1B18] border border-[#E0DACB] dark:border-[#302D27] text-center space-y-1">
-              <span className="text-xs text-[#666056] dark:text-[#A09A8E] block">Coffee Amount</span>
-              <span className="font-serif text-2xl font-bold text-[#C84B31]">
+            <div className="p-3.5 rounded-xl bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-center space-y-1">
+              <span className="text-xs text-ink-muted dark:text-dark-text-muted block">Coffee Amount</span>
+              <span className="font-serif text-2xl font-bold text-vermillion">
                 {activePreset.dose}g
               </span>
-              <span className="text-[11px] text-[#888276] block">
+              <span className="text-[11px] text-ink-faint block">
                 ({activePreset.spoons})
               </span>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-[#FBF9F5] dark:bg-[#1C1B18] border border-[#E0DACB] dark:border-[#302D27] text-center space-y-1">
-              <span className="text-xs text-[#666056] dark:text-[#A09A8E] block">Water Amount</span>
-              <span className="font-serif text-2xl font-bold text-[#1A1816] dark:text-[#EAE6DF]">
+            <div className="p-3.5 rounded-xl bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-center space-y-1">
+              <span className="text-xs text-ink-muted dark:text-dark-text-muted block">Water Amount</span>
+              <span className="font-serif text-2xl font-bold text-ink dark:text-dark-text-main">
                 {activePreset.water}ml
               </span>
-              <span className="text-[11px] text-[#888276] block">
+              <span className="text-[11px] text-ink-faint block">
                 (~{activePreset.subtitle.split('/')[0].trim()})
               </span>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-[#FBF9F5] dark:bg-[#1C1B18] border border-[#E0DACB] dark:border-[#302D27] text-center space-y-1">
-              <span className="text-xs text-[#666056] dark:text-[#A09A8E] block">Water Temp</span>
-              <span className="font-serif text-2xl font-bold text-[#1A1816] dark:text-[#EAE6DF]">
+            <div className="p-3.5 rounded-xl bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-center space-y-1">
+              <span className="text-xs text-ink-muted dark:text-dark-text-muted block">Water Temp</span>
+              <span className="font-serif text-2xl font-bold text-ink dark:text-dark-text-main">
                 200°F
               </span>
-              <span className="text-[11px] text-[#888276] block">
+              <span className="text-[11px] text-ink-faint block">
                 (30s after boiling)
               </span>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-[#FBF9F5] dark:bg-[#1C1B18] border border-[#E0DACB] dark:border-[#302D27] text-center space-y-1">
-              <span className="text-xs text-[#666056] dark:text-[#A09A8E] block">Brew Time</span>
-              <span className="font-serif text-2xl font-bold text-[#1A1816] dark:text-[#EAE6DF]">
+            <div className="p-3.5 rounded-xl bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-center space-y-1">
+              <span className="text-xs text-ink-muted dark:text-dark-text-muted block">Brew Time</span>
+              <span className="font-serif text-2xl font-bold text-ink dark:text-dark-text-main">
                 {activePreset.time}
               </span>
-              <span className="text-[11px] text-[#888276] block">
+              <span className="text-[11px] text-ink-faint block">
                 (total pour time)
               </span>
             </div>
@@ -176,10 +176,10 @@ export const DialInGuide = () => {
         {/* 3 Simple Steps Flow */}
         <div className="space-y-6">
           <div className="text-left">
-            <span className="text-xs font-semibold uppercase tracking-wider text-[#C84B31] block mb-1">
+            <span className="text-xs font-semibold uppercase tracking-wider text-vermillion block mb-1">
               2. The Routine
             </span>
-            <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#1A1816] dark:text-[#EAE6DF]">
+            <h3 className="font-serif text-2xl sm:text-3xl font-bold text-ink dark:text-dark-text-main">
               3 Steps to a Great Cup
             </h3>
           </div>
@@ -188,22 +188,22 @@ export const DialInGuide = () => {
             {BREW_STEPS.map((step) => (
               <div
                 key={step.num}
-                className="p-6 rounded-2xl bg-[#F3EFE6] dark:bg-[#161513] border border-[#E8E4DC] dark:border-[#262420] flex flex-col justify-between space-y-4 text-left transition-all hover:border-[#1A1816] dark:hover:border-[#EAE6DF]"
+                className="p-6 rounded-2xl bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline flex flex-col justify-between space-y-4 text-left transition-all hover:border-ink dark:hover:border-dark-text-main"
               >
                 <div className="space-y-3">
-                  <div className="w-9 h-9 rounded-full bg-[#1A1816] dark:bg-[#EAE6DF] text-[#FBF9F5] dark:text-[#11100F] flex items-center justify-center font-serif font-bold text-base shadow-sm">
+                  <div className="w-9 h-9 rounded-full bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas flex items-center justify-center font-serif font-bold text-base shadow-sm">
                     {step.num}
                   </div>
-                  <h4 className="font-serif font-bold text-xl text-[#1A1816] dark:text-[#EAE6DF]">
+                  <h4 className="font-serif font-bold text-xl text-ink dark:text-dark-text-main">
                     {step.title}
                   </h4>
-                  <p className="text-xs sm:text-sm text-[#555047] dark:text-[#A09A8E] leading-relaxed">
+                  <p className="text-xs sm:text-sm text-ink-muted dark:text-dark-text-muted leading-relaxed">
                     {step.desc}
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-[#E0DACB] dark:border-[#262420] text-xs text-[#888276] dark:text-[#888276]">
-                  <strong className="text-[#1A1816] dark:text-[#EAE6DF] block mb-0.5">Barista Tip:</strong>
+                <div className="pt-3 border-t border-hairline-strong dark:border-dark-hairline text-xs text-ink-faint dark:text-ink-faint">
+                  <strong className="text-ink dark:text-dark-text-main block mb-0.5">Barista Tip:</strong>
                   {step.tip}
                 </div>
               </div>
@@ -212,35 +212,35 @@ export const DialInGuide = () => {
         </div>
 
         {/* 3 Friendly Roaster Secrets */}
-        <div className="p-6 sm:p-8 rounded-2xl bg-[#F3EFE6] dark:bg-[#161513] border border-[#E8E4DC] dark:border-[#262420] text-left space-y-4">
-          <h4 className="font-serif font-bold text-lg text-[#1A1816] dark:text-[#EAE6DF]">
+        <div className="p-6 sm:p-8 rounded-2xl bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline text-left space-y-4">
+          <h4 className="font-serif font-bold text-lg text-ink dark:text-dark-text-main">
             Three Barista Tips for Better Taste
           </h4>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-            <div className="p-4 rounded-xl bg-[#FBF9F5] dark:bg-[#1C1B18] border border-[#E0DACB] dark:border-[#302D27] space-y-1.5">
-              <span className="font-semibold text-sm text-[#1A1816] dark:text-[#EAE6DF] block">
+            <div className="p-4 rounded-xl bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong space-y-1.5">
+              <span className="font-semibold text-sm text-ink dark:text-dark-text-main block">
                 💧 Use Filtered Water
               </span>
-              <p className="text-[#666056] dark:text-[#A09A8E] leading-relaxed">
+              <p className="text-ink-muted dark:text-dark-text-muted leading-relaxed">
                 Coffee is mostly water. Filtered tap water removes mineral harshness and brings out natural fruit and chocolate notes.
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-[#FBF9F5] dark:bg-[#1C1B18] border border-[#E0DACB] dark:border-[#302D27] space-y-1.5">
-              <span className="font-semibold text-sm text-[#1A1816] dark:text-[#EAE6DF] block">
+            <div className="p-4 rounded-xl bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong space-y-1.5">
+              <span className="font-semibold text-sm text-ink dark:text-dark-text-main block">
                 🌡️ Let Water Cool 30 Seconds
               </span>
-              <p className="text-[#666056] dark:text-[#A09A8E] leading-relaxed">
+              <p className="text-ink-muted dark:text-dark-text-muted leading-relaxed">
                 Water straight off the boil (212°F) can over-extract and turn bitter. Let the kettle rest for 30–45 seconds (~200°F) before pouring.
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-[#FBF9F5] dark:bg-[#1C1B18] border border-[#E0DACB] dark:border-[#302D27] space-y-1.5">
-              <span className="font-semibold text-sm text-[#1A1816] dark:text-[#EAE6DF] block">
+            <div className="p-4 rounded-xl bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong space-y-1.5">
+              <span className="font-semibold text-sm text-ink dark:text-dark-text-main block">
                 ☕ Use Fresh Beans
               </span>
-              <p className="text-[#666056] dark:text-[#A09A8E] leading-relaxed">
+              <p className="text-ink-muted dark:text-dark-text-muted leading-relaxed">
                 Coffee beans taste best within 4 weeks of their roast date, when the natural sugars and aromas are freshest.
               </p>
             </div>

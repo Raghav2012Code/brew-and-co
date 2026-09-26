@@ -10,7 +10,7 @@ const badgeVariants = cva(
         default:
           "border-transparent bg-ink text-paper dark:bg-dark-text-main dark:text-dark-canvas",
         secondary:
-          "border-hairline bg-paper-dim text-ink-muted dark:border-dark-hairline dark:bg-dark-card dark:text-dark-text-muted",
+          "border-hairline bg-surface text-ink-muted dark:border-dark-hairline dark:bg-dark-card dark:text-dark-text-muted",
         destructive:
           "border-transparent bg-vermillion text-white dark:bg-dark-vermillion",
         outline:

@@ -157,7 +157,7 @@ export const RoastMatchmakerModal: React.FC = () => {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-4 sm:p-6 bg-paper-dim dark:bg-dark-subtle border-b border-hairline dark:border-dark-hairline flex items-center justify-between">
+        <div className="p-4 sm:p-6 bg-surface dark:bg-dark-subtle border-b border-hairline dark:border-dark-hairline flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <Compass className="w-5 h-5 text-vermillion dark:text-dark-vermillion animate-spin-slow" />
             <h2 id="matchmaker-modal-title" className="font-serif font-bold text-xl sm:text-2xl text-ink dark:text-dark-text-main">
@@ -178,7 +178,7 @@ export const RoastMatchmakerModal: React.FC = () => {
         </div>
 
         {/* Quiz Progress Bar */}
-        <div className="w-full bg-paper-dim dark:bg-dark-canvas h-1">
+        <div className="w-full bg-surface dark:bg-dark-canvas h-1">
           <div
             className="bg-vermillion dark:bg-dark-vermillion h-full transition-all duration-300"
             style={{ width: `${(step / 4) * 100}%` }}
@@ -209,7 +209,7 @@ export const RoastMatchmakerModal: React.FC = () => {
                   <button
                     key={opt.id}
                     onClick={() => handleSelectAnswer('brewMethod', opt.id)}
-                    className="p-3.5 text-left border border-hairline dark:border-dark-hairline bg-paper-dim dark:bg-dark-subtle hover:border-ink dark:hover:border-dark-text-main hover:bg-paper dark:hover:bg-dark-canvas active:scale-98 transition-all cursor-pointer"
+                    className="p-3.5 text-left border border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-subtle hover:border-ink dark:hover:border-dark-text-main hover:bg-paper dark:hover:bg-dark-canvas active:scale-98 transition-all cursor-pointer"
                   >
                     <span className="font-bold text-xs sm:text-sm block">{opt.title}</span>
                     <span className="text-[11px] text-ink-muted dark:text-dark-text-muted">{opt.desc}</span>
@@ -241,7 +241,7 @@ export const RoastMatchmakerModal: React.FC = () => {
                   <button
                     key={opt.id}
                     onClick={() => handleSelectAnswer('flavorPreference', opt.id)}
-                    className="p-3.5 text-left border border-hairline dark:border-dark-hairline bg-paper-dim dark:bg-dark-subtle hover:border-ink dark:hover:border-dark-text-main hover:bg-paper dark:hover:bg-dark-canvas active:scale-98 transition-all cursor-pointer"
+                    className="p-3.5 text-left border border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-subtle hover:border-ink dark:hover:border-dark-text-main hover:bg-paper dark:hover:bg-dark-canvas active:scale-98 transition-all cursor-pointer"
                   >
                     <span className="font-bold text-xs sm:text-sm block">{opt.title}</span>
                     <span className="text-[11px] text-ink-muted dark:text-dark-text-muted">{opt.desc}</span>
@@ -270,7 +270,7 @@ export const RoastMatchmakerModal: React.FC = () => {
                   <button
                     key={opt.id}
                     onClick={() => handleSelectAnswer('milkPreference', opt.id)}
-                    className="p-4 text-left border border-hairline dark:border-dark-hairline bg-paper-dim dark:bg-dark-subtle hover:border-ink dark:hover:border-dark-text-main hover:bg-paper dark:hover:bg-dark-canvas active:scale-98 transition-all cursor-pointer"
+                    className="p-4 text-left border border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-subtle hover:border-ink dark:hover:border-dark-text-main hover:bg-paper dark:hover:bg-dark-canvas active:scale-98 transition-all cursor-pointer"
                   >
                     <span className="font-bold text-sm block">{opt.title}</span>
                     <span className="text-xs text-ink-muted dark:text-dark-text-muted mt-1 block">{opt.desc}</span>
@@ -300,7 +300,7 @@ export const RoastMatchmakerModal: React.FC = () => {
               </div>
 
               {/* Matched Bean Showcase */}
-              <div className="p-4 sm:p-5 bg-paper-dim dark:bg-dark-subtle border border-hairline dark:border-dark-hairline space-y-4">
+              <div className="p-4 sm:p-5 bg-surface dark:bg-dark-subtle border border-hairline dark:border-dark-hairline space-y-4">
                 <div className="flex items-start gap-4">
                   <img
                     src={matchedBean.image}

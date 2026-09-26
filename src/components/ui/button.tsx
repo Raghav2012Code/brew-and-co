@@ -13,10 +13,10 @@ const buttonVariants = cva(
         destructive:
           "bg-vermillion text-white hover:bg-vermillion/90 dark:bg-dark-vermillion dark:hover:bg-dark-vermillion/90 active:scale-[0.99]",
         outline:
-          "border border-hairline bg-transparent hover:bg-paper-dim text-ink dark:border-dark-hairline dark:hover:bg-dark-subtle dark:text-dark-text-main",
+          "border border-hairline bg-transparent hover:bg-surface text-ink dark:border-dark-hairline dark:hover:bg-dark-subtle dark:text-dark-text-main",
         secondary:
-          "bg-paper-dim text-ink hover:bg-paper-dark dark:bg-dark-card dark:text-dark-text-main dark:hover:bg-dark-card-hover",
-        ghost: "hover:bg-paper-dim text-ink dark:text-dark-text-main dark:hover:bg-dark-subtle",
+          "bg-surface text-ink hover:bg-surface-hover dark:bg-dark-card dark:text-dark-text-main dark:hover:bg-dark-card-hover",
+        ghost: "hover:bg-surface text-ink dark:text-dark-text-main dark:hover:bg-dark-subtle",
         link: "text-ink underline-offset-4 hover:underline dark:text-dark-text-main",
         editorial:
           "bg-ink text-paper hover:bg-vermillion transition-all duration-200 dark:bg-dark-text-main dark:text-dark-canvas dark:hover:bg-dark-vermillion dark:hover:text-white active:scale-[0.99]",

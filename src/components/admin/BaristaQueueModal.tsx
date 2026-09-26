@@ -114,7 +114,7 @@ export const BaristaQueueModal: React.FC = () => {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top KDS Header */}
-        <div className="p-4 sm:p-5 bg-paper-dim dark:bg-dark-subtle border-b border-hairline dark:border-dark-hairline flex items-center justify-between gap-4">
+        <div className="p-4 sm:p-5 bg-surface dark:bg-dark-subtle border-b border-hairline dark:border-dark-hairline flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-none bg-vermillion text-paper dark:text-dark-canvas flex items-center justify-center font-mono font-bold text-xs shadow-xs">
               KDS
@@ -193,7 +193,7 @@ export const BaristaQueueModal: React.FC = () => {
                   className={`px-2.5 py-1 text-[11px] font-mono capitalize transition-all cursor-pointer ${
                     filterStatus === st
                       ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas font-bold'
-                      : 'bg-paper-dim dark:bg-dark-subtle text-ink-muted dark:text-dark-text-muted border border-hairline/60'
+                      : 'bg-surface dark:bg-dark-subtle text-ink-muted dark:text-dark-text-muted border border-hairline/60'
                   }`}
                 >
                   {st === 'all' ? 'Active' : st}
@@ -204,7 +204,7 @@ export const BaristaQueueModal: React.FC = () => {
         </div>
 
         {/* Tab Content Body */}
-        <div className="flex-1 p-4 sm:p-6 overflow-y-auto bg-paper-dim/40 dark:bg-dark-subtle/40">
+        <div className="flex-1 p-4 sm:p-6 overflow-y-auto bg-surface/40 dark:bg-dark-subtle/40">
           {activeTab === 'barista' ? (
             /* TAB 1: BARISTA TICKET RAIL */
             <div>
@@ -308,7 +308,7 @@ export const BaristaQueueModal: React.FC = () => {
                         </div>
 
                         {/* Status Transition Action Bar */}
-                        <div className="p-3 bg-paper-dim dark:bg-dark-subtle border-t border-hairline dark:border-dark-hairline">
+                        <div className="p-3 bg-surface dark:bg-dark-subtle border-t border-hairline dark:border-dark-hairline">
                           {isCompleted ? (
                             <div className="w-full min-h-[38px] px-3 py-1.5 text-xs font-mono font-bold flex items-center justify-center gap-1.5 bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline text-emerald-600 dark:text-emerald-400 shadow-xs">
                               <CheckCircle2 className="w-3.5 h-3.5" />
@@ -406,7 +406,7 @@ export const BaristaQueueModal: React.FC = () => {
                     onClick={() => {
                       window.print();
                     }}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono border border-hairline dark:border-dark-hairline bg-paper-dim dark:bg-dark-canvas hover:border-ink cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono border border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-canvas hover:border-ink cursor-pointer"
                   >
                     <Printer className="w-3.5 h-3.5" />
                     <span>Print Manifest</span>
@@ -422,7 +422,7 @@ export const BaristaQueueModal: React.FC = () => {
                     {roasteryManifest.items.map((item, idx) => (
                       <div
                         key={idx}
-                        className="p-4 bg-paper-dim dark:bg-dark-canvas border border-hairline dark:border-dark-hairline space-y-3"
+                        className="p-4 bg-surface dark:bg-dark-canvas border border-hairline dark:border-dark-hairline space-y-3"
                       >
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-hairline/60 dark:border-dark-hairline/60 pb-2">
                           <div>
@@ -478,7 +478,7 @@ export const BaristaQueueModal: React.FC = () => {
         </div>
 
         {/* Footer actions */}
-        <div className="p-4 sm:p-5 bg-paper-dim dark:bg-dark-subtle border-t border-hairline dark:border-dark-hairline flex items-center justify-between">
+        <div className="p-4 sm:p-5 bg-surface dark:bg-dark-subtle border-t border-hairline dark:border-dark-hairline flex items-center justify-between">
           <div className="text-xs font-mono text-ink-muted dark:text-dark-text-muted">
             Status: <span className="text-emerald-600 font-bold">● Live KDS Stream Active</span>
           </div>

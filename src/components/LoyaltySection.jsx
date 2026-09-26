@@ -42,32 +42,32 @@ export const LoyaltySection = () => {
   };
 
   const content = (
-    <div className="rounded-2xl border border-[#E8E4DC] dark:border-[#262420] bg-[#F3EFE6] dark:bg-[#161513] p-6 sm:p-10 text-left transition-colors">
+    <div className="rounded-2xl border border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-card p-6 sm:p-10 text-left transition-colors">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         
         {/* Left: Program Overview (6 cols) */}
         <div className="lg:col-span-6 space-y-4">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FBF9F5] dark:bg-[#1C1B18] border border-[#E0DACB] dark:border-[#302D27] text-xs font-semibold text-[#C84B31]">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-xs font-semibold text-vermillion">
             <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
             <span>Tasting Pass</span>
           </div>
 
-          <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#1A1816] dark:text-[#EAE6DF] tracking-tight leading-tight">
+          <h2 className="font-serif text-3xl sm:text-4xl font-bold text-ink dark:text-dark-text-main tracking-tight leading-tight">
             Buy 6 drinks, <br />
             get the 7th free.
           </h2>
 
-          <p className="text-sm text-[#666056] dark:text-[#A09A8E] leading-relaxed">
+          <p className="text-sm text-ink-muted dark:text-dark-text-muted leading-relaxed">
             Every pickup order adds a stamp to your pass in your browser. Complete 6 stamps to redeem a free coffee or specialty drink on your next order.
           </p>
 
-          <div className="pt-1 flex items-center gap-4 text-xs font-semibold text-[#1A1816] dark:text-[#EAE6DF]">
+          <div className="pt-1 flex items-center gap-4 text-xs font-semibold text-ink dark:text-dark-text-main">
             <span className="flex items-center gap-1.5">
-              <Check className="w-4 h-4 text-[#2E7D32]" aria-hidden="true" />
+              <Check className="w-4 h-4 text-success" aria-hidden="true" />
               No app or sign-in needed
             </span>
             <span className="flex items-center gap-1.5">
-              <Check className="w-4 h-4 text-[#2E7D32]" aria-hidden="true" />
+              <Check className="w-4 h-4 text-success" aria-hidden="true" />
               Saved automatically
             </span>
           </div>
@@ -75,20 +75,20 @@ export const LoyaltySection = () => {
 
         {/* Right: Clean Stamp Card (6 cols) */}
         <div className="lg:col-span-6">
-          <div className="rounded-xl border border-[#E0DACB] dark:border-[#302D27] bg-[#FBF9F5] dark:bg-[#1C1B18] p-6 sm:p-7 shadow-sm space-y-6">
+          <div className="rounded-xl border border-hairline-strong dark:border-dark-hairline-strong bg-paper dark:bg-dark-surface p-6 sm:p-7 shadow-sm space-y-6">
             
-            <div className="flex items-center justify-between border-b border-[#E8E4DC] dark:border-[#262420] pb-4">
+            <div className="flex items-center justify-between border-b border-hairline dark:border-dark-hairline pb-4">
               <div>
-                <h3 className="font-serif font-bold text-lg text-[#1A1816] dark:text-[#EAE6DF]">
+                <h3 className="font-serif font-bold text-lg text-ink dark:text-dark-text-main">
                   Your Digital Stamp Card
                 </h3>
-                <p className="text-xs text-[#888276]">
+                <p className="text-xs text-ink-faint">
                   {6 - loyaltyStamps} more drinks until your free cup
                 </p>
               </div>
 
               {freeDrinksAvailable > 0 && (
-                <span className="px-3 py-1 rounded-full bg-[#C84B31] text-[#FBF9F5] text-xs font-bold shadow-sm">
+                <span className="px-3 py-1 rounded-full bg-vermillion text-paper text-xs font-bold shadow-sm">
                   {freeDrinksAvailable} Free Drink Available
                 </span>
               )}
@@ -105,16 +105,16 @@ export const LoyaltySection = () => {
                     key={index}
                     className={`aspect-square rounded-full border-2 flex flex-col items-center justify-center transition-all ${
                       isStamped
-                        ? 'border-[#C84B31] bg-[#C84B31] text-[#FBF9F5] shadow-sm'
+                        ? 'border-vermillion bg-vermillion text-paper shadow-sm'
                         : isLast
-                        ? 'border-dashed border-[#C84B31] bg-[#FBF9F5] dark:bg-[#1C1B18] text-[#C84B31]'
-                        : 'border-dashed border-[#D5CFBF] dark:border-[#302D27] bg-[#F3EFE6] dark:bg-[#161513] text-[#888276]'
+                        ? 'border-dashed border-vermillion bg-paper dark:bg-dark-surface text-vermillion'
+                        : 'border-dashed border-hairline-strong dark:border-dark-hairline-strong bg-surface dark:bg-dark-card text-ink-faint'
                     }`}
                   >
                     {isStamped ? (
                       <span className="font-serif font-bold text-lg">★</span>
                     ) : isLast ? (
-                      <Gift className="w-5 h-5 text-[#C84B31]" aria-hidden="true" />
+                      <Gift className="w-5 h-5 text-vermillion" aria-hidden="true" />
                     ) : (
                       <span className="text-xs font-semibold">{index + 1}</span>
                     )}
@@ -124,15 +124,15 @@ export const LoyaltySection = () => {
             </div>
 
             {/* Demo Button */}
-            <div className="flex items-center justify-between gap-3 pt-2 border-t border-[#E8E4DC] dark:border-[#262420]">
-              <span className="text-xs text-[#888276]">
+            <div className="flex items-center justify-between gap-3 pt-2 border-t border-hairline dark:border-dark-hairline">
+              <span className="text-xs text-ink-faint">
                 Stamps are added automatically at checkout
               </span>
 
               <button
                 onClick={handleTestStamp}
                 aria-label="Add a sample stamp to your Tasting Pass"
-                className="px-3 py-1.5 rounded-lg border border-[#D5CFBF] dark:border-[#38342E] hover:border-[#1A1816] dark:hover:border-[#EAE6DF] text-xs font-semibold text-[#1A1816] dark:text-[#EAE6DF] transition-colors shrink-0 cursor-pointer"
+                className="px-3 py-1.5 rounded-lg border border-hairline-strong dark:border-dark-hairline-strong hover:border-ink dark:hover:border-dark-text-main text-xs font-semibold text-ink dark:text-dark-text-main transition-colors shrink-0 cursor-pointer"
               >
                 + Add Sample Stamp
               </button>
@@ -147,7 +147,7 @@ export const LoyaltySection = () => {
 
   return (
     <>
-      <section id="rewards" className="border-b border-[#E8E4DC] dark:border-[#262420] bg-[#FBF9F5] dark:bg-[#11100F] py-12 sm:py-20 scroll-mt-16 transition-colors">
+      <section id="rewards" className="border-b border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas py-12 sm:py-20 scroll-mt-16 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
           {content}
         </div>
@@ -169,7 +169,7 @@ export const LoyaltySection = () => {
             <button
               onClick={() => setIsLoyaltyModalOpen(false)}
               aria-label="Close Tasting Pass Modal"
-              className="absolute top-4 right-4 z-20 min-h-[38px] min-w-[38px] flex items-center justify-center rounded-full bg-[#FBF9F5] dark:bg-[#1C1B18] border border-[#E0DACB] dark:border-[#302D27] text-[#1A1816] dark:text-[#EAE6DF] hover:bg-[#1A1816] dark:hover:bg-[#EAE6DF] hover:text-[#FBF9F5] dark:hover:text-[#11100F] active:scale-90 transition-all cursor-pointer shadow-md"
+              className="absolute top-4 right-4 z-20 min-h-[38px] min-w-[38px] flex items-center justify-center rounded-full bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-ink dark:text-dark-text-main hover:bg-ink dark:hover:bg-dark-text-main hover:text-paper dark:hover:text-dark-canvas active:scale-90 transition-all cursor-pointer shadow-md"
             >
               <X className="w-4 h-4" aria-hidden="true" />
             </button>

@@ -68,7 +68,7 @@ export const RoasterySection: React.FC = () => {
             <button
               onClick={() => setIsManageDrawerOpen(true)}
               aria-label="Manage your active subscriptions"
-              className="inline-flex items-center gap-2 px-4 py-2.5 border border-ink dark:border-dark-text-main bg-paper-dim dark:bg-dark-card text-xs font-mono font-bold text-ink dark:text-dark-text-main hover:bg-ink hover:text-paper dark:hover:bg-dark-text-main dark:hover:text-dark-canvas active:scale-95 transition-all cursor-pointer shadow-xs"
+              className="inline-flex items-center gap-2 px-4 py-2.5 border border-ink dark:border-dark-text-main bg-surface dark:bg-dark-card text-xs font-mono font-bold text-ink dark:text-dark-text-main hover:bg-ink hover:text-paper dark:hover:bg-dark-text-main dark:hover:text-dark-canvas active:scale-95 transition-all cursor-pointer shadow-xs"
             >
               <Package className="w-3.5 h-3.5 text-vermillion dark:text-dark-vermillion" />
               <span>Subscription Vault ({activeSubscriptionCount} Active)</span>
@@ -86,7 +86,7 @@ export const RoasterySection: React.FC = () => {
       </div>
 
       {/* Subscription Value Proposition Banner */}
-      <div className="my-8 sm:my-10 p-5 sm:p-6 bg-paper-dim dark:bg-dark-card border border-hairline dark:border-dark-hairline grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="my-8 sm:my-10 p-5 sm:p-6 bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="flex items-start gap-3">
           <div className="w-8 h-8 rounded-full bg-vermillion/10 dark:bg-dark-vermillion/20 flex items-center justify-center shrink-0">
             <Zap className="w-4 h-4 text-vermillion dark:text-dark-vermillion" />
@@ -164,7 +164,7 @@ export const RoasterySection: React.FC = () => {
               className={`px-3 py-1.5 text-xs font-mono font-medium transition-all shrink-0 cursor-pointer ${
                 isSelected
                   ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-xs font-bold'
-                  : 'bg-paper-dim dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
+                  : 'bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
               }`}
             >
               {tab.label}
@@ -183,7 +183,7 @@ export const RoasterySection: React.FC = () => {
           return (
             <article
               key={bean.id}
-              className="group flex flex-col justify-between bg-paper-dim dark:bg-dark-card border border-hairline dark:border-dark-hairline hover:border-ink dark:hover:border-dark-text-main transition-all duration-200 overflow-hidden shadow-xs hover:shadow-md"
+              className="group flex flex-col justify-between bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline hover:border-ink dark:hover:border-dark-text-main transition-all duration-200 overflow-hidden shadow-xs hover:shadow-md"
             >
               {/* Top Image & Badge Header */}
               <div>

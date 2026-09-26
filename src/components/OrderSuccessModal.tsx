@@ -77,7 +77,7 @@ export const OrderSuccessModal: React.FC = () => {
     <Dialog open={Boolean(activeOrder)} onOpenChange={(open) => !open && setActiveOrder(null)}>
       <DialogContent className="max-w-md p-0 bg-paper dark:bg-dark-subtle border border-hairline dark:border-dark-hairline flex flex-col max-h-[90vh] overflow-hidden">
         {/* Header */}
-        <DialogHeader className="p-5 sm:p-6 bg-paper-dim dark:bg-dark-card border-b border-hairline dark:border-dark-hairline text-center items-center">
+        <DialogHeader className="p-5 sm:p-6 bg-surface dark:bg-dark-card border-b border-hairline dark:border-dark-hairline text-center items-center">
           <div className="w-12 h-12 bg-ink text-paper dark:bg-dark-text-main dark:text-dark-canvas flex items-center justify-center mx-auto mb-3 shadow-md">
             <Check className="w-6 h-6 stroke-[2.5]" aria-hidden="true" />
           </div>
@@ -96,7 +96,7 @@ export const OrderSuccessModal: React.FC = () => {
         <div className="p-4 sm:p-6 space-y-4 sm:space-y-5 text-sm overflow-y-auto flex-1">
           
           {/* Estimated Timer Box */}
-          <div className="p-3.5 sm:p-4 bg-paper-dim dark:bg-dark-card border border-hairline dark:border-dark-hairline flex items-center justify-between">
+          <div className="p-3.5 sm:p-4 bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline flex items-center justify-between">
             <div className="flex items-center gap-2 text-xs font-mono font-semibold text-ink-muted dark:text-dark-text-muted">
               <Clock className="w-4 h-4 text-vermillion dark:text-dark-vermillion" aria-hidden="true" />
               <span>Estimated Time:</span>
@@ -120,7 +120,7 @@ export const OrderSuccessModal: React.FC = () => {
           </div>
 
           {/* Pickup Details */}
-          <div className="p-3.5 bg-paper-dim dark:bg-dark-card border border-hairline dark:border-dark-hairline text-xs font-mono space-y-1 text-ink-muted dark:text-dark-text-muted">
+          <div className="p-3.5 bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline text-xs font-mono space-y-1 text-ink-muted dark:text-dark-text-muted">
             <div className="flex justify-between">
               <span>Name on Order:</span>
               <strong className="text-ink dark:text-dark-text-main">{currentOrder.pickupName}</strong>

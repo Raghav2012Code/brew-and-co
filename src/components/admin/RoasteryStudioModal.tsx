@@ -93,7 +93,7 @@ export const RoasteryStudioModal: React.FC = () => {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-4 sm:p-5 bg-paper-dim dark:bg-dark-subtle border-b border-hairline dark:border-dark-hairline flex items-center justify-between">
+        <div className="p-4 sm:p-5 bg-surface dark:bg-dark-subtle border-b border-hairline dark:border-dark-hairline flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas flex items-center justify-center font-mono font-bold text-xs">
               <Store className="w-4 h-4" />
@@ -151,7 +151,7 @@ export const RoasteryStudioModal: React.FC = () => {
           {activeTab === 'brand' ? (
             <div className="space-y-6 max-w-2xl">
               {/* Brand Name & Tagline */}
-              <div className="space-y-4 p-5 bg-paper-dim dark:bg-dark-subtle border border-hairline dark:border-dark-hairline">
+              <div className="space-y-4 p-5 bg-surface dark:bg-dark-subtle border border-hairline dark:border-dark-hairline">
                 <h3 className="font-serif text-lg font-bold">Store Identity</h3>
 
                 <div className="space-y-3">
@@ -194,7 +194,7 @@ export const RoasteryStudioModal: React.FC = () => {
               </div>
 
               {/* Accent Color Palette Customizer */}
-              <div className="space-y-3 p-5 bg-paper-dim dark:bg-dark-subtle border border-hairline dark:border-dark-hairline">
+              <div className="space-y-3 p-5 bg-surface dark:bg-dark-subtle border border-hairline dark:border-dark-hairline">
                 <div className="flex items-center justify-between">
                   <h3 className="font-serif text-lg font-bold">Theme Accent Color</h3>
                   <span className="text-xs font-mono text-ink-muted">Preview</span>
@@ -250,7 +250,7 @@ export const RoasteryStudioModal: React.FC = () => {
                 {draftBeans.map((bean) => (
                   <div
                     key={bean.id}
-                    className="p-4 bg-paper-dim dark:bg-dark-subtle border border-hairline dark:border-dark-hairline space-y-3"
+                    className="p-4 bg-surface dark:bg-dark-subtle border border-hairline dark:border-dark-hairline space-y-3"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <div>
@@ -318,7 +318,7 @@ export const RoasteryStudioModal: React.FC = () => {
         </div>
 
         {/* Footer */}
-        <div className="p-4 sm:p-5 bg-paper-dim dark:bg-dark-subtle border-t border-hairline dark:border-dark-hairline flex items-center justify-between gap-3">
+        <div className="p-4 sm:p-5 bg-surface dark:bg-dark-subtle border-t border-hairline dark:border-dark-hairline flex items-center justify-between gap-3">
           <button
             type="button"
             onClick={handleResetDefaults}

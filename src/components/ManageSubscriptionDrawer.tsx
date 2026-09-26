@@ -65,7 +65,7 @@ export const ManageSubscriptionDrawer: React.FC = () => {
         className="w-full sm:max-w-md p-0 bg-paper dark:bg-dark-subtle border-l border-hairline dark:border-dark-hairline flex flex-col justify-between"
       >
         {/* Header */}
-        <SheetHeader className="p-4 sm:p-6 bg-paper-dim dark:bg-dark-card border-b border-hairline dark:border-dark-hairline flex-row items-center justify-between space-y-0">
+        <SheetHeader className="p-4 sm:p-6 bg-surface dark:bg-dark-card border-b border-hairline dark:border-dark-hairline flex-row items-center justify-between space-y-0">
           <div className="flex items-center gap-2.5">
             <Sparkles className="w-5 h-5 text-vermillion dark:text-dark-vermillion" aria-hidden="true" />
             <SheetTitle className="font-serif font-bold text-lg sm:text-xl text-ink dark:text-dark-text-main">
@@ -113,8 +113,8 @@ export const ManageSubscriptionDrawer: React.FC = () => {
                     key={sub.id}
                     className={`p-4 border transition-all ${
                       isPaused
-                        ? 'border-hairline/60 dark:border-dark-hairline/60 bg-paper-dim/50 dark:bg-dark-card/50 opacity-80'
-                        : 'border-hairline dark:border-dark-hairline bg-paper-dim dark:bg-dark-card shadow-xs'
+                        ? 'border-hairline/60 dark:border-dark-hairline/60 bg-surface/50 dark:bg-dark-card/50 opacity-80'
+                        : 'border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-card shadow-xs'
                     }`}
                   >
                     {/* Top Row: Roast Info + Status Badge */}
@@ -198,7 +198,7 @@ export const ManageSubscriptionDrawer: React.FC = () => {
                           <select
                             value={sub.frequencyId}
                             onChange={(e) => updateFrequency(sub.id, e.target.value)}
-                            className="w-full p-2 text-xs bg-paper-dim dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main focus:outline-none"
+                            className="w-full p-2 text-xs bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main focus:outline-none"
                           >
                             {SUBSCRIPTION_FREQUENCIES.filter((f) => f.id !== 'onetime').map((freq) => (
                               <option key={freq.id} value={freq.id}>
@@ -215,7 +215,7 @@ export const ManageSubscriptionDrawer: React.FC = () => {
                           <select
                             value={sub.grindId}
                             onChange={(e) => updateGrind(sub.id, e.target.value)}
-                            className="w-full p-2 text-xs bg-paper-dim dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main focus:outline-none"
+                            className="w-full p-2 text-xs bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main focus:outline-none"
                           >
                             {GRIND_PROFILES.map((grind) => (
                               <option key={grind.id} value={grind.id}>
@@ -284,7 +284,7 @@ export const ManageSubscriptionDrawer: React.FC = () => {
         </div>
 
         {/* Footer info */}
-        <div className="p-4 sm:p-6 bg-paper-dim dark:bg-dark-card border-t border-hairline dark:border-dark-hairline">
+        <div className="p-4 sm:p-6 bg-surface dark:bg-dark-card border-t border-hairline dark:border-dark-hairline">
           <div className="flex items-center gap-2 text-xs text-ink-muted dark:text-dark-text-muted">
             <ShieldCheck className="w-4 h-4 text-vermillion dark:text-dark-vermillion shrink-0" />
             <span>Zero lock-in. Skip weeks or swap roast profiles anytime.</span>

@@ -153,7 +153,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Spec Banner */}
-        <div className="p-4 sm:p-6 bg-paper-dim dark:bg-dark-subtle border-b border-hairline dark:border-dark-hairline flex items-start justify-between gap-4">
+        <div className="p-4 sm:p-6 bg-surface dark:bg-dark-subtle border-b border-hairline dark:border-dark-hairline flex items-start justify-between gap-4">
           <div className="space-y-1">
             <div className="flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-wider bg-vermillion/10 dark:bg-dark-vermillion/20 text-vermillion dark:text-dark-vermillion border border-vermillion/30 dark:border-dark-vermillion/30">
@@ -191,7 +191,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
             {selectedBean.tastingNotes?.map((note: string) => (
               <span
                 key={note}
-                className="px-2.5 py-1 text-xs font-mono bg-paper-dim dark:bg-dark-canvas border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main"
+                className="px-2.5 py-1 text-xs font-mono bg-surface dark:bg-dark-canvas border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main"
               >
                 {note}
               </span>
@@ -224,7 +224,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
                     onClick={() => setSelectedFrequency(freq.id)}
                     className={`relative p-3 text-left border flex flex-col justify-between transition-all cursor-pointer ${
                       isSelected
-                        ? 'border-ink dark:border-dark-text-main bg-paper-dim dark:bg-dark-canvas shadow-xs ring-1 ring-ink dark:ring-dark-text-main'
+                        ? 'border-ink dark:border-dark-text-main bg-surface dark:bg-dark-canvas shadow-xs ring-1 ring-ink dark:ring-dark-text-main'
                         : 'border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-subtle hover:border-ink-muted dark:hover:border-dark-text-muted'
                     }`}
                   >
@@ -275,7 +275,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
                     onClick={() => setSelectedGrind(grind.id)}
                     className={`w-full p-2.5 sm:p-3 text-left border flex items-center justify-between gap-3 transition-all cursor-pointer ${
                       isSelected
-                        ? 'border-ink dark:border-dark-text-main bg-paper-dim dark:bg-dark-canvas ring-1 ring-ink dark:ring-dark-text-main'
+                        ? 'border-ink dark:border-dark-text-main bg-surface dark:bg-dark-canvas ring-1 ring-ink dark:ring-dark-text-main'
                         : 'border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-subtle hover:border-ink-muted dark:hover:border-dark-text-muted'
                     }`}
                   >
@@ -332,7 +332,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
                     onClick={() => setSelectedBagSize(bag.id)}
                     className={`p-3 text-left border flex flex-col justify-between transition-all cursor-pointer ${
                       isSelected
-                        ? 'border-ink dark:border-dark-text-main bg-paper-dim dark:bg-dark-canvas ring-1 ring-ink dark:ring-dark-text-main'
+                        ? 'border-ink dark:border-dark-text-main bg-surface dark:bg-dark-canvas ring-1 ring-ink dark:ring-dark-text-main'
                         : 'border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-subtle hover:border-ink-muted dark:hover:border-dark-text-muted'
                     }`}
                   >
@@ -367,7 +367,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
           </div>
 
           {/* Guarantee & Freshness Callout */}
-          <div className="p-3.5 bg-paper-dim dark:bg-dark-subtle border border-hairline dark:border-dark-hairline flex items-center gap-3">
+          <div className="p-3.5 bg-surface dark:bg-dark-subtle border border-hairline dark:border-dark-hairline flex items-center gap-3">
             <ShieldCheck className="w-5 h-5 text-vermillion dark:text-dark-vermillion shrink-0" />
             <div className="text-xs text-ink-muted dark:text-dark-text-muted">
               <span className="font-bold text-ink dark:text-dark-text-main">Roasted-to-Order Promise:</span> Small-batch roasted within 48 hours of dispatch. Pause, skip, or cancel your subscription anytime with 1 click.
@@ -376,7 +376,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
         </div>
 
         {/* Modal Footer / Action CTA */}
-        <div className="p-4 sm:p-6 bg-paper-dim dark:bg-dark-subtle border-t border-hairline dark:border-dark-hairline flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="p-4 sm:p-6 bg-surface dark:bg-dark-subtle border-t border-hairline dark:border-dark-hairline flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="w-full sm:w-auto flex items-center justify-between sm:justify-start gap-4">
             {/* Quantity Stepper */}
             <div className="flex items-center border border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-card">

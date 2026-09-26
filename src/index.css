@@ -2,49 +2,56 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Canonical palette (Hallmark D1). One palette for the whole app:
+   paper #FBF9F5 · surface #F3EFE6 · ink #1A1816 · vermillion #C84B31.
+   Every colour in the app resolves through one of these tokens. */
 :root {
   --background: #FBF9F5;
-  --foreground: #121110;
-  --card: #F6F4EE;
-  --card-foreground: #121110;
-  --popover: #F6F4EE;
-  --popover-foreground: #121110;
-  --primary: #121110;
-  --primary-foreground: #F6F4EE;
-  --secondary: #EDE9DF;
-  --secondary-foreground: #121110;
-  --muted: #EDE9DF;
-  --muted-foreground: #5C5852;
-  --accent: #E03410;
+  --foreground: #1A1816;
+  --card: #F3EFE6;
+  --card-foreground: #1A1816;
+  --popover: #F3EFE6;
+  --popover-foreground: #1A1816;
+  --primary: #1A1816;
+  --primary-foreground: #FBF9F5;
+  --secondary: #F3EFE6;
+  --secondary-foreground: #1A1816;
+  --muted: #F3EFE6;
+  --muted-foreground: #666056;
+  --accent: #C84B31;
   --accent-foreground: #FFFFFF;
-  --destructive: #E03410;
+  --destructive: #C62828;
   --destructive-foreground: #FFFFFF;
-  --border: #D8D3C6;
-  --input: #D8D3C6;
-  --ring: #121110;
+  --success: #2E7D32;
+  --rating: #E5A93C;
+  --border: #E8E4DC;
+  --input: #E8E4DC;
+  --ring: #1A1816;
   --radius: 0.125rem;
 }
 
 .dark {
   --background: #11100F;
-  --foreground: #ECE8DF;
-  --card: #161513;
-  --card-foreground: #ECE8DF;
-  --popover: #161513;
-  --popover-foreground: #ECE8DF;
-  --primary: #ECE8DF;
+  --foreground: #EAE6DF;
+  --card: #1C1B18;
+  --card-foreground: #EAE6DF;
+  --popover: #1C1B18;
+  --popover-foreground: #EAE6DF;
+  --primary: #EAE6DF;
   --primary-foreground: #11100F;
-  --secondary: #1E1C1A;
-  --secondary-foreground: #ECE8DF;
-  --muted: #1E1C1A;
-  --muted-foreground: #A8A297;
+  --secondary: #1C1B18;
+  --secondary-foreground: #EAE6DF;
+  --muted: #1C1B18;
+  --muted-foreground: #A09A8E;
   --accent: #FF451A;
   --accent-foreground: #FFFFFF;
-  --destructive: #FF451A;
-  --destructive-foreground: #FFFFFF;
-  --border: #2B2824;
-  --input: #2B2824;
-  --ring: #ECE8DF;
+  --destructive: #F87171;
+  --destructive-foreground: #11100F;
+  --success: #34D399;
+  --rating: #FBBF24;
+  --border: #262420;
+  --input: #262420;
+  --ring: #EAE6DF;
 }
 
 @theme {
@@ -53,25 +60,39 @@
   --font-sans: 'Plus Jakarta Sans', sans-serif;
   --font-mono: 'Space Mono', monospace;
 
-  --color-paper: #F6F4EE;
-  --color-paper-dim: #EDE9DF;
-  --color-paper-dark: #E2DDD0;
-  --color-ink: #121110;
-  --color-ink-muted: #5C5852;
-  --color-ink-faint: #8E887E;
-  --color-hairline: #D8D3C6;
-  --color-vermillion: #E03410;
-  --color-cobalt: #0038FF;
+  --color-paper: #FBF9F5;
+  --color-surface: #F3EFE6;
+  --color-surface-hover: #E8E4DC;
+  --color-ink: #1A1816;
+  --color-ink-muted: #666056;
+  --color-ink-faint: #888276;
+  --color-hairline: #E8E4DC;
+  --color-hairline-strong: #E0DACB;
+  --color-on-ink: #33302C;
+  --color-vermillion: #C84B31;
+  --color-success: #2E7D32;
+  --color-danger: #C62828;
+  --color-rating: #E5A93C;
+  --color-status-ready: #059669;
+  --color-status-brewing: #D97706;
 
-  --color-dark-canvas: #0D0C0B;
-  --color-dark-subtle: #151412;
+  --color-dark-canvas: #11100F;
+  --color-dark-sunken: #0E0D0C;
+  --color-dark-surface: #1C1B18;
   --color-dark-card: #161513;
   --color-dark-card-hover: #1E1C1A;
-  --color-dark-hairline: #2B2824;
-  --color-dark-text-main: #ECE8DF;
-  --color-dark-text-muted: #A8A297;
-  --color-dark-text-faint: #736D63;
+  --color-dark-subtle: #161513;
+  --color-dark-hairline: #262420;
+  --color-dark-hairline-strong: #302D27;
+  --color-dark-text-main: #EAE6DF;
+  --color-dark-text-muted: #A09A8E;
+  --color-dark-text-faint: #777064;
   --color-dark-vermillion: #FF451A;
+  --color-dark-success: #34D399;
+  --color-dark-danger: #F87171;
+  --color-dark-rating: #FBBF24;
+  --color-dark-status-ready: #34D399;
+  --color-dark-status-brewing: #FBBF24;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -113,7 +134,7 @@
   body {
     background-color: var(--background);
     color: var(--foreground);
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: var(--font-sans);
     overflow-x: hidden;
     touch-action: manipulation;
     transition: background-color 0.15s ease, color 0.15s ease;
@@ -121,13 +142,13 @@
   }
 
   ::selection {
-    background-color: #1A1816;
-    color: #FBF9F5;
+    background-color: var(--color-ink);
+    color: var(--color-paper);
   }
 
   .dark ::selection {
-    background-color: #EAE6DF;
-    color: #11100F;
+    background-color: var(--color-dark-text-main);
+    color: var(--color-dark-canvas);
   }
 }
 
@@ -147,22 +168,22 @@
   height: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: #F6F4EE;
+  background: var(--color-paper);
 }
 .dark ::-webkit-scrollbar-track {
-  background: #0D0C0B;
+  background: var(--color-dark-canvas);
 }
 ::-webkit-scrollbar-thumb {
-  background: #121110;
+  background: var(--color-ink);
 }
 .dark ::-webkit-scrollbar-thumb {
-  background: #3D3934;
+  background: var(--color-dark-hairline-strong);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #E03410;
+  background: var(--color-vermillion);
 }
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: #FF451A;
+  background: var(--color-dark-vermillion);
 }
 
 /* Archival Stamp Animation */
