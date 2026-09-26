@@ -95,8 +95,8 @@ export const OrderSuccessModal: React.FC = () => {
         {/* Live Prep Status */}
         <div className="p-4 sm:p-6 space-y-4 sm:space-y-5 text-sm overflow-y-auto flex-1">
           
-          {/* Estimated Timer Box */}
-          <div className="p-3.5 sm:p-4 bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline flex items-center justify-between">
+          {/* Estimated time — a ruled row, not a nested card */}
+          <div className="py-3.5 sm:py-4 border-y border-hairline dark:border-dark-hairline flex items-center justify-between">
             <div className="flex items-center gap-2 text-xs font-mono font-semibold text-ink-muted dark:text-dark-text-muted">
               <Clock className="w-4 h-4 text-vermillion dark:text-dark-vermillion" aria-hidden="true" />
               <span>Estimated Time:</span>
@@ -119,8 +119,8 @@ export const OrderSuccessModal: React.FC = () => {
             </div>
           </div>
 
-          {/* Pickup Details */}
-          <div className="p-3.5 bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline text-xs font-mono space-y-1 text-ink-muted dark:text-dark-text-muted">
+          {/* Pickup details — a ruled block, not a nested card */}
+          <div className="py-3.5 border-y border-hairline dark:border-dark-hairline text-xs font-mono space-y-1 text-ink-muted dark:text-dark-text-muted">
             <div className="flex justify-between">
               <span>Name on Order:</span>
               <strong className="text-ink dark:text-dark-text-main">{currentOrder.pickupName}</strong>

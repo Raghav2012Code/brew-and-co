@@ -148,7 +148,7 @@ export const RoasteryStudioModal: React.FC = () => {
           {activeTab === 'brand' ? (
             <div className="space-y-6 max-w-2xl">
               {/* Brand Name & Tagline */}
-              <div className="space-y-4 p-5 bg-surface dark:bg-dark-subtle border border-hairline dark:border-dark-hairline">
+              <div className="space-y-4 py-5 border-t border-hairline dark:border-dark-hairline">
                 <h3 className="font-serif text-lg font-bold">Store Identity</h3>
 
                 <div className="space-y-3">
@@ -191,7 +191,7 @@ export const RoasteryStudioModal: React.FC = () => {
               </div>
 
               {/* Accent Color Palette Customizer */}
-              <div className="space-y-3 p-5 bg-surface dark:bg-dark-subtle border border-hairline dark:border-dark-hairline">
+              <div className="space-y-3 py-5 border-t border-hairline dark:border-dark-hairline">
                 <div className="flex items-center justify-between">
                   <h3 className="font-serif text-lg font-bold">Theme Accent Color</h3>
                   <span className="text-xs font-mono text-ink-muted">Preview</span>
@@ -247,7 +247,7 @@ export const RoasteryStudioModal: React.FC = () => {
                 {draftBeans.map((bean) => (
                   <div
                     key={bean.id}
-                    className="p-4 bg-surface dark:bg-dark-subtle border border-hairline dark:border-dark-hairline space-y-3"
+                    className="py-4 border-y border-hairline dark:border-dark-hairline space-y-3"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <div>

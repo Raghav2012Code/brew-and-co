@@ -109,7 +109,7 @@ export const MenuSection = () => {
                   className={`min-h-[40px] px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-[color,background-color,border-color,opacity,transform] cursor-pointer ${
                     isActive
                       ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-sm'
-                      : 'bg-surface dark:bg-dark-card text-ink-muted dark:text-dark-text-muted hover:text-ink dark:hover:text-dark-text-main border border-hairline-strong dark:border-dark-hairline-strong'
+                      : 'bg-surface dark:bg-dark-card text-ink-muted dark:text-dark-text-muted hover:bg-surface-hover dark:hover:bg-dark-card-hover'
                   }`}
                 >
                   {cat.name}
@@ -149,10 +149,10 @@ export const MenuSection = () => {
             <button
               onClick={() => setShowOnlyFavorites(!showOnlyFavorites)}
               aria-pressed={showOnlyFavorites}
-              className={`min-h-[36px] flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-[color,background-color,border-color,opacity,transform] ${
+              className={`min-h-[36px] flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-[color,background-color,border-color,opacity,transform] ${
                 showOnlyFavorites
-                  ? 'border-vermillion bg-vermillion text-paper'
-                  : 'border-hairline-strong dark:border-dark-hairline-strong bg-paper dark:bg-dark-canvas text-ink-muted dark:text-dark-text-muted'
+                  ? 'bg-vermillion text-paper'
+                  : 'bg-surface dark:bg-dark-card text-ink-muted dark:text-dark-text-muted hover:bg-surface-hover dark:hover:bg-dark-card-hover'
               }`}
             >
               <Heart className={`w-3.5 h-3.5 ${showOnlyFavorites ? 'fill-current' : ''}`} aria-hidden="true" />

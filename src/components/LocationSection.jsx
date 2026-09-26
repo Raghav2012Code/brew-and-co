@@ -85,7 +85,7 @@ export const LocationSection = () => {
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-xs text-ink-muted dark:text-dark-text-muted space-y-1">
+              <div className="py-4 border-t border-hairline-strong dark:border-dark-hairline-strong text-xs text-ink-muted dark:text-dark-text-muted space-y-1">
                 <strong className="block text-ink dark:text-dark-text-main">Online Order Pickup</strong>
                 <p>Pick up your drinks at the counter just inside the front entrance.</p>
               </div>

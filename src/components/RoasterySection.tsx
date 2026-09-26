@@ -59,7 +59,7 @@ export const RoasterySection: React.FC = () => {
             <button
               onClick={() => setIsManageDrawerOpen(true)}
               aria-label="Manage your active subscriptions"
-              className="inline-flex items-center gap-2 whitespace-nowrap px-4 py-2.5 border border-ink dark:border-dark-text-main bg-surface dark:bg-dark-card text-xs font-mono font-bold text-ink dark:text-dark-text-main hover:bg-ink hover:text-paper dark:hover:bg-dark-text-main dark:hover:text-dark-canvas transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-xs"
+              className="inline-flex items-center gap-2 whitespace-nowrap px-4 py-2.5 bg-surface dark:bg-dark-card text-xs font-mono font-bold text-ink dark:text-dark-text-main hover:bg-ink hover:text-paper dark:hover:bg-dark-text-main dark:hover:text-dark-canvas transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-xs"
             >
               <Package className="w-3.5 h-3.5 text-vermillion dark:text-dark-vermillion" />
               <span>Subscription Vault ({activeSubscriptionCount} Active)</span>

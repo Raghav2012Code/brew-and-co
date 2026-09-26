@@ -299,8 +299,8 @@ export const RoastMatchmakerModal: React.FC = () => {
                 </button>
               </div>
 
-              {/* Matched Bean Showcase */}
-              <div className="p-4 sm:p-5 bg-surface dark:bg-dark-subtle border border-hairline dark:border-dark-hairline space-y-4">
+              {/* Matched bean — ruled block, the dialog is already the container */}
+              <div className="py-4 sm:py-5 border-y border-hairline dark:border-dark-hairline space-y-4">
                 <div className="flex items-start gap-4">
                   <img
                     src={matchedBean.image}

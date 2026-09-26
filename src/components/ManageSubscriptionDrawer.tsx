@@ -154,8 +154,8 @@ export const ManageSubscriptionDrawer: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Meta tags */}
-                    <div className="mt-3 p-2.5 bg-paper dark:bg-dark-canvas border border-hairline dark:border-dark-hairline space-y-1 text-xs">
+                    {/* Meta tags — a ruled block, not a nested card */}
+                    <div className="mt-3 pt-2.5 border-t border-hairline dark:border-dark-hairline space-y-1 text-xs">
                       <div className="flex justify-between">
                         <span className="text-ink-muted dark:text-dark-text-muted">Quantity:</span>
                         <strong className="text-ink dark:text-dark-text-main font-mono text-[11px]">
@@ -190,7 +190,7 @@ export const ManageSubscriptionDrawer: React.FC = () => {
 
                     {/* Edit Form (Expanded) */}
                     {isEditing && (
-                      <div className="mt-3 p-3 bg-paper dark:bg-dark-subtle border border-ink/20 dark:border-dark-text-main/20 space-y-3 anim-panel-in-sm">
+                      <div className="mt-3 pt-3 border-t border-hairline dark:border-dark-hairline space-y-3 anim-panel-in-sm">
                         <div>
                           <label className="text-[11px] font-mono font-bold text-ink-muted dark:text-dark-text-muted block mb-1">
                             Change Frequency:

@@ -191,7 +191,7 @@ export const BaristaQueueModal: React.FC = () => {
                   className={`px-2.5 py-1 text-[11px] font-mono capitalize transition-colors cursor-pointer ${
                     filterStatus === st
                       ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas font-bold'
-                      : 'bg-surface dark:bg-dark-subtle text-ink-muted dark:text-dark-text-muted border border-hairline/60'
+                      : 'bg-surface dark:bg-dark-subtle text-ink-muted dark:text-dark-text-muted hover:bg-surface-hover dark:hover:bg-dark-card-hover'
                   }`}
                 >
                   {st === 'all' ? 'Active' : st}
@@ -354,7 +354,7 @@ export const BaristaQueueModal: React.FC = () => {
             <div className="space-y-6">
               {/* Roastery Summary KPI Bar */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="p-4 bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline">
+                <div className="py-4 border-t border-hairline dark:border-dark-hairline">
                   <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-ink-muted dark:text-dark-text-muted block">
                     Total Roasted Batch (Demand)
                   </span>
@@ -366,7 +366,7 @@ export const BaristaQueueModal: React.FC = () => {
                   </span>
                 </div>
 
-                <div className="p-4 bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline">
+                <div className="py-4 border-t border-hairline dark:border-dark-hairline">
                   <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-ink-muted dark:text-dark-text-muted block">
                     Required Green Coffee Weight
                   </span>
@@ -378,7 +378,7 @@ export const BaristaQueueModal: React.FC = () => {
                   </span>
                 </div>
 
-                <div className="p-4 bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline">
+                <div className="py-4 border-t border-hairline dark:border-dark-hairline">
                   <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-ink-muted dark:text-dark-text-muted block">
                     Active Subscriber Plans
                   </span>
@@ -392,7 +392,7 @@ export const BaristaQueueModal: React.FC = () => {
               </div>
 
               {/* Manifest Table by Single-Origin */}
-              <div className="bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline p-5 space-y-4">
+              <div className="py-5 border-t border-hairline dark:border-dark-hairline space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="font-serif text-xl font-bold text-ink dark:text-dark-text-main">
                     Roast Batch Breakdown by Origin
@@ -418,7 +418,7 @@ export const BaristaQueueModal: React.FC = () => {
                     {roasteryManifest.items.map((item, idx) => (
                       <div
                         key={idx}
-                        className="p-4 bg-surface dark:bg-dark-canvas border border-hairline dark:border-dark-hairline space-y-3"
+                        className="py-4 border-y border-hairline dark:border-dark-hairline space-y-3"
                       >
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-hairline/60 dark:border-dark-hairline/60 pb-2">
                           <div>

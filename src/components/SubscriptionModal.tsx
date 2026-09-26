@@ -228,7 +228,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
                     aria-checked={isSelected}
                     type="button"
                     onClick={() => setSelectedFrequency(freq.id)}
-                    className={`relative p-3 text-left border flex flex-col justify-between transition-colors cursor-pointer ${
+                    className={`relative p-3 text-left flex flex-col justify-between transition-colors cursor-pointer ${
                       isSelected
                         ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas'
                         : 'bg-surface dark:bg-dark-subtle text-ink dark:text-dark-text-main hover:bg-surface-hover dark:hover:bg-dark-card-hover'
@@ -279,7 +279,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
                     aria-checked={isSelected}
                     type="button"
                     onClick={() => setSelectedGrind(grind.id)}
-                    className={`w-full p-2.5 sm:p-3 text-left border flex items-center justify-between gap-3 transition-colors cursor-pointer ${
+                    className={`w-full p-2.5 sm:p-3 text-left flex items-center justify-between gap-3 transition-colors cursor-pointer ${
                       isSelected
                         ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas'
                         : 'bg-surface dark:bg-dark-subtle text-ink dark:text-dark-text-main hover:bg-surface-hover dark:hover:bg-dark-card-hover'
@@ -336,7 +336,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
                     aria-checked={isSelected}
                     type="button"
                     onClick={() => setSelectedBagSize(bag.id)}
-                    className={`p-3 text-left border flex flex-col justify-between transition-colors cursor-pointer ${
+                    className={`p-3 text-left flex flex-col justify-between transition-colors cursor-pointer ${
                       isSelected
                         ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas'
                         : 'bg-surface dark:bg-dark-subtle text-ink dark:text-dark-text-main hover:bg-surface-hover dark:hover:bg-dark-card-hover'
@@ -373,7 +373,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
           </div>
 
           {/* Guarantee & Freshness Callout */}
-          <div className="p-3.5 bg-surface dark:bg-dark-subtle border border-hairline dark:border-dark-hairline flex items-center gap-3">
+          <div className="py-3.5 border-y border-hairline dark:border-dark-hairline flex items-center gap-3">
             <ShieldCheck className="w-5 h-5 text-vermillion dark:text-dark-vermillion shrink-0" />
             <div className="text-xs text-ink-muted dark:text-dark-text-muted">
               <span className="font-bold text-ink dark:text-dark-text-main">Roasted-to-Order Promise:</span> Small-batch roasted within 48 hours of dispatch. Pause, skip, or cancel your subscription anytime with 1 click.

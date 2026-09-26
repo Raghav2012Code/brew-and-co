@@ -285,7 +285,7 @@ export const CartDrawer: React.FC = () => {
 
               {/* Free Drink Reward Toggle */}
               {freeDrinksAvailable > 0 && (
-                <div className="p-3.5 bg-surface dark:bg-dark-card border border-vermillion/40 dark:border-dark-vermillion/40 flex items-center justify-between">
+                <div className="py-3 border-t border-vermillion/40 dark:border-dark-vermillion/40 flex items-center justify-between">
                   <div>
                     <p className="text-xs font-bold text-ink dark:text-dark-text-main flex items-center gap-1.5 font-mono">
                       <Sparkles className="w-3.5 h-3.5 text-vermillion dark:text-dark-vermillion" aria-hidden="true" />
@@ -322,7 +322,7 @@ export const CartDrawer: React.FC = () => {
                         onClick={() => {
                           setTipPercent(pct);
                         }}
-                        className={`min-h-[38px] py-2 border text-xs font-mono font-semibold transition-[color,background-color,border-color,opacity,transform] cursor-pointer ${
+                        className={`min-h-[38px] py-2 text-xs font-mono font-semibold transition-[color,background-color,border-color,opacity,transform] cursor-pointer ${
                           isSelected
                             ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas'
                             : 'bg-surface dark:bg-dark-card text-ink dark:text-dark-text-main hover:bg-surface-hover dark:hover:bg-dark-card-hover'

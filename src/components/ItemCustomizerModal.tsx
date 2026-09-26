@@ -299,7 +299,7 @@ export const ItemCustomizerModal: React.FC = () => {
                     key={sw.id}
                     type="button"
                     onClick={() => setSelectedSweetness(sw)}
-                    className={`min-h-[42px] p-2.5 border text-center font-mono text-xs transition-[color,background-color,border-color,opacity,transform] cursor-pointer ${
+                    className={`min-h-[42px] p-2.5 text-center font-mono text-xs transition-[color,background-color,border-color,opacity,transform] cursor-pointer ${
                       isSelected
                         ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas font-semibold'
                         : 'bg-surface dark:bg-dark-card text-ink dark:text-dark-text-main hover:bg-surface-hover dark:hover:bg-dark-card-hover'
