@@ -9,7 +9,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
 
 interface CustomizerSize {
   id: string;
@@ -112,7 +111,6 @@ export const ItemCustomizerModal: React.FC = () => {
       specialNotes: specialNotes.slice(0, 150),
       quantity,
     });
-    toast.success(`Added ${quantity}× ${customizerItem.name} to bag!`);
     setCustomizerItem(null);
   };
 

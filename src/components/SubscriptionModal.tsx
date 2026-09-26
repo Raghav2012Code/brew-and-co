@@ -130,14 +130,11 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
     setIsSubscribeModalOpen(false);
 
     if (isSubscription) {
-      toast.success(`Subscribed to ${selectedBean.name}!`, {
+      toast.info(`Subscribed to ${selectedBean.name}`, {
         description: `Delivered ${currentFreq.name.toLowerCase()} (${currentGrind.name}) with ${currentFreq.discountPct}% recurring savings.`,
       });
-    } else {
-      toast.success(`Added ${selectedBean.name} to Bag`, {
-        description: `${currentBag.name} • ${currentGrind.name}`,
-      });
     }
+    // No toast on the bag path: the bag count and the cart line are the feedback.
   };
 
   return (

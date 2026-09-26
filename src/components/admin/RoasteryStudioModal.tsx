@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { X, Palette, Coffee, Check, RotateCcw, Store } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { useTenant, ACCENT_COLOR_PRESETS, RoasteryBrandProfile } from '../../context/TenantContext';
-import { toast } from 'sonner';
 
 export const RoasteryStudioModal: React.FC = () => {
   const { isRoasteryStudioOpen, setIsRoasteryStudioOpen } = useStore();
@@ -69,14 +68,12 @@ export const RoasteryStudioModal: React.FC = () => {
     });
 
     setIsRoasteryStudioOpen(false);
-    toast.success('Roastery Studio changes saved');
   };
 
   const handleResetDefaults = () => {
     if (window.confirm('Reset all brand and catalog settings to factory default?')) {
       resetToDefaults();
       setIsRoasteryStudioOpen(false);
-      toast.info('Settings reset to default');
     }
   };
 

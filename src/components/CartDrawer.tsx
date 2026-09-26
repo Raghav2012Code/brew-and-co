@@ -85,22 +85,19 @@ export const CartDrawer: React.FC = () => {
       });
 
       if (registeredCount > 0) {
-        toast.success(`Order placed & ${registeredCount} Subscription${registeredCount > 1 ? 's' : ''} Activated!`, {
+        toast.info(`Order placed · ${registeredCount} subscription${registeredCount > 1 ? 's' : ''} activated`, {
           description: `Your recurring dispatch is scheduled. Manage your plan anytime in the Subscription Vault.`,
         });
-      } else {
-        toast.success('Order placed successfully!', {
-          description: `Preparing your coffee for ${guestName}.`,
-        });
       }
+      // No toast on the plain path: the Order Success modal is the confirmation.
     } catch {
       toast.error('Failed to place order. Please try again.');
     }
   }, [cart, addSubscription, placeOrder, pickupName, tipPercent, calculatedTip, applyFreeDrink, freeDrinksAvailable, discountAmount]);
 
-  const handleRemove = useCallback((id: string, name: string) => {
+  const handleRemove = useCallback((id: string) => {
+    // Silent success: the line leaves the list and the totals re-compute.
     removeFromCart(id);
-    toast.info(`Removed ${name} from bag.`);
   }, [removeFromCart]);
 
   return (
@@ -196,7 +193,7 @@ export const CartDrawer: React.FC = () => {
 
                         <button
                           type="button"
-                          onClick={() => handleRemove(item.id, item.name)}
+                          onClick={() => handleRemove(item.id)}
                           aria-label={`Remove ${item.name} from bag`}
                           className="min-h-[36px] min-w-[36px] flex items-center justify-center text-ink-faint hover:text-vermillion dark:hover:text-dark-vermillion transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
                         >

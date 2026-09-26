@@ -35,8 +35,8 @@ export const ManageSubscriptionDrawer: React.FC = () => {
 
   const handlePauseToggle = (sub: ActiveSubscription) => {
     if (sub.status === 'active') {
+      // Silent success: the row's status chip flips to Paused.
       pauseSubscription(sub.id);
-      toast.info(`Paused subscription for ${sub.beanName}`);
     } else {
       resumeSubscription(sub.id);
       // Compute fresh dispatch date since state update is async and sub.nextDispatchDate is stale
@@ -45,7 +45,7 @@ export const ManageSubscriptionDrawer: React.FC = () => {
       const next = new Date();
       next.setDate(next.getDate() + days);
       const nextStr = next.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
-      toast.success(`Resumed subscription for ${sub.beanName}!`, {
+      toast.info(`Resumed subscription for ${sub.beanName}`, {
         description: `Next roast scheduled for ${nextStr}.`,
       });
     }
@@ -53,8 +53,8 @@ export const ManageSubscriptionDrawer: React.FC = () => {
 
   const handleCancel = (sub: ActiveSubscription) => {
     if (window.confirm(`Are you sure you want to cancel your recurring subscription for ${sub.beanName}?`)) {
+      // Silent success: the plan leaves the vault and the count updates.
       cancelSubscription(sub.id);
-      toast.info(`Cancelled subscription for ${sub.beanName}`);
     }
   };
 

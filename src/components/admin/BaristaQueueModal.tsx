@@ -87,15 +87,13 @@ export const BaristaQueueModal: React.FC = () => {
   });
 
   const handleStatusAdvance = useCallback((orderId: string, currentStatus: string) => {
+    // No toast: the ticket card itself restyles and re-filters on advance.
     if (currentStatus === 'received') {
       updateOrderStatus(orderId, 'brewing');
-      toast.info(`Order #${orderId} is now Brewing`);
     } else if (currentStatus === 'brewing') {
       updateOrderStatus(orderId, 'ready');
-      toast.success(`Order #${orderId} is Ready for Pickup! 🔔`);
     } else if (currentStatus === 'ready') {
       updateOrderStatus(orderId, 'completed');
-      toast.info(`Order #${orderId} marked completed`);
     }
   }, [updateOrderStatus]);
 
@@ -135,7 +133,7 @@ export const BaristaQueueModal: React.FC = () => {
               type="button"
               onClick={() => {
                 playBaristaChime('ready');
-                toast.info('Audio chime chime tested');
+                toast.info('Test chime played');
               }}
               title="Test Barista Chime"
               className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-mono border border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas text-ink-muted hover:text-ink dark:hover:text-dark-text-main cursor-pointer"
@@ -488,8 +486,8 @@ export const BaristaQueueModal: React.FC = () => {
               <button
                 type="button"
                 onClick={() => {
+                  // Silent success: the rail empties in place.
                   clearCompletedOrders();
-                  toast.info('Completed orders cleared');
                 }}
                 className="px-3 py-1.5 text-xs font-mono border border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas text-ink-muted hover:text-ink cursor-pointer"
               >

@@ -3,7 +3,6 @@ import { Heart, Plus, Sliders } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { toast } from 'sonner';
 import type { MenuItem } from '@/types';
 
 export const ProductCard: React.FC<{ item: MenuItem }> = memo(({ item }) => {
@@ -14,11 +13,11 @@ export const ProductCard: React.FC<{ item: MenuItem }> = memo(({ item }) => {
     if (item.customizable) {
       setCustomizerItem(item);
     } else {
+      // Silent success: the bag count in the header updates immediately.
       addToCart(item, {
         size: { id: 'standard', name: 'Standard' },
         temp: item.defaultTemp || 'hot',
       });
-      toast.success(`Added 1× ${item.name} to bag!`);
     }
   }, [item, setCustomizerItem, addToCart]);
 
