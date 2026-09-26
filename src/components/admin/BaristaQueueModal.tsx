@@ -2,6 +2,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { X, Coffee, Flame, CheckCircle2, Printer, ChevronRight, Check, Volume2 } from 'lucide-react';
 import { useStore, playBaristaChime } from '../../context/StoreContext';
 import { useSubscription } from '../../context/SubscriptionContext';
+import { Dialog, DialogContent, DialogTitle } from '../ui/dialog';
 import { toast } from 'sonner';
 
 export const BaristaQueueModal: React.FC = () => {
@@ -97,19 +98,12 @@ export const BaristaQueueModal: React.FC = () => {
     }
   }, [updateOrderStatus]);
 
-  if (!isBaristaModalOpen) return null;
-
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="barista-kds-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/80 backdrop-blur-md anim-overlay-in"
-      onClick={() => setIsBaristaModalOpen(false)}
-    >
-      <div
-        className="relative w-full max-w-5xl h-[94vh] flex flex-col bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline shadow-2xl overflow-hidden anim-panel-in"
-        onClick={(e) => e.stopPropagation()}
+    <Dialog open={isBaristaModalOpen} onOpenChange={setIsBaristaModalOpen}>
+      <DialogContent
+        hideClose
+        overlayClassName="bg-black/80 backdrop-blur-md"
+        className="max-w-5xl h-[94vh] w-[calc(100%-1rem)] sm:w-[calc(100%-2rem)] md:w-[calc(100%-3rem)] p-0 flex flex-col bg-paper dark:bg-dark-card overflow-hidden"
       >
         {/* Top KDS Header */}
         <div className="p-4 sm:p-5 bg-surface dark:bg-dark-subtle border-b border-hairline dark:border-dark-hairline flex items-center justify-between gap-4">
@@ -118,9 +112,9 @@ export const BaristaQueueModal: React.FC = () => {
               KDS
             </div>
             <div>
-              <h2 id="barista-kds-title" className="font-serif font-bold text-xl sm:text-2xl text-ink dark:text-dark-text-main leading-tight flex items-center gap-2">
+              <DialogTitle className="font-serif font-bold text-xl sm:text-2xl text-ink dark:text-dark-text-main leading-tight flex items-center gap-2">
                 <span>Roastery & Barista Operations Station</span>
-              </h2>
+              </DialogTitle>
               <p className="text-xs font-mono text-ink-muted dark:text-dark-text-muted">
                 Real-Time Ticket Rail • Batch Roast Manifest
               </p>
@@ -501,7 +495,7 @@ export const BaristaQueueModal: React.FC = () => {
             </button>
           </div>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };

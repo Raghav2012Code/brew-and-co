@@ -28,10 +28,15 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & { hideClose?: boolean }
->(({ className, children, hideClose = false, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+    hideClose?: boolean
+    /** Tone for the scrim. A work surface wants a heavier scrim than a
+     *  confirmation does; the data-state animation is unaffected. */
+    overlayClassName?: string
+  }
+>(({ className, children, hideClose = false, overlayClassName, ...props }, ref) => (
   <DialogPortal>
-    <DialogOverlay />
+    <DialogOverlay className={overlayClassName} />
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
@@ -87,7 +92,10 @@ const DialogTitle = React.forwardRef<
   <DialogPrimitive.Title
     ref={ref}
     className={cn(
-      "text-2xl font-serif tracking-tight text-ink dark:text-dark-text-main font-normal",
+      // No font-weight here on purpose. Tailwind emits `.font-normal` after
+      // `.font-bold`, so a `font-normal` in this base would silently beat
+      // every caller's `font-bold`. Weight belongs to the caller.
+      "text-2xl font-serif tracking-tight text-ink dark:text-dark-text-main",
       className
     )}
     {...props}
