@@ -156,14 +156,14 @@ export const LoyaltySection = () => {
       {/* Modal View for Direct Click from Header */}
       {isLoyaltyModalOpen && (
         <div 
-          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-6 bg-black/70 backdrop-blur-sm anim-overlay"
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-6 bg-black/70 backdrop-blur-sm anim-overlay-in"
           role="dialog"
           aria-modal="true"
           aria-label="Tasting Pass Modal"
           onClick={() => setIsLoyaltyModalOpen(false)}
         >
           <div 
-            className="relative w-full max-w-2xl max-h-[88vh] sm:max-h-[90vh] overflow-y-auto rounded-t-3xl sm:rounded-2xl anim-panel"
+            className="relative w-full max-w-2xl max-h-[88vh] sm:max-h-[90vh] overflow-y-auto rounded-t-3xl sm:rounded-2xl anim-panel-in"
             onClick={(e) => e.stopPropagation()}
           >
             <button

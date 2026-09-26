@@ -149,11 +149,11 @@ export const RoastMatchmakerModal: React.FC = () => {
       role="dialog"
       aria-modal="true"
       aria-labelledby="matchmaker-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-sm anim-overlay"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-sm anim-overlay-in"
       onClick={handleDismiss}
     >
       <div
-        className="relative w-full max-w-xl flex flex-col bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline shadow-2xl overflow-hidden anim-panel"
+        className="relative w-full max-w-xl flex flex-col bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline shadow-2xl overflow-hidden anim-panel-in"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -188,7 +188,7 @@ export const RoastMatchmakerModal: React.FC = () => {
         {/* Modal Body */}
         <div className="p-5 sm:p-8 text-ink dark:text-dark-text-main">
           {step === 1 && (
-            <div className="space-y-5 anim-panel">
+            <div className="space-y-5 anim-panel-in">
               <div className="space-y-1">
                 <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-vermillion dark:text-dark-vermillion">
                   Step 1 of 3 • Brewing Routine
@@ -220,7 +220,7 @@ export const RoastMatchmakerModal: React.FC = () => {
           )}
 
           {step === 2 && (
-            <div className="space-y-5 anim-panel">
+            <div className="space-y-5 anim-panel-in">
               <div className="space-y-1">
                 <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-vermillion dark:text-dark-vermillion">
                   Step 2 of 3 • Flavor Palate
@@ -252,7 +252,7 @@ export const RoastMatchmakerModal: React.FC = () => {
           )}
 
           {step === 3 && (
-            <div className="space-y-5 anim-panel">
+            <div className="space-y-5 anim-panel-in">
               <div className="space-y-1">
                 <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-vermillion dark:text-dark-vermillion">
                   Step 3 of 3 • Drinking Style
@@ -281,7 +281,7 @@ export const RoastMatchmakerModal: React.FC = () => {
           )}
 
           {step === 4 && matchedBean && (
-            <div className="space-y-6 anim-panel">
+            <div className="space-y-6 anim-panel-in">
               {/* Result marker — states what the engine actually did, no invented score */}
               <div className="flex items-center justify-between border-b border-hairline/60 dark:border-dark-hairline/60 pb-3">
                 <div className="flex items-center gap-2">
