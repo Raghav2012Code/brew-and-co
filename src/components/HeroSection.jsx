@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, MapPin, Star } from 'lucide-react';
+import { ArrowRight, MapPin } from 'lucide-react';
 
 const TODAY_TASTING_SPECIMENS = [
   { name: 'Ethiopia Guji Anaerobic', notes: 'Candied Lime • Jasmine', badge: 'Special Roast' },
@@ -16,22 +16,6 @@ export const HeroSection = () => {
           
           {/* Left: Rich Editorial & Roastery Telemetry (7 cols) */}
           <div className="lg:col-span-7 space-y-6 text-left">
-            
-            {/* Live Micro-Roastery Status Badge */}
-            <div className="flex flex-wrap items-center gap-2.5">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-xs font-semibold text-ink dark:text-dark-text-main shadow-xs">
-                <span className="w-2 h-2 rounded-full bg-vermillion animate-pulse" aria-hidden="true" />
-                <span className="font-mono text-[11px] uppercase tracking-wider text-vermillion">Batch #842</span>
-                <span className="text-ink-faint dark:text-dark-text-faint">•</span>
-                <span className="text-xs">Roasted Fresh Today at 6:30 AM</span>
-              </div>
-
-              <div className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface/60 dark:bg-dark-surface/60 border border-hairline-strong/60 dark:border-dark-hairline-strong/60 text-[11px] font-medium text-ink-muted dark:text-dark-text-muted">
-                <MapPin className="w-3 h-3 text-ink-faint" />
-                <span>San Francisco, CA</span>
-              </div>
-            </div>
-
             {/* Authoritative Editorial Headline — roman display, emphasis by weight + accent */}
             <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-ink dark:text-dark-text-main leading-[1.08]">
               Exceptional coffee, <br />
@@ -82,18 +66,6 @@ export const HeroSection = () => {
                   <MapPin className="w-4 h-4 text-ink-faint" aria-hidden="true" />
                   <span>Find Our Cafe</span>
                 </a>
-              </div>
-
-              {/* Social Proof Rating */}
-              <div className="flex items-center gap-3 text-xs text-ink-muted dark:text-dark-text-muted">
-                <div className="flex items-center text-rating">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                  ))}
-                </div>
-                <span className="font-medium">
-                  <strong className="text-ink dark:text-dark-text-main">4.9 stars</strong> from over 1,200 neighborhood reviews
-                </span>
               </div>
             </div>
 

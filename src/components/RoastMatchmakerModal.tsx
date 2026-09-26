@@ -282,12 +282,12 @@ export const RoastMatchmakerModal: React.FC = () => {
 
           {step === 4 && matchedBean && (
             <div className="space-y-6 anim-panel">
-              {/* Match Score Badge */}
+              {/* Result marker — states what the engine actually did, no invented score */}
               <div className="flex items-center justify-between border-b border-hairline/60 dark:border-dark-hairline/60 pb-3">
                 <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-                    98% Palate Match Found
+                  <span className="w-2.5 h-2.5 rounded-full bg-status-ready dark:bg-dark-status-ready" aria-hidden="true" />
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-status-ready dark:text-dark-status-ready">
+                    Closest match from your answers
                   </span>
                 </div>
                 <button
