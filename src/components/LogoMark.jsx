@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const LogoMark = ({ className = 'w-9 h-9', showText = false, textClassName = '' }) => {
+export const LogoMark = ({ className = 'w-9 h-9', showText = false, textClassName = '', nameplate = false }) => {
   return (
     <div className="inline-flex items-center gap-3 group">
       {/* Precision Vector Roastery Emblem */}
@@ -70,11 +70,11 @@ export const LogoMark = ({ className = 'w-9 h-9', showText = false, textClassNam
 
       {showText && (
         <div className={`text-left ${textClassName}`}>
-          <span className="font-serif font-bold text-xl sm:text-2xl tracking-tight text-ink dark:text-dark-text-main block leading-none">
-            Brew & Co.
+          <span className={`font-serif font-bold tracking-tight text-ink dark:text-dark-text-main block leading-none ${nameplate ? 'text-2xl sm:text-3xl' : 'text-xl sm:text-2xl'}`}>
+            Brew &amp; Co.
           </span>
-          <span className="text-[10px] sm:text-[11px] font-medium tracking-widest uppercase text-ink-faint dark:text-ink-faint block mt-0.5">
-            Roastery & Cafe
+          <span className={`font-medium tracking-widest uppercase text-ink-faint block ${nameplate ? 'text-[11px] mt-1' : 'text-[10px] sm:text-[11px] mt-0.5'}`}>
+            Roastery &amp; Cafe
           </span>
         </div>
       )}

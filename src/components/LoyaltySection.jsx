@@ -147,7 +147,7 @@ export const LoyaltySection = () => {
 
   return (
     <>
-      <section id="rewards" className="border-b border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas py-12 sm:py-20 scroll-mt-16 transition-colors">
+      <section id="rewards" className="border-b border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas py-12 sm:py-20 anchor-offset transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-8">
           {content}
         </div>

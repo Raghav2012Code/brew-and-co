@@ -71,7 +71,7 @@ export const DialInGuide = () => {
   const activePreset = CUP_PRESETS.find((p) => p.id === selectedPresetId) || CUP_PRESETS[0];
 
   return (
-    <section id="brew-guide" className="border-b border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas py-14 sm:py-20 scroll-mt-16 text-left transition-colors">
+    <section id="brew-guide" className="border-b border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas py-14 sm:py-20 anchor-offset text-left transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-12">
         
         {/* Header — left-biased, matching every other section head */}

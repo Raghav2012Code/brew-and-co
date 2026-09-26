@@ -6,7 +6,7 @@ import { useStore } from '../context/StoreContext';
 export const LocationSection = () => {
   const { storeStatus } = useStore();
   return (
-    <section id="location" className="border-b border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas py-12 sm:py-20 scroll-mt-16 text-left transition-colors">
+    <section id="location" className="border-b border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-canvas py-12 sm:py-20 anchor-offset text-left transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-10">
         
         {/* Section Header */}
