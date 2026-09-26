@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { STORE_HOURS } from '../data/menuData';
+import { calculateTax } from '../data/commercePolicy';
 import type { CartItem, CartItemOptions, OrderStatus, MenuItem } from '../types';
 
 // Re-export types for backward compatibility
@@ -661,7 +662,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       })();
 
       const finalSubtotal = Math.max(0, rawSubtotal - discount);
-      const tax = Number((finalSubtotal * 0.0825).toFixed(2));
+      const tax = calculateTax(finalSubtotal);
 
       // Pre-discount tip calculation on rawSubtotal; support tipAmount and tipPercent
       let finalTip = 0;

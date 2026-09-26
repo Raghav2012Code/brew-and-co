@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Check, Clock, Printer } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
+import { calculateTax, resolvePrepSeconds } from '../data/commercePolicy';
 import {
   Dialog,
   DialogContent,
@@ -31,7 +32,7 @@ export const OrderSuccessModal: React.FC = () => {
       return;
     }
 
-    const initialSeconds = prepMinutes ? prepMinutes * 60 : 480;
+    const initialSeconds = resolvePrepSeconds(prepMinutes);
     setSecondsRemaining(initialSeconds);
 
     const timer = setInterval(() => {
@@ -54,7 +55,7 @@ export const OrderSuccessModal: React.FC = () => {
     if (status === 'ready' || status === 'completed' || secondsRemaining <= 0) {
       return 3;
     }
-    const totalSeconds = currentOrder?.prepMinutes ? currentOrder.prepMinutes * 60 : 480;
+    const totalSeconds = resolvePrepSeconds(currentOrder?.prepMinutes);
     if (status === 'brewing' || secondsRemaining <= totalSeconds * 0.5) {
       return 2;
     }
@@ -69,7 +70,7 @@ export const OrderSuccessModal: React.FC = () => {
 
   const subtotal = currentOrder.subtotal ?? (currentOrder.items || []).reduce((sum: number, item: any) => sum + (item.unitPrice || 0) * (item.quantity || 1), 0);
   const discount = currentOrder.discount ?? 0;
-  const tax = currentOrder.tax ?? Number((Math.max(0, subtotal - discount) * 0.0825).toFixed(2));
+  const tax = currentOrder.tax ?? calculateTax(subtotal - discount);
   const tip = currentOrder.tipAmount ?? 0;
   const total = currentOrder.total ?? Number((Math.max(0, subtotal - discount) + tax + tip).toFixed(2));
 

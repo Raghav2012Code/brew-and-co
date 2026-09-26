@@ -3,6 +3,7 @@ import { Trash2, Plus, Minus, ShoppingBag, Sparkles, Zap } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { useSubscription } from '../context/SubscriptionContext';
 import { formatPrice } from '@/lib/format';
+import { calculateTax } from '../data/commercePolicy';
 import {
   Sheet,
   SheetContent,
@@ -42,7 +43,7 @@ export const CartDrawer: React.FC = () => {
   }, [applyFreeDrink, freeDrinksAvailable, cart]);
 
   const subtotal = useMemo(() => Math.max(0, rawSubtotal - discountAmount), [rawSubtotal, discountAmount]);
-  const tax = useMemo(() => Number((subtotal * 0.0825).toFixed(2)), [subtotal]);
+  const tax = useMemo(() => calculateTax(subtotal), [subtotal]);
   const calculatedTip = useMemo(() => Number(((rawSubtotal * tipPercent) / 100).toFixed(2)), [rawSubtotal, tipPercent]);
   const total = useMemo(() => Number((subtotal + tax + calculatedTip).toFixed(2)), [subtotal, tax, calculatedTip]);
 
