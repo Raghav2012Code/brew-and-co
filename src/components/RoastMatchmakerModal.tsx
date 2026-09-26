@@ -4,6 +4,7 @@ import { ROASTERY_BEANS } from '../data/roasteryData';
 import { useStore } from '../context/StoreContext';
 import { useSubscription } from '../context/SubscriptionContext';
 import { useTenant } from '../context/TenantContext';
+import { Dialog, DialogContent, DialogTitle } from './ui/dialog';
 
 interface QuizState {
   brewMethod: string;
@@ -34,8 +35,6 @@ export const RoastMatchmakerModal: React.FC = () => {
       resetQuiz();
     }
   }, [isMatchmakerOpen]);
-
-  if (!isMatchmakerOpen) return null;
 
   const handleSelectAnswer = (key: keyof QuizState, value: string) => {
     const updated = { ...answers, [key]: value };
@@ -145,24 +144,19 @@ export const RoastMatchmakerModal: React.FC = () => {
   };
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="matchmaker-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-sm anim-overlay-in"
-      onClick={handleDismiss}
-    >
-      <div
-        className="relative w-full max-w-xl flex flex-col bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline shadow-2xl overflow-hidden anim-panel-in"
-        onClick={(e) => e.stopPropagation()}
+    <Dialog open={isMatchmakerOpen} onOpenChange={handleDismiss}>
+      <DialogContent
+        hideClose
+        overlayClassName="bg-black/75"
+        className="max-w-xl w-[calc(100%-1.5rem)] sm:w-[calc(100%-3rem)] p-0 flex flex-col bg-paper dark:bg-dark-card overflow-hidden"
       >
         {/* Header */}
         <div className="p-4 sm:p-6 bg-surface dark:bg-dark-subtle border-b border-hairline dark:border-dark-hairline flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <Compass className="w-5 h-5 text-vermillion dark:text-dark-vermillion" />
-            <h2 id="matchmaker-modal-title" className="font-serif font-bold text-xl sm:text-2xl text-ink dark:text-dark-text-main">
+            <DialogTitle className="font-serif font-bold text-xl sm:text-2xl text-ink dark:text-dark-text-main">
               Find Your Ideal Roast
-            </h2>
+            </DialogTitle>
           </div>
 
           <button
@@ -366,7 +360,7 @@ export const RoastMatchmakerModal: React.FC = () => {
             </div>
           )}
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };

@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { useSubscription } from '../context/SubscriptionContext';
 import { useStore } from '../context/StoreContext';
+import { Dialog, DialogContent, DialogTitle } from './ui/dialog';
 import {
   GRIND_PROFILES,
   BAG_SIZES,
@@ -64,16 +65,14 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
     };
   }, [isSubscribeModalOpen]);
 
-  useEffect(() => {
-    if (!isSubscribeModalOpen) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsSubscribeModalOpen(false);
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [isSubscribeModalOpen, setIsSubscribeModalOpen]);
+  // No window keydown listener: Radix's Dialog owns Escape, and this effect
+  // used to race it by closing the modal from underneath the primitive.
 
-  if (!isSubscribeModalOpen || !selectedBean) return null;
+  // `selectedBean` is set when the modal opens and never cleared, so gating
+  // on it alone keeps this mounted after a close — which is what lets Radix
+  // hold the node through its exit and animate it. Gating on
+  // `isSubscribeModalOpen` instead would unmount instantly and skip that.
+  if (!selectedBean) return null;
 
   const currentGrind = GRIND_PROFILES.find((g) => g.id === selectedGrind) || GRIND_PROFILES[0];
   const currentBag = BAG_SIZES.find((b) => b.id === selectedBagSize) || BAG_SIZES[0];
@@ -138,16 +137,11 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
   };
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="subscription-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/70 backdrop-blur-sm anim-overlay-in"
-      onClick={() => setIsSubscribeModalOpen(false)}
-    >
-      <div
-        className="relative w-full max-w-2xl max-h-[92vh] flex flex-col bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline shadow-2xl overflow-hidden anim-panel-in"
-        onClick={(e) => e.stopPropagation()}
+    <Dialog open={isSubscribeModalOpen} onOpenChange={setIsSubscribeModalOpen}>
+      <DialogContent
+        hideClose
+        overlayClassName="bg-black/70"
+        className="max-w-2xl max-h-[92vh] w-[calc(100%-1.5rem)] sm:w-[calc(100%-3rem)] p-0 flex flex-col bg-paper dark:bg-dark-card overflow-hidden"
       >
         {/* Header Spec Banner */}
         <div className="p-4 sm:p-6 bg-surface dark:bg-dark-subtle border-b border-hairline dark:border-dark-hairline flex items-start justify-between gap-4">
@@ -164,9 +158,9 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
                 • {selectedBean.elevation}
               </span>
             </div>
-            <h2 id="subscription-modal-title" className="font-serif text-xl sm:text-2xl font-bold text-ink dark:text-dark-text-main leading-tight">
+            <DialogTitle className="font-serif text-xl sm:text-2xl font-bold text-ink dark:text-dark-text-main leading-tight">
               {selectedBean.name}
-            </h2>
+            </DialogTitle>
             <p className="text-xs text-ink-muted dark:text-dark-text-muted">
               {selectedBean.origin} • <span className="font-medium text-ink dark:text-dark-text-main">{selectedBean.process}</span>
             </p>
@@ -446,7 +440,7 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
             )}
           </button>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };

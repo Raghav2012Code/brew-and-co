@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Palette, Coffee, Check, RotateCcw, Store } from 'lucide-react';
 import { useStore } from '../../context/StoreContext';
 import { useTenant, ACCENT_COLOR_PRESETS, RoasteryBrandProfile } from '../../context/TenantContext';
+import { Dialog, DialogContent, DialogTitle } from '../ui/dialog';
 
 export const RoasteryStudioModal: React.FC = () => {
   const { isRoasteryStudioOpen, setIsRoasteryStudioOpen } = useStore();
@@ -36,8 +37,6 @@ export const RoasteryStudioModal: React.FC = () => {
       setCuppingInputs(c);
     }
   }, [isRoasteryStudioOpen, brandProfile, roasteryBeans]);
-
-  if (!isRoasteryStudioOpen) return null;
 
   const handleDismiss = () => {
     // Revert local draft to current context state and close
@@ -78,16 +77,11 @@ export const RoasteryStudioModal: React.FC = () => {
   };
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="roastery-studio-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/80 backdrop-blur-md anim-overlay-in"
-      onClick={handleDismiss}
-    >
-      <div
-        className="relative w-full max-w-4xl h-[92vh] flex flex-col bg-paper dark:bg-dark-card border border-hairline dark:border-dark-hairline shadow-2xl overflow-hidden anim-panel-in"
-        onClick={(e) => e.stopPropagation()}
+    <Dialog open={isRoasteryStudioOpen} onOpenChange={(open) => { if (!open) handleDismiss(); }}>
+      <DialogContent
+        hideClose
+        overlayClassName="bg-black/80 backdrop-blur-md"
+        className="max-w-4xl h-[92vh] w-[calc(100%-1rem)] sm:w-[calc(100%-2rem)] md:w-[calc(100%-3rem)] p-0 flex flex-col bg-paper dark:bg-dark-card overflow-hidden"
       >
         {/* Header */}
         <div className="p-4 sm:p-5 bg-surface dark:bg-dark-subtle border-b border-hairline dark:border-dark-hairline flex items-center justify-between">
@@ -96,9 +90,9 @@ export const RoasteryStudioModal: React.FC = () => {
               <Store className="w-4 h-4" />
             </div>
             <div>
-              <h2 id="roastery-studio-title" className="font-serif font-bold text-xl sm:text-2xl text-ink dark:text-dark-text-main">
+              <DialogTitle className="font-serif font-bold text-xl sm:text-2xl text-ink dark:text-dark-text-main">
                 Roastery SaaS Brand Studio
-              </h2>
+              </DialogTitle>
               <p className="text-xs font-mono text-ink-muted dark:text-dark-text-muted">
                 Multi-Tenant Customizer • Instant Live Preview
               </p>
@@ -339,11 +333,11 @@ export const RoasteryStudioModal: React.FC = () => {
               onClick={handleSave}
               className="px-5 py-2 text-xs font-mono font-bold bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas hover:bg-vermillion cursor-pointer shadow-xs"
             >
-              Save & Exit Studio
+              Save &amp; Exit Studio
             </button>
           </div>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Gift, Check, X, Sparkles, Star } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
+import { Dialog, DialogContent, DialogTitle } from './ui/dialog';
 
 export const LoyaltySection = () => {
   const {
@@ -154,29 +155,27 @@ export const LoyaltySection = () => {
       </section>
 
       {/* Modal View for Direct Click from Header */}
-      {isLoyaltyModalOpen && (
-        <div 
-          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-6 bg-black/70 backdrop-blur-sm anim-overlay-in"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Tasting Pass Modal"
-          onClick={() => setIsLoyaltyModalOpen(false)}
+      <Dialog open={isLoyaltyModalOpen} onOpenChange={setIsLoyaltyModalOpen}>
+        <DialogContent
+          hideClose
+          overlayClassName="bg-black/70"
+          className="max-w-2xl max-h-[88vh] sm:max-h-[90vh] w-[calc(100%-1.5rem)] sm:w-[calc(100%-3rem)] p-0 overflow-y-auto rounded-t-3xl sm:rounded-2xl bg-transparent border-0 shadow-none dark:bg-transparent"
         >
-          <div 
-            className="relative w-full max-w-2xl max-h-[88vh] sm:max-h-[90vh] overflow-y-auto rounded-t-3xl sm:rounded-2xl anim-panel-in"
-            onClick={(e) => e.stopPropagation()}
+          {/* The panel carries its own paper background via `content`, so the
+              dialog shell stays transparent. The name is visually hidden
+              because the visible heading belongs to the section, not the
+              dialog — without it the dialog would have no accessible name. */}
+          <DialogTitle className="sr-only">Tasting Pass</DialogTitle>
+          <button
+            onClick={() => setIsLoyaltyModalOpen(false)}
+            aria-label="Close Tasting Pass Modal"
+            className="absolute top-4 right-4 z-20 min-h-[38px] min-w-[38px] flex items-center justify-center rounded-full bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-ink dark:text-dark-text-main hover:bg-ink dark:hover:bg-dark-text-main hover:text-paper dark:hover:text-dark-canvas transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-md"
           >
-            <button
-              onClick={() => setIsLoyaltyModalOpen(false)}
-              aria-label="Close Tasting Pass Modal"
-              className="absolute top-4 right-4 z-20 min-h-[38px] min-w-[38px] flex items-center justify-center rounded-full bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-ink dark:text-dark-text-main hover:bg-ink dark:hover:bg-dark-text-main hover:text-paper dark:hover:text-dark-canvas transition-[color,background-color,border-color,opacity,transform] cursor-pointer shadow-md"
-            >
-              <X className="w-4 h-4" aria-hidden="true" />
-            </button>
-            {content}
-          </div>
-        </div>
-      )}
+            <X className="w-4 h-4" aria-hidden="true" />
+          </button>
+          {content}
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
