@@ -134,8 +134,8 @@ export const RoasterySection: React.FC = () => {
               onClick={() => setFilterRoast(tab.id as any)}
               className={`px-3 py-1.5 text-xs font-mono font-medium transition-colors shrink-0 cursor-pointer ${
                 isSelected
-                  ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-xs font-bold'
-                  : 'bg-surface dark:bg-dark-card border border-hairline dark:border-dark-hairline text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
+                  ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas font-bold'
+                  : 'bg-surface dark:bg-dark-card text-ink dark:text-dark-text-main hover:bg-surface-hover dark:hover:bg-dark-card-hover'
               }`}
             >
               {tab.label}
@@ -201,8 +201,8 @@ export const RoasterySection: React.FC = () => {
                     </p>
                   </div>
 
-                  {/* Varietal & Process Meta */}
-                  <div className="grid grid-cols-2 gap-2 p-3 bg-paper dark:bg-dark-canvas border border-hairline/70 dark:border-dark-hairline/70 text-[11px] font-mono">
+                  {/* Varietal & Process Meta — a hairline-ruled spec row, not a nested card */}
+                  <div className="grid grid-cols-2 gap-2 pt-3 border-t border-hairline/70 dark:border-dark-hairline/70 text-[11px] font-mono">
                     <div>
                       <span className="text-ink-faint block">Process:</span>
                       <strong className="text-ink dark:text-dark-text-main font-semibold truncate block">

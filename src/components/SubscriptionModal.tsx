@@ -221,8 +221,8 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
                     onClick={() => setSelectedFrequency(freq.id)}
                     className={`relative p-3 text-left border flex flex-col justify-between transition-colors cursor-pointer ${
                       isSelected
-                        ? 'border-ink dark:border-dark-text-main bg-surface dark:bg-dark-canvas shadow-xs ring-1 ring-ink dark:ring-dark-text-main'
-                        : 'border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-subtle hover:border-ink-muted dark:hover:border-dark-text-muted'
+                        ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas'
+                        : 'bg-surface dark:bg-dark-subtle text-ink dark:text-dark-text-main hover:bg-surface-hover dark:hover:bg-dark-card-hover'
                     }`}
                   >
                     <div>
@@ -272,8 +272,8 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
                     onClick={() => setSelectedGrind(grind.id)}
                     className={`w-full p-2.5 sm:p-3 text-left border flex items-center justify-between gap-3 transition-colors cursor-pointer ${
                       isSelected
-                        ? 'border-ink dark:border-dark-text-main bg-surface dark:bg-dark-canvas ring-1 ring-ink dark:ring-dark-text-main'
-                        : 'border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-subtle hover:border-ink-muted dark:hover:border-dark-text-muted'
+                        ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas'
+                        : 'bg-surface dark:bg-dark-subtle text-ink dark:text-dark-text-main hover:bg-surface-hover dark:hover:bg-dark-card-hover'
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -329,8 +329,8 @@ export const SubscriptionModal: React.FC<SubscriptionModalProps> = ({ initialFre
                     onClick={() => setSelectedBagSize(bag.id)}
                     className={`p-3 text-left border flex flex-col justify-between transition-colors cursor-pointer ${
                       isSelected
-                        ? 'border-ink dark:border-dark-text-main bg-surface dark:bg-dark-canvas ring-1 ring-ink dark:ring-dark-text-main'
-                        : 'border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-subtle hover:border-ink-muted dark:hover:border-dark-text-muted'
+                        ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas'
+                        : 'bg-surface dark:bg-dark-subtle text-ink dark:text-dark-text-main hover:bg-surface-hover dark:hover:bg-dark-card-hover'
                     }`}
                   >
                     <div>

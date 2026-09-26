@@ -30,7 +30,7 @@ export const ProductCard: React.FC<{ item: MenuItem }> = memo(({ item }) => {
     <div className="group border border-hairline dark:border-dark-hairline bg-paper dark:bg-dark-card hover:border-ink dark:hover:border-dark-text-main p-4 flex flex-col justify-between text-left transition-colors relative">
       <div>
         {/* Specimen Photo */}
-        <div className="relative aspect-[4/3] w-full overflow-hidden bg-surface dark:bg-dark-subtle mb-3.5 border border-hairline dark:border-dark-hairline">
+        <div className="relative aspect-[4/3] w-full overflow-hidden bg-surface dark:bg-dark-subtle mb-3.5">
           <img
             src={item.image}
             alt={item.name}

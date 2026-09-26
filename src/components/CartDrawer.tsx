@@ -201,8 +201,8 @@ export const CartDrawer: React.FC = () => {
                         </button>
                       </div>
 
-                      {/* Customization Details */}
-                      <div className="text-xs text-ink-muted dark:text-dark-text-muted space-y-0.5 bg-paper dark:bg-dark-canvas p-2.5 border border-hairline dark:border-dark-hairline">
+                      {/* Customization Details — a hairline-ruled block, not a nested card */}
+                      <div className="text-xs text-ink-muted dark:text-dark-text-muted space-y-0.5 pt-2.5 border-t border-hairline dark:border-dark-hairline">
                         {isItemSub ? (
                           <>
                             <div>
@@ -324,8 +324,8 @@ export const CartDrawer: React.FC = () => {
                         }}
                         className={`min-h-[38px] py-2 border text-xs font-mono font-semibold transition-[color,background-color,border-color,opacity,transform] cursor-pointer ${
                           isSelected
-                            ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-sm'
-                            : 'border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-card text-ink dark:text-dark-text-main hover:border-ink dark:hover:border-dark-text-main'
+                            ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas'
+                            : 'bg-surface dark:bg-dark-card text-ink dark:text-dark-text-main hover:bg-surface-hover dark:hover:bg-dark-card-hover'
                         }`}
                       >
                         {pct === 0 ? 'None' : `${pct}%`}

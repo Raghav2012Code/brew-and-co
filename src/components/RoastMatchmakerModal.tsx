@@ -209,7 +209,7 @@ export const RoastMatchmakerModal: React.FC = () => {
                   <button
                     key={opt.id}
                     onClick={() => handleSelectAnswer('brewMethod', opt.id)}
-                    className="p-3.5 text-left border border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-subtle hover:border-ink dark:hover:border-dark-text-main hover:bg-paper dark:hover:bg-dark-canvas transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
+                    className="p-3.5 text-left bg-surface dark:bg-dark-subtle hover:bg-surface-hover dark:hover:bg-dark-card-hover transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
                   >
                     <span className="font-bold text-xs sm:text-sm block">{opt.title}</span>
                     <span className="text-[11px] text-ink-muted dark:text-dark-text-muted">{opt.desc}</span>
@@ -241,7 +241,7 @@ export const RoastMatchmakerModal: React.FC = () => {
                   <button
                     key={opt.id}
                     onClick={() => handleSelectAnswer('flavorPreference', opt.id)}
-                    className="p-3.5 text-left border border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-subtle hover:border-ink dark:hover:border-dark-text-main hover:bg-paper dark:hover:bg-dark-canvas transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
+                    className="p-3.5 text-left bg-surface dark:bg-dark-subtle hover:bg-surface-hover dark:hover:bg-dark-card-hover transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
                   >
                     <span className="font-bold text-xs sm:text-sm block">{opt.title}</span>
                     <span className="text-[11px] text-ink-muted dark:text-dark-text-muted">{opt.desc}</span>
@@ -270,7 +270,7 @@ export const RoastMatchmakerModal: React.FC = () => {
                   <button
                     key={opt.id}
                     onClick={() => handleSelectAnswer('milkPreference', opt.id)}
-                    className="p-4 text-left border border-hairline dark:border-dark-hairline bg-surface dark:bg-dark-subtle hover:border-ink dark:hover:border-dark-text-main hover:bg-paper dark:hover:bg-dark-canvas transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
+                    className="p-4 text-left bg-surface dark:bg-dark-subtle hover:bg-surface-hover dark:hover:bg-dark-card-hover transition-[color,background-color,border-color,opacity,transform] cursor-pointer"
                   >
                     <span className="font-bold text-sm block">{opt.title}</span>
                     <span className="text-xs text-ink-muted dark:text-dark-text-muted mt-1 block">{opt.desc}</span>

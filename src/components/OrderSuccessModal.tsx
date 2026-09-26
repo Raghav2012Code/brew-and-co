@@ -106,15 +106,15 @@ export const OrderSuccessModal: React.FC = () => {
             </span>
           </div>
 
-          {/* 3 Step Indicator */}
+          {/* 3 Step Indicator — selection by fill, no nested borders */}
           <div className="grid grid-cols-3 gap-2 text-xs text-center font-mono uppercase tracking-wider">
-            <div className={`p-2.5 border font-semibold ${prepStage >= 1 ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas' : 'border-hairline dark:border-dark-hairline text-ink-faint'}`}>
+            <div className={`p-2.5 font-semibold ${prepStage >= 1 ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas' : 'bg-surface dark:bg-dark-card text-ink-faint'}`}>
               Grinding
             </div>
-            <div className={`p-2.5 border font-semibold ${prepStage >= 2 ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas' : 'border-hairline dark:border-dark-hairline text-ink-faint'}`}>
+            <div className={`p-2.5 font-semibold ${prepStage >= 2 ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas' : 'bg-surface dark:bg-dark-card text-ink-faint'}`}>
               Brewing
             </div>
-            <div className={`p-2.5 border font-semibold ${prepStage >= 3 ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas' : 'border-hairline dark:border-dark-hairline text-ink-faint'}`}>
+            <div className={`p-2.5 font-semibold ${prepStage >= 3 ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas' : 'bg-surface dark:bg-dark-card text-ink-faint'}`}>
               Ready
             </div>
           </div>

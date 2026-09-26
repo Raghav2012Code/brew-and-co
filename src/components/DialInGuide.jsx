@@ -110,10 +110,10 @@ export const DialInGuide = () => {
                   type="button"
                   onClick={() => setSelectedPresetId(preset.id)}
                   aria-pressed={isSelected}
-                  className={`p-4 rounded-xl border text-left transition-colors ${
+                  className={`p-4 text-left transition-colors ${
                     isSelected
-                      ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas shadow-sm'
-                      : 'border-hairline-strong dark:border-dark-hairline-strong bg-paper dark:bg-dark-surface text-ink dark:text-dark-text-main hover:border-ink'
+                      ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas'
+                      : 'bg-paper dark:bg-dark-surface text-ink dark:text-dark-text-main hover:bg-surface-hover dark:hover:bg-dark-card-hover'
                   }`}
                 >
                   <p className="font-semibold text-sm">{preset.label}</p>
@@ -125,48 +125,48 @@ export const DialInGuide = () => {
             })}
           </div>
 
-          {/* Clean Recipe Summary Bar */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-            <div className="p-3.5 rounded-xl bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-center space-y-1">
-              <span className="text-xs text-ink-muted dark:text-dark-text-muted block">Coffee Amount</span>
-              <span className="font-serif text-2xl font-bold text-vermillion">
+          {/* Recipe readout — four figures divided by rules, not boxed cards */}
+          <dl className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4 pt-4 border-t border-hairline dark:border-dark-hairline">
+            <div>
+              <dt className="text-xs text-ink-muted dark:text-dark-text-muted">Coffee Amount</dt>
+              <dd className="font-serif text-2xl font-bold text-vermillion mt-0.5">
                 {activePreset.dose}g
-              </span>
-              <span className="text-[11px] text-ink-faint block">
-                ({activePreset.spoons})
-              </span>
+              </dd>
+              <dd className="text-[11px] text-ink-faint mt-0.5">
+                {activePreset.spoons}
+              </dd>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-center space-y-1">
-              <span className="text-xs text-ink-muted dark:text-dark-text-muted block">Water Amount</span>
-              <span className="font-serif text-2xl font-bold text-ink dark:text-dark-text-main">
+            <div>
+              <dt className="text-xs text-ink-muted dark:text-dark-text-muted">Water Amount</dt>
+              <dd className="font-serif text-2xl font-bold text-ink dark:text-dark-text-main mt-0.5">
                 {activePreset.water}ml
-              </span>
-              <span className="text-[11px] text-ink-faint block">
-                (~{activePreset.subtitle.split('/')[0].trim()})
-              </span>
+              </dd>
+              <dd className="text-[11px] text-ink-faint mt-0.5">
+                {activePreset.subtitle.split('/')[0].trim()}
+              </dd>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-center space-y-1">
-              <span className="text-xs text-ink-muted dark:text-dark-text-muted block">Water Temp</span>
-              <span className="font-serif text-2xl font-bold text-ink dark:text-dark-text-main">
+            <div>
+              <dt className="text-xs text-ink-muted dark:text-dark-text-muted">Water Temp</dt>
+              <dd className="font-serif text-2xl font-bold text-ink dark:text-dark-text-main mt-0.5">
                 200°F
-              </span>
-              <span className="text-[11px] text-ink-faint block">
-                (30s after boiling)
-              </span>
+              </dd>
+              <dd className="text-[11px] text-ink-faint mt-0.5">
+                30s after boiling
+              </dd>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong text-center space-y-1">
-              <span className="text-xs text-ink-muted dark:text-dark-text-muted block">Brew Time</span>
-              <span className="font-serif text-2xl font-bold text-ink dark:text-dark-text-main">
+            <div>
+              <dt className="text-xs text-ink-muted dark:text-dark-text-muted">Brew Time</dt>
+              <dd className="font-serif text-2xl font-bold text-ink dark:text-dark-text-main mt-0.5">
                 {activePreset.time}
-              </span>
-              <span className="text-[11px] text-ink-faint block">
-                (total pour time)
-              </span>
+              </dd>
+              <dd className="text-[11px] text-ink-faint mt-0.5">
+                total pour time
+              </dd>
             </div>
-          </div>
+          </dl>
         </div>
 
         {/* 3 Simple Steps Flow */}
@@ -214,7 +214,7 @@ export const DialInGuide = () => {
           </h4>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-            <div className="p-4 rounded-xl bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong space-y-1.5">
+            <div className="space-y-1.5">
               <span className="font-semibold text-sm text-ink dark:text-dark-text-main flex items-center gap-2">
                 <Droplets className="w-4 h-4 text-vermillion dark:text-dark-vermillion shrink-0" aria-hidden="true" />
                 Use Filtered Water
@@ -224,7 +224,7 @@ export const DialInGuide = () => {
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong space-y-1.5">
+            <div className="space-y-1.5">
               <span className="font-semibold text-sm text-ink dark:text-dark-text-main flex items-center gap-2">
                 <Thermometer className="w-4 h-4 text-vermillion dark:text-dark-vermillion shrink-0" aria-hidden="true" />
                 Let Water Cool 30 Seconds
@@ -234,7 +234,7 @@ export const DialInGuide = () => {
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-paper dark:bg-dark-surface border border-hairline-strong dark:border-dark-hairline-strong space-y-1.5">
+            <div className="space-y-1.5">
               <span className="font-semibold text-sm text-ink dark:text-dark-text-main flex items-center gap-2">
                 <Coffee className="w-4 h-4 text-vermillion dark:text-dark-vermillion shrink-0" aria-hidden="true" />
                 Use Fresh Beans

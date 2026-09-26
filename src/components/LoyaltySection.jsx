@@ -73,9 +73,9 @@ export const LoyaltySection = () => {
           </div>
         </div>
 
-        {/* Right: Clean Stamp Card (6 cols) */}
+        {/* Right: Stamp Card (6 cols) — no nested border, the panel above is the container */}
         <div className="lg:col-span-6">
-          <div className="rounded-xl border border-hairline-strong dark:border-dark-hairline-strong bg-paper dark:bg-dark-surface p-6 sm:p-7 shadow-sm space-y-6">
+          <div className="p-6 sm:p-7 space-y-6">
             
             <div className="flex items-center justify-between border-b border-hairline dark:border-dark-hairline pb-4">
               <div>

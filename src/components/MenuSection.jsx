@@ -133,10 +133,10 @@ export const MenuSection = () => {
                   key={f.id}
                   onClick={() => toggleFilter(f.id)}
                   aria-pressed={isSelected}
-                  className={`min-h-[36px] px-3 py-1.5 rounded-lg text-xs font-medium border transition-[color,background-color,border-color,opacity,transform] ${
+                  className={`min-h-[36px] px-3 py-1.5 text-xs font-medium transition-[color,background-color,border-color,opacity,transform] ${
                     isSelected
-                      ? 'border-ink dark:border-dark-text-main bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas'
-                      : 'border-hairline-strong dark:border-dark-hairline-strong bg-paper dark:bg-dark-canvas text-ink-muted dark:text-dark-text-muted hover:border-ink'
+                      ? 'bg-ink dark:bg-dark-text-main text-paper dark:text-dark-canvas'
+                      : 'bg-surface dark:bg-dark-card text-ink-muted dark:text-dark-text-muted hover:bg-surface-hover dark:hover:bg-dark-card-hover'
                   }`}
                 >
                   {f.label}
