@@ -1,5 +1,5 @@
 import React from 'react';
-import { Gift, Check, X, Sparkles } from 'lucide-react';
+import { Gift, Check, X, Sparkles, Star } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 
 export const LoyaltySection = () => {
@@ -112,7 +112,7 @@ export const LoyaltySection = () => {
                     }`}
                   >
                     {isStamped ? (
-                      <span className="font-serif font-bold text-lg">★</span>
+                      <Star className="w-5 h-5 fill-current" aria-hidden="true" />
                     ) : isLast ? (
                       <Gift className="w-5 h-5 text-vermillion" aria-hidden="true" />
                     ) : (
