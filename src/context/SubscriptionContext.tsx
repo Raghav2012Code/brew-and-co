@@ -38,6 +38,9 @@ interface SubscriptionContextType {
   pauseSubscription: (id: string) => void;
   resumeSubscription: (id: string) => void;
   cancelSubscription: (id: string) => void;
+  /** Puts a cancelled plan back exactly as it was. Exists so cancelling can
+   *  be an optimistic update with an Undo rather than a confirmation gate. */
+  restoreSubscription: (sub: ActiveSubscription) => void;
   updateFrequency: (id: string, newFreqId: string) => void;
   updateGrind: (id: string, newGrindId: string) => void;
 }
@@ -163,6 +166,15 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
     setSubscriptions((prev) => (Array.isArray(prev) ? prev.filter((sub) => sub.id !== id) : []));
   }, []);
 
+  const restoreSubscription = useCallback((sub: ActiveSubscription) => {
+    setSubscriptions((prev) => {
+      const list = Array.isArray(prev) ? prev : [];
+      // Guard against a double-undo re-adding a plan the user cancelled again.
+      if (list.some((s) => s.id === sub.id)) return list;
+      return [...list, sub];
+    });
+  }, []);
+
   // Retain custom bean base prices, do not calculate imminent dispatch date on paused subs, use nullish coalescing
   const updateFrequency = useCallback((id: string, newFreqId: string) => {
     const freq = SUBSCRIPTION_FREQUENCIES.find((f) => f.id === newFreqId);
@@ -255,6 +267,7 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
       pauseSubscription,
       resumeSubscription,
       cancelSubscription,
+      restoreSubscription,
       updateFrequency,
       updateGrind,
     }),
@@ -270,6 +283,7 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
       pauseSubscription,
       resumeSubscription,
       cancelSubscription,
+      restoreSubscription,
       updateFrequency,
       updateGrind,
     ]

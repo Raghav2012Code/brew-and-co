@@ -27,11 +27,14 @@ export const ManageSubscriptionDrawer: React.FC = () => {
     pauseSubscription,
     resumeSubscription,
     cancelSubscription,
+    restoreSubscription,
     updateFrequency,
     updateGrind,
   } = useSubscription();
 
   const [editingSubId, setEditingSubId] = useState<string | null>(null);
+  // The plan most recently cancelled, held so the Undo row can put it back.
+  const [cancelledPlan, setCancelledPlan] = useState<ActiveSubscription | null>(null);
 
   const handlePauseToggle = (sub: ActiveSubscription) => {
     if (sub.status === 'active') {
@@ -52,14 +55,35 @@ export const ManageSubscriptionDrawer: React.FC = () => {
   };
 
   const handleCancel = (sub: ActiveSubscription) => {
-    if (window.confirm(`Are you sure you want to cancel your recurring subscription for ${sub.beanName}?`)) {
-      // Silent success: the plan leaves the vault and the count updates.
-      cancelSubscription(sub.id);
-    }
+    // Optimistic update with an Undo rather than a confirmation gate. The
+    // plan leaves the vault immediately and the count updates.
+    //
+    // The Undo is an inline row, not a toast. Sonner sits at z-index
+    // 999999999 but Radix sets `pointer-events: none` on <body> while a
+    // modal is open, and z-index cannot override that — so a toast action
+    // button is rendered on top and still unclickable. Since the vault is
+    // itself a modal, a toast Undo would be dead on arrival. Inline also
+    // means no expiry timer racing the user's decision.
+    cancelSubscription(sub.id);
+    setCancelledPlan(sub);
+  };
+
+  const handleUndoCancel = () => {
+    if (!cancelledPlan) return;
+    restoreSubscription(cancelledPlan);
+    setCancelledPlan(null);
   };
 
   return (
-    <Sheet open={isManageDrawerOpen} onOpenChange={setIsManageDrawerOpen}>
+    <Sheet
+      open={isManageDrawerOpen}
+      onOpenChange={(open) => {
+        // Drop the Undo offer on close so reopening the vault never shows a
+        // stale one for a plan the user has since thought about.
+        if (!open) setCancelledPlan(null);
+        setIsManageDrawerOpen(open);
+      }}
+    >
       <SheetContent
         side="right"
         className="w-full sm:max-w-md p-0 bg-paper dark:bg-dark-subtle border-l border-hairline dark:border-dark-hairline flex flex-col justify-between"
@@ -76,6 +100,22 @@ export const ManageSubscriptionDrawer: React.FC = () => {
 
         {/* Content Body */}
         <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-4 text-sm text-ink dark:text-dark-text-main">
+          {cancelledPlan && (
+            <div className="flex items-center justify-between gap-3 py-2.5 -mx-1 px-1 border-b border-hairline dark:border-dark-hairline">
+              <p className="text-xs text-ink-muted dark:text-dark-text-muted min-w-0">
+                <span className="text-ink dark:text-dark-text-main font-medium">{cancelledPlan.beanName}</span>{" "}
+                cancelled. Nothing was charged.
+              </p>
+              <button
+                type="button"
+                onClick={handleUndoCancel}
+                className="shrink-0 min-h-[34px] px-2.5 border border-ink dark:border-dark-text-main text-xs font-mono font-bold text-ink dark:text-dark-text-main hover:bg-ink hover:text-paper dark:hover:bg-dark-text-main dark:hover:text-dark-canvas transition-colors cursor-pointer"
+              >
+                Undo
+              </button>
+            </div>
+          )}
+
           {subscriptions.length === 0 ? (
             <div className="py-16 text-center space-y-3">
               <Package className="w-10 h-10 mx-auto text-ink-muted dark:text-dark-text-muted stroke-[1.5]" />
