@@ -711,7 +711,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           particleCount: 80,
           spread: 70,
           origin: { y: 0.6 },
-          colors: ['#C84B31', '#E5A93C', '#FBF9F5', '#1A1816'],
+          colors: ['#BC3010', '#A9761A', '#FBF9F5', '#1A1816'],
         });
       }
 
@@ -725,7 +725,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         particleCount: 120,
         spread: 90,
         origin: { y: 0.5 },
-        colors: ['#C84B31', '#FBF9F5', '#E5A93C'],
+        colors: ['#BC3010', '#FBF9F5', '#A9761A'],
       });
     },
     [cart, loyaltyStamps, freeDrinksAvailable, clearCart]

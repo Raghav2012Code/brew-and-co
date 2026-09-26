@@ -33,7 +33,7 @@ export const LoyaltySection = () => {
           particleCount: 70,
           spread: 60,
           origin: { y: 0.6 },
-          colors: ['#1A1816', '#C84B31', '#E5A93C'],
+          colors: ['#1A1816', '#BC3010', '#A9761A'],
         });
       } catch (e) {
         console.error(e);
